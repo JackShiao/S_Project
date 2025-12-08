@@ -1,0 +1,39 @@
+GitHub Copilot — 我在使用 Raptor mini (Preview)。
+
+整體評價（摘要）
+
+基本架構完整：用了 Bootstrap、header/main/footer、carousel、table，排版易讀。
+可快速迭代，但有些可改善的語意、無障礙、與效能問題，以及程式碼重複或不當用法。
+建議改善項目（優先順序）
+
+無障礙與語意
+
+將 <html lang="en"> 改為繁體中文如 lang="zh-TW"。
+圖片加上 alt 屬性；carousel 圖片應有描述、且加入 width/height 或 aspect ratio 以降低 CLS。
+表格加 caption，th 加 scope="col"；列表 ul 內必須有 li。
+header 使用 <nav>、logo 使用 <a href="#"> 或 <h1>，利於語意化與 SEO。
+資源載入與效能
+
+移除 head 中的 bootstrap.js，改在 body 底部引入且只引入一次（bootstrap.bundle.min.js 包含 Popper）。
+使用 minified 檔案（.min.css/.min.js），若部署可加入 integrity/crossorigin。
+除非必要，勿使用大段 <br> 做空間，改用 CSS margin 或 padding。
+響應式與排版
+
+col-lg-4 加上 col-12 或 col-md-6 以支援手機顯示：class="col-12 col-md-6 col-lg-4"。
+避免內聯 style（如 border: 1px solid blue），改放自訂 class 或 Bootstrap utility classes。
+可讀性與維護
+
+將重複檔案或重複代碼去除（你目前有重複附加的檔案並且載入兩次 bootstrap.js）。
+將表單的搜尋 input 加 name 屬性，登入/註冊可改成 <a> 或帶 href 的 button，若要為表單送出則 type="submit"。
+SEO 與 metadata
+
+加 meta description、og:title、og:description、favicon。
+<title> 可以更具描述性。
+範例修改片段（建議套用）
+
+其他進階建議（可選）
+
+加入「懶載入」(lazy-loading) 圖片、SVG icon、使用 CSS variables 和 BEM 命名。
+若需要動態資料，可考慮用 API 取得指數、新聞，並用 JS 生成表格與新聞列表。
+加入 ARIA live region（aria-live）以提示更新內容，或為有更新的區塊（像市場指數）標示更新時間。
+若要我幫你直接修改檔案（例如移除重複 script、修正 lang、替換內聯樣式），告訴我你想要套用哪些建議，我會回傳具體的差異修改程式碼。

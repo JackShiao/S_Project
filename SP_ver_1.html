@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 
 <head>
     <meta charset="UTF-8">
@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="./bootstrap-5.3.8-dist/css/bootstrap.css">
     <link rel="stylesheet" href="./SP_css/BS_SP_header.css">
     <!-- <link rel="stylesheet" href="./bootstrap-5.3.8-examples/modals/modals.css"> -->
-    <script src="./bootstrap-5.3.8-dist/js/bootstrap.js"></script>
 
     <style>
 
@@ -18,29 +17,55 @@
 
 <body>
 
-    <header class="p-3 text-bg-dark sticky-top">
-        <div class="container">
-            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+    <!-- 參考 BS header example 4 -->
+    <header class="sticky-top">
+        <nav class="p-3 navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
 
-                <span class="d-flex align-items-center me-lg-auto fs-4">
-                    <a>財經網</a>
-                </span>
+                <a class="navbar-brand fs-3 mx-lg-0 mx-auto me-lg-4 text-decoration-none text-white"
+                    href="./SP_ver_1.html">財經網</a>
 
-                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-                    <input type="search" class="form-control form-control-dark text-bg-dark search_p"
-                        placeholder="搜尋..." aria-label="Search" />
-                </form>
-                <div class="text-end">
-                    <button type="button" class="btn btn-outline-light me-2">
-                        登入
-                    </button>
-                    <button type="button" class="btn btn-warning">
-                        註冊會員
-                    </button>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+                    aria-controls="mainNavbar" aria-expanded="false" aria-label="切換選單">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li><a href="#" class="nav-link px-2 text-white">市場指數</a></li>
+                        <li><a href="#" class="nav-link px-2 text-white">新聞</a></li>
+                        <li><a href="#" class="nav-link px-2 text-white">觀點分析</a></li>
+                        <li><a href="#" class="nav-link px-2 text-white">關於</a></li>
+                    </ul>
+
+                    <form class="d-flex align-items-center mb-3 mb-lg-0 me-lg-3" role="search">
+                        <input type="search" class="form-control form-control-dark text-bg-dark search_p"
+                            placeholder="搜尋..." aria-label="Search" />
+                    </form>
+
+                    <div class="d-flex align-items-center">
+                        <button type="button" class="btn btn-outline-light me-2">
+                            登入
+                        </button>
+                        <button type="button" class="btn btn-warning">
+                            註冊會員
+                        </button>
+                    </div>
+
                 </div>
             </div>
-        </div>
+        </nav>
     </header>
+
+    <!-- Banner 區塊開始 -->
+    <section class="py-5 text-center bg-light border-bottom">
+        <div class="container">
+            <h1 class="display-4 fw-bold">掌握全球財經脈動</h1>
+            <p class="lead mb-4">投資決策最佳夥伴，提供即時指數、新聞與專業分析</p>
+            <a href="#" class="btn btn-primary btn-lg">立即註冊會員</a>
+        </div>
+    </section>
+    <!-- Banner 區塊結束 -->
 
     <main class="container">
 
