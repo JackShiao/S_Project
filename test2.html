@@ -7,9 +7,10 @@
     <title>test2</title>
     <link rel="stylesheet" href="./bootstrap-5.3.8-dist/css/bootstrap.css">
     <link rel="stylesheet" href="./SP_css/BS_SP_header.css">
-    <!-- <link rel="stylesheet" href="./bootstrap-5.3.8-examples/carousel/carousel.css"> -->
+    <!-- <link rel="stylesheet" href="./bootstrap-5.3.8-examples/modals/modals.css"> -->
 
     <style>
+
     </style>
 
 </head>
@@ -18,10 +19,10 @@
 
     <!-- 參考 BS header example 4 -->
     <header class="sticky-top">
-        <nav class="p-2 navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="p-2 navbar navbar-expand-lg navbar-dark bg-dark" aria-label="主導覽列">
             <div class="container">
 
-                <a class="navbar-brand fs-3 mx-lg-0 mx-auto me-lg-4 text-decoration-none text-white"
+                <a class="navbar-brand fs-3 mx-lg-0 me-lg-4 text-decoration-none text-white"
                     href="./SP_ver_1.html">財經網</a>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
@@ -45,8 +46,8 @@
 
                     <div class="d-flex flex-lg-row flex-column align-items-center">
                         <button type="button"
-                            class="btn btn-outline-light w-100 w-lg-auto mb-2 mb-lg-0 me-lg-2">登入</button>
-                        <button type="button" class="btn btn-warning w-100 w-lg-auto text-nowrap">
+                            class="btn btn-outline-light w-100 w-lg-auto mb-2 mb-lg-0 me-lg-2" data-bs-toggle="modal">登入</button>
+                        <button type="button" class="btn btn-warning w-100 w-lg-auto mb-lg-0 mb-2 text-nowrap" data-bs-toggle="modal">
                             註冊會員
                         </button>
                     </div>
@@ -57,7 +58,71 @@
     </header>
 
 
+    <!-- Banner -->
+    <section class="border-bottom">
+        <div id="bannerCarousel" class="carousel slide mb-6" data-bs-ride="carousel" aria-live="polite">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#bannerCarousel" data-bs-slide-to="0" class="active"
+                    aria-current="true" aria-label="網站介紹"></button>
+                <button type="button" data-bs-target="#bannerCarousel" data-bs-slide-to="1" aria-label="最新新聞"></button>
+                <button type="button" data-bs-target="#bannerCarousel" data-bs-slide-to="2"
+                    aria-label="財經活動快訊"></button>
 
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="./SP_img/banner1.jpg" class="d-block w-100" alt="財經網介紹Banner"
+                        style="height:400px ;object-fit:cover ;">
+                    <div class="text-center">
+                        <div class="container">
+                            <div class="carousel-caption mx-auto my-5 text-center"
+                                style="background:rgba(0,0,0,0.4); border-radius:20px; padding:2rem; max-width:700px;">
+                                <h1 class="display-4 fw-bold mb-3 text-white">掌握全球財經脈動</h1>
+                                <p class="lead mb-4 text-white">投資決策最佳夥伴，提供即時指數、新聞與專業分析</p>
+                                <p><a class="btn btn-lg btn-warning " href="#">立即註冊會員</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="./SP_img/banner2.png" class="d-block w-100" alt="時事新聞Banner"
+                        style="height:400px; object-fit:cover; object-position:center 25%;">
+                    <div class="text-center">
+                        <div class="container">
+                            <div class="carousel-caption mx-auto my-5 text-center"
+                                style="background:rgba(0,0,0,0.4); border-radius:20px; padding:2rem; max-width:700px;">
+                                <h1 class="display-4 fw-bold mb-3 text-white">時事新聞</h1>
+                                <p class="lead mb-4 text-white">美股三大指數震盪，投資人關注聯準會政策動向。</p>
+                                <p><a class="btn btn-lg btn-primary" href="#">看更多新聞</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="./SP_img/banner3.jpg" class="d-block w-100 " alt="市場觀點Banner"
+                        style="height:400px; object-fit:cover;">
+                    <div class="text-center">
+                        <div class="container">
+                            <div class="carousel-caption mx-auto my-5 text-center"
+                                style="background:rgba(0,0,0,0.4); border-radius:20px; padding:2rem; max-width:700px;">
+                                <h1 class="display-4 fw-bold mb-3 text-white">市場觀點</h1>
+                                <p class="lead mb-4 text-white">深度解析產業趨勢，華爾街分析師看法！</p>
+                                <p><a class="btn btn-lg btn-success" href="#">探索更多</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#bannerCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">上一張</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#bannerCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">下一張</span>
+            </button>
+        </div>
+    </section>
 
 
     <main class="container">
@@ -65,56 +130,70 @@
         <!-- 指數區 -->
         <section class="mt-2">
             <div class="border rounded shadow-sm p-3 mb-4">
-                <h4 class="mb-3">市場指數(即時展示)</h4>
+                <h3 class="mb-3">市場指數(即時展示)</h3>
                 <div id="market-table-js"></div>
                 <div class="mt-2">
-                    <a href="market.html" class="btn btn-primary w-100">查看更多</a>
+                    <a href="./market.html" class="btn btn-warning w-100">查看更多</a>
                 </div>
             </div>
         </section>
 
         <!-- 新聞區 -->
         <section class="mt-2">
-            <h4>新聞</h4>
-            <div class="row">
-                <div class="col-lg-4" style="border: 1px solid blue;">
-                    <div id="imgEX" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
-                        <div class="carousel-indicators">
-                            <button type="button" data-bs-target="#imgEX" data-bs-slide-to="0" class="active"
-                                aria-current="true" aria-label="Slide 1"></button>
-                            <button type="button" data-bs-target="#imgEX" data-bs-slide-to="1"
-                                aria-label="Slide 2"></button>
-                            <button type="button" data-bs-target="#imgEX" data-bs-slide-to="2"
-                                aria-label="Slide 3"></button>
+            <div class="row g-3">
+                <div class="col-lg-4">
+                    <div class="border rounded shadow-sm h-100 p-3 bg-white">
+                        <h4 class="mb-3">國際新聞</h4>
+                            <h4 class="mb-3"><a href="#" class="text-decoration-none text-dark">國際新聞</a></h4>
+                        <div class="mb-3">
+                            <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" class="w-100 rounded" style="height:140px; object-fit:cover;" alt="國際新聞預覽圖">
+                            <div class="mt-2 small text-secondary">路透社</div>
+                            <div class="fw-bold mb-1">美國聯準會維持利率不變，全球市場反應正面</div>
+                            <div class="small text-muted">1小時前</div>
                         </div>
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <img src="https://dummyimage.com/600x100/00ff5e/ffffff" class="d-block w-100">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="https://dummyimage.com/600x100/f057c5/ffffff" class="d-block w-100">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="https://dummyimage.com/600x100/f057c5/ffffff" class="d-block w-100">
-                            </div>
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#imgEX"
-                            data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#imgEX"
-                            data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
+                        <ul class="list-unstyled" id="news-intl">
+                            <li class="mb-2"><a href="#" class="text-decoration-none">美國聯準會維持利率不變，全球市場反應正面</a></li>
+                            <li class="mb-2"><a href="#" class="text-decoration-none">歐洲央行預計明年調整貨幣政策</a></li>
+                            <li class="mb-2"><a href="#" class="text-decoration-none">中國出口數據回升，亞洲股市走揚</a></li>
+                        </ul>
+                            <div class="mt-2 text-end"></div>
                     </div>
                 </div>
-                <div class="col-lg-4" style="border: 1px solid blue;">
-                    123
+                <div class="col-lg-4">
+                    <div class="border rounded shadow-sm h-100 p-3 bg-white">
+                        <h4 class="mb-3">台灣新聞</h4>
+                            <h4 class="mb-3"><a href="#" class="text-decoration-none text-dark">台灣新聞</a></h4>
+                        <div class="mb-3">
+                            <img src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80" class="w-100 rounded" style="height:140px; object-fit:cover;" alt="台灣新聞預覽圖">
+                            <div class="mt-2 small text-secondary">中央社</div>
+                            <div class="fw-bold mb-1">台積電宣布新廠投資計畫，股價創新高</div>
+                            <div class="small text-muted">20分鐘前</div>
+                        </div>
+                        <ul class="list-unstyled" id="news-tw">
+                            <li class="mb-2"><a href="#" class="text-decoration-none">台積電宣布新廠投資計畫，股價創新高</a></li>
+                            <li class="mb-2"><a href="#" class="text-decoration-none">金管會推動金融科技創新實驗</a></li>
+                            <li class="mb-2"><a href="#" class="text-decoration-none">台灣出口連續三月成長</a></li>
+                        </ul>
+                            <div class="mt-2 text-end"></div>
+                    </div>
                 </div>
-                <div class="col-lg-4" style="border: 1px solid blue;">
-                    123
+                <div class="col-lg-4">
+                    <div class="border rounded shadow-sm h-100 p-3 bg-white">
+                        <h4 class="mb-3">產業新聞</h4>
+                            <h4 class="mb-3"><a href="#" class="text-decoration-none text-dark">產業新聞</a></h4>
+                        <div class="mb-3">
+                            <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=400&q=80" class="w-100 rounded" style="height:140px; object-fit:cover;" alt="產業新聞預覽圖">
+                            <div class="mt-2 small text-secondary">工商時報</div>
+                            <div class="fw-bold mb-1">AI 晶片需求強勁，半導體產業受惠</div>
+                            <div class="small text-muted">2小時前</div>
+                        </div>
+                        <ul class="list-unstyled" id="news-industry">
+                            <li class="mb-2"><a href="#" class="text-decoration-none">AI 晶片需求強勁，半導體產業受惠</a></li>
+                            <li class="mb-2"><a href="#" class="text-decoration-none">電動車市場擴大，供應鏈加速轉型</a></li>
+                            <li class="mb-2"><a href="#" class="text-decoration-none">綠能產業投資熱潮持續</a></li>
+                        </ul>
+                            <div class="mt-2 text-end"></div>
+                    </div>
                 </div>
             </div>
         </section>
