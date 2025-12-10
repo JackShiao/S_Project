@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="./bootstrap-5.3.8-dist/css/bootstrap.css">
     <link rel="stylesheet" href="./SP_css/BS_SP_header.css">
     <link rel="stylesheet" href="./bootstrap-icons-1.13.1/bootstrap-icons.css">
-    <!-- <link rel="stylesheet" href="./bootstrap-5.3.8-examples/modals/modals.css"> -->
+    <link rel="stylesheet" href="./bootstrap-5.3.8-examples/modals/modals.css">
 
     <style>
 
@@ -47,9 +47,9 @@
 
                     <div class="d-flex flex-lg-row flex-column align-items-center">
                         <button type="button" class="btn btn-outline-light w-100 w-lg-auto mb-2 mb-lg-0 me-lg-2"
-                            data-bs-toggle="modal">登入</button>
+                            data-bs-toggle="modal" data-bs-target="#loginModal">登入</button>
                         <button type="button" class="btn btn-warning w-100 w-lg-auto mb-lg-0 mb-2 text-nowrap"
-                            data-bs-toggle="modal">
+                            data-bs-toggle="modal" data-bs-target="#registerModal">
                             註冊會員
                         </button>
                     </div>
@@ -59,7 +59,7 @@
         </nav>
     </header>
 
-    <!-- Banner -->
+    <!-- Banner 參考 BS Carousel -->
     <section class="border-bottom">
         <div id="bannerCarousel" class="carousel slide mb-6" data-bs-ride="carousel" aria-live="polite">
             <div class="carousel-indicators">
@@ -80,7 +80,7 @@
                                 style="background:rgba(0,0,0,0.4); border-radius:20px; padding:2rem; max-width:700px;">
                                 <h1 class="display-4 fw-bold mb-3 text-white">掌握全球財經脈動</h1>
                                 <p class="lead mb-4 text-white">投資決策最佳夥伴，提供即時指數、新聞與專業分析</p>
-                                <p><a class="btn btn-lg btn-warning " href="#">立即註冊會員</a></p>
+                                <p><a class="btn btn-lg btn-warning " href="#">查看市場指數</a></p>
                             </div>
                         </div>
                     </div>
@@ -233,36 +233,112 @@
 
 
 
+    <!-- 登入 Modal -->
+    <div class="modal modal-sheet fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content rounded-4 shadow">
+                <div class="modal-header p-5 pb-4 border-bottom-0">
+                    <div class="d-flex w-100 align-items-center justify-content-center position-relative">
+                        <h1 class="fw-bold mb-0 fs-2" id="loginModalLabel">登入</h1>
+                        <button type="button" class="btn-close position-absolute end-0" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                </div>
+                <div class="modal-body p-5 pt-0">
+                    <form>
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control rounded-3" id="loginEmail"
+                                placeholder="name@example.com">
+                            <label for="loginEmail">電子郵件</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control rounded-3" id="loginPassword"
+                                placeholder="請輸入密碼">
+                            <label for="loginPassword">密碼</label>
+                        </div>
+                        <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit">登入</button>
+                        <small class="d-flex text-body-secondary justify-content-center">登入即表示同意本站使用條款。</small>
+                        <hr class="my-4" />
+                        <h2 class="fs-5 fw-bold mb-3 d-flex justify-content-center">或使用第三方登入</h2>
+                        <a href="https://www.google.com/" target="_blank" rel="noopener">
+                            <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="button">
+                                <i class="bi bi-google me-1"></i> Google 登入
+                            </button>
+                        </a>
+                        <a href="https://www.facebook.com/" target="_blank" rel="noopener">
+                            <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" type="button">
+                                <i class="bi bi-facebook me-1"></i> Facebook 登入
+                            </button>
+                        </a>
+                        <a href="https://github.com/" target="_blank" rel="noopener">
+                            <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="button">
+                                <i class="bi bi-github me-1"></i> GitHub 登入
+                            </button>
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 註冊 Modal -->
+    <div class="modal modal-sheet fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content rounded-4 shadow">
+                <div class="modal-header p-5 pb-4 border-bottom-0">
+                    <div class="d-flex w-100 align-items-center justify-content-center position-relative">
+                        <h1 class="fw-bold mb-0 fs-2" id="registerModalLabel">註冊會員</h1>
+                        <button type="button" class="btn-close position-absolute end-0" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                </div>
+                <div class="modal-body p-5 pt-0">
+                    <form>
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control rounded-3" id="registerEmail"
+                                placeholder="name@example.com">
+                            <label for="registerEmail">電子郵件</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control rounded-3" id="registerPassword"
+                                placeholder="請輸入密碼">
+                            <label for="registerPassword">密碼</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control rounded-3" id="registerPassword2"
+                                placeholder="請再次輸入密碼">
+                            <label for="registerPassword2">確認密碼</label>
+                        </div>
+                        <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit">註冊</button>
+                        <small class="text-body-secondary d-flex justify-content-center">註冊即表示同意本站使用條款。</small>
+                        <hr class="my-4" />
+                        <h2 class="fs-5 fw-bold mb-3 d-flex justify-content-center">或使用第三方登入</h2>
+                        <a href="https://www.google.com/" target="_blank" rel="noopener">
+                        <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="button">
+                            <i class="bi bi-google me-1"></i> Google 登入
+                        </button>
+                        </a>
+                        <a href="https://www.facebook.com/" target="_blank" rel="noopener">
+                        <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" type="button">
+                            <i class="bi bi-facebook me-1"></i> Facebook 登入
+                        </button>
+                        </a>
+                        <a href="https://github.com/" target="_blank" rel="noopener">
+                            <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="button">
+                                <i class="bi bi-github me-1"></i> GitHub 登入
+                            </button>
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="./bootstrap-5.3.8-dist/js/bootstrap.js"></script>
-    <script>
-        // 市場指數資料
-        const marketData = [
-            { name: "S&P500", value: "6,812.63", change: "-0.53%" },
-            { name: "納斯達克指數", value: "23,275.92", change: "-0.38%" },
-            { name: "道瓊指數", value: "47,289", change: "+5.6%" },
-            { name: "台灣加權", value: "17,500.12", change: "+0.21%" },
-            { name: "日經225", value: "33,200.88", change: "-0.12%" }
-        ];
-
-        function renderMarketTable() {
-            let html = `<div class='table-responsive'>`;
-            html += `<table class='table table-hover'>`;
-            html += `<thead><tr><th>指數名稱</th><th>收盤指數</th><th>昨日漲跌幅</th></tr></thead><tbody>`;
-            for (let i = 0; i < marketData.length; i++) {
-                const item = marketData[i];
-                let isUp = item.change.startsWith("+");
-                let arrow = isUp
-                    ? "<span style='color:red'>&#9650;</span>"
-                    : "<span style='color:green'>&#9660;</span>";
-                let color = isUp ? "text-danger" : "text-success";
-                html += `<tr><td>${item.name}</td><td>${item.value}</td><td class='${color}'>${arrow} ${item.change.replace('+', '').replace('-', '')}</td></tr>`;
-            }
-            html += `</tbody></table></div>`;
-            document.getElementById("market-table-js").innerHTML = html;
-        }
-        renderMarketTable();
-    </script>
+    <script src="./SP_js/market.js"></script>
+    <script src="./SP_js/login_register.js"></script>
 </body>
 
 </html>

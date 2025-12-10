@@ -7,7 +7,8 @@
     <title>test2</title>
     <link rel="stylesheet" href="./bootstrap-5.3.8-dist/css/bootstrap.css">
     <link rel="stylesheet" href="./SP_css/BS_SP_header.css">
-    <!-- <link rel="stylesheet" href="./bootstrap-5.3.8-examples/modals/modals.css"> -->
+    <link rel="stylesheet" href="./bootstrap-icons-1.13.1/bootstrap-icons.css">
+    <link rel="stylesheet" href="./bootstrap-5.3.8-examples/modals/modals.css">
 
     <style>
 
@@ -17,120 +18,50 @@
 
 <body>
 
+    <!-- 參考 BS header example 4 -->
+    <header class="sticky-top">
+        <nav class="p-2 navbar navbar-expand-lg navbar-dark bg-dark" aria-label="主導覽列">
+            <div class="container">
 
+                <a class="navbar-brand fs-3 mx-lg-0 me-lg-4 text-decoration-none text-white"
+                    href="./SP_ver_1.html">財經網</a>
 
-    <main class="container">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+                    aria-controls="mainNavbar" aria-expanded="false" aria-label="切換選單">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-        <!-- 指數區 -->
-        <section class="mt-2">
-            <div class="border rounded shadow-sm p-3 mb-4">
-                <h3 class="mb-3">市場指數(即時展示)</h3>
-                <div id="market-table-js"></div>
-                <div class="mt-2">
-                    <a href="./market.html" class="btn btn-warning w-100">查看更多</a>
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li><a href="#" class="nav-link px-2 text-secondary active " aria-current="page">首頁</a></li>
+                        <li><a href="#" class="nav-link px-2 text-white">市場指數</a></li>
+                        <li><a href="#" class="nav-link px-2 text-white">新聞</a></li>
+                        <li><a href="#" class="nav-link px-2 text-white">觀點分析</a></li>
+                        <li><a href="#" class="nav-link px-2 text-white">關於</a></li>
+                    </ul>
+
+                    <form class="d-flex align-items-center mb-3 mb-lg-0 me-lg-3" role="search">
+                        <input type="search" class="form-control form-control-dark text-bg-dark search_p"
+                            placeholder="搜尋..." aria-label="Search" />
+                    </form>
+
+                    <div class="d-flex flex-lg-row flex-column align-items-center">
+                        <button type="button" class="btn btn-outline-light w-100 w-lg-auto mb-2 mb-lg-0 me-lg-2"
+                            data-bs-toggle="modal" data-bs-target="#loginModal">登入</button>
+                        <button type="button" class="btn btn-warning w-100 w-lg-auto mb-lg-0 mb-2 text-nowrap"
+                            data-bs-toggle="modal" data-bs-target="#registerModal">
+                            註冊會員
+                        </button>
+                    </div>
+
                 </div>
             </div>
-        </section>
-
-        <!-- 新聞區 -->
-        <section class="mt-2">
-            <div class="row g-3">
-                <div class="col-lg-4">
-                    <div class="border rounded shadow-sm h-100 p-3 bg-white">
-                        <h4 class="mb-3">國際新聞</h4>
-                        <h4 class="mb-3"><a href="#" class="text-decoration-none text-dark">國際新聞</a></h4>
-                        <div class="mb-3">
-                            <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80"
-                                class="w-100 rounded" style="height:140px; object-fit:cover;" alt="國際新聞預覽圖">
-                            <div class="mt-2 small text-secondary">路透社</div>
-                            <div class="fw-bold mb-1">美國聯準會維持利率不變，全球市場反應正面</div>
-                            <div class="small text-muted">1小時前</div>
-                        </div>
-                        <ul class="list-unstyled" id="news-intl">
-                            <li class="mb-2"><a href="#" class="text-decoration-none">美國聯準會維持利率不變，全球市場反應正面</a></li>
-                            <li class="mb-2"><a href="#" class="text-decoration-none">歐洲央行預計明年調整貨幣政策</a></li>
-                            <li class="mb-2"><a href="#" class="text-decoration-none">中國出口數據回升，亞洲股市走揚</a></li>
-                        </ul>
-                        <div class="mt-2 text-end"></div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="border rounded shadow-sm h-100 p-3 bg-white">
-                        <h4 class="mb-3">台灣新聞</h4>
-                        <h4 class="mb-3"><a href="#" class="text-decoration-none text-dark">台灣新聞</a></h4>
-                        <div class="mb-3">
-                            <img src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80"
-                                class="w-100 rounded" style="height:140px; object-fit:cover;" alt="台灣新聞預覽圖">
-                            <div class="mt-2 small text-secondary">中央社</div>
-                            <div class="fw-bold mb-1">台積電宣布新廠投資計畫，股價創新高</div>
-                            <div class="small text-muted">20分鐘前</div>
-                        </div>
-                        <ul class="list-unstyled" id="news-tw">
-                            <li class="mb-2"><a href="#" class="text-decoration-none">台積電宣布新廠投資計畫，股價創新高</a></li>
-                            <li class="mb-2"><a href="#" class="text-decoration-none">金管會推動金融科技創新實驗</a></li>
-                            <li class="mb-2"><a href="#" class="text-decoration-none">台灣出口連續三月成長</a></li>
-                        </ul>
-                        <div class="mt-2 text-end"></div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="border rounded shadow-sm h-100 p-3 bg-white">
-                        <h4 class="mb-3">產業新聞</h4>
-                        <h4 class="mb-3"><a href="#" class="text-decoration-none text-dark">產業新聞</a></h4>
-                        <div class="mb-3">
-                            <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=400&q=80"
-                                class="w-100 rounded" style="height:140px; object-fit:cover;" alt="產業新聞預覽圖">
-                            <div class="mt-2 small text-secondary">工商時報</div>
-                            <div class="fw-bold mb-1">AI 晶片需求強勁，半導體產業受惠</div>
-                            <div class="small text-muted">2小時前</div>
-                        </div>
-                        <ul class="list-unstyled" id="news-industry">
-                            <li class="mb-2"><a href="#" class="text-decoration-none">AI 晶片需求強勁，半導體產業受惠</a></li>
-                            <li class="mb-2"><a href="#" class="text-decoration-none">電動車市場擴大，供應鏈加速轉型</a></li>
-                            <li class="mb-2"><a href="#" class="text-decoration-none">綠能產業投資熱潮持續</a></li>
-                        </ul>
-                        <div class="mt-2 text-end"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 觀點區 -->
-        <section class="mt-2">
-            <div class="card border rounded shadow-sm p-3 mb-4">
-                <h3>觀點摘要</h3>
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-2">
-                        <i class="bi bi-chat-right-quote fs-2 me-2 mb-1"></i>
-                        <div>
-                            <div class="fw-bold">外電摘錄</div>
-                            <div class="text-muted small">來源：路透社 Reuters ｜ 2025/12/09</div>
-                        </div>
-                    </div>
-                    <h5 class="card-title">美聯準會決策力挺金融市場</h5>
-                    <p class="card-text">
-                        「美國聯準會維持基準利率不變，市場普遍認為有助穩定投資人信心。歐洲主要股市小幅收漲。」
-                    </p>
-                    <a href="https://www.reuters.com/markets/us/fed-keeps-rates-steady-market-reactions-2025-12-09/"
-                        class="btn btn-outline-secondary btn-sm" target="_blank" rel="noopener">
-                        查看完整原文 <i class="bi bi-box-arrow-up-right"></i>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-
-
-
-
+        </nav>
+    </header>
+    <main class="container my-4">
+        <h1>測試頁面</h1>
+        <p>這是一個用於測試登入和註冊 Modal 的頁面。</p>
     </main>
-
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-
 
     <footer class="p-2 text-bg-dark">
         <p class="text-center fs-6">財經資訊網站</p>
@@ -140,88 +71,237 @@
 
 
 
+    <!-- 登入 Modal -->
+    <div class="modal modal-sheet fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content rounded-4 shadow">
+                <div class="modal-header p-5 pb-4 border-bottom-0">
+                    <div class="d-flex w-100 align-items-center justify-content-center position-relative">
+                        <h1 class="fw-bold mb-0 fs-2" id="loginModalLabel">登入</h1>
+                        <button type="button" class="btn-close position-absolute end-0" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                </div>
+                <div class="modal-body p-5 pt-0">
+                    <form>
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control rounded-3" id="loginEmail"
+                                placeholder="name@example.com">
+                            <label for="loginEmail">電子郵件</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control rounded-3" id="loginPassword" placeholder="請輸入密碼">
+                            <label for="loginPassword">密碼</label>
+                            <button type="button" tabindex="-1" class="btn btn-link position-absolute top-50 end-0 translate-middle-y px-2 py-0 text-secondary password-toggle" data-target="#loginPassword" style="z-index:2; margin-right:8px;">
+                                <i class="bi bi-eye-slash" id="loginPasswordEye"></i>
+                            </button>
+                        </div>
+                        <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit">登入</button>
+                        <small class="d-flex text-body-secondary justify-content-center">登入即表示同意本站使用條款。</small>
+                        <hr class="my-4" />
+                        <h2 class="fs-5 fw-bold mb-3 d-flex justify-content-center">或使用第三方登入</h2>
+                        <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="button">
+                            <i class="bi bi-google me-1"></i> Google 登入
+                        </button>
+                        <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" type="button">
+                            <i class="bi bi-facebook me-1"></i> Facebook 登入
+                        </button>
+                        <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="button">
+                            <i class="bi bi-github me-1"></i> GitHub 登入
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 註冊 Modal -->
+    <div class="modal modal-sheet fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content rounded-4 shadow">
+                <div class="modal-header p-5 pb-4 border-bottom-0">
+                    <div class="d-flex w-100 align-items-center justify-content-center position-relative">
+                        <h1 class="fw-bold mb-0 fs-2" id="registerModalLabel">註冊會員</h1>
+                        <button type="button" class="btn-close position-absolute end-0" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                </div>
+                <div class="modal-body p-5 pt-0">
+                    <form>
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control rounded-3" id="registerEmail"
+                                placeholder="name@example.com">
+                            <label for="registerEmail">電子郵件</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control rounded-3" id="registerPassword" placeholder="請輸入密碼">
+                            <label for="registerPassword">密碼</label>
+                            <button type="button" tabindex="-1" class="btn btn-link position-absolute top-50 end-0 translate-middle-y px-2 py-0 text-secondary password-toggle" data-target="#registerPassword" style="z-index:2; margin-right:8px;">
+                                <i class="bi bi-eye-slash" id="registerPasswordEye"></i>
+                            </button>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control rounded-3" id="registerPassword2" placeholder="請再次輸入密碼">
+                            <label for="registerPassword2">確認密碼</label>
+                            <button type="button" tabindex="-1" class="btn btn-link position-absolute top-50 end-0 translate-middle-y px-2 py-0 text-secondary password-toggle" data-target="#registerPassword2" style="z-index:2; margin-right:8px;">
+                                <i class="bi bi-eye-slash" id="registerPassword2Eye"></i>
+                            </button>
+                        </div>
+                        <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit">註冊</button>
+                        <small class="text-body-secondary d-flex justify-content-center">註冊即表示同意本站使用條款。</small>
+                        <hr class="my-4" />
+                        <h2 class="fs-5 fw-bold mb-3 d-flex justify-content-center">或使用第三方登入</h2>
+                        <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="button">
+                            <i class="bi bi-google me-1"></i> Google 登入
+                        </button>
+                        <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" type="button">
+                            <i class="bi bi-facebook me-1"></i> Facebook 登入
+                        </button>
+                        <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="button">
+                            <i class="bi bi-github me-1"></i> GitHub 登入
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="./bootstrap-5.3.8-dist/js/bootstrap.js"></script>
     <script>
-        function formatChange(item) {
-            if (!item) return "-";
-            const diff = item.regularMarketChangePercent;
-            if (diff === undefined) return "-";
-            const sign = diff >= 0 ? "+" : "";
-            return `${sign}${diff.toFixed(2)}%`;
-        }
-
-        function renderMarketTable(marketData) {
-            let html = `<div class='table-responsive'>`;
-            html += `<table class='table table-hover'>`;
-            html += `<thead><tr><th>指數名稱</th><th>收盤指數</th><th>昨日漲跌幅</th></tr></thead><tbody>`;
-            for (let i = 0; i < marketData.length; i++) {
-                const item = marketData[i];
-                let isUp = item.change.startsWith("+");
-                let arrow = isUp
-                    ? "<span style='color:red'>&#9650;</span>"
-                    : "<span style='color:green'>&#9660;</span>";
-                let color = isUp ? "text-danger" : "text-success";
-                html += `<tr><td>${item.name}</td><td>${item.value}</td><td class='${color}'>${arrow} ${item.change.replace('+', '').replace('-', '')}</td></tr>`;
-            }
-            html += `</tbody></table></div>`;
-            document.getElementById("market-table-js").innerHTML = html;
-        }
-
-        async function fetchMarketData() {
-            const proxy = "https://cors-anywhere.herokuapp.com/";
-            const symbols = "^TWII,^DJI,^IXIC,^GSPC,^N225";
-            const url = proxy + `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbols}`;
-            try {
-                const res = await fetch(url, {
-                    headers: {
-                        'Origin': location.origin,
-                        'X-Requested-With': 'XMLHttpRequest'
+        // 密碼顯示/隱藏切換
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.password-toggle').forEach(function (btn) {
+                // 讓 form-floating 正常顯示，需設置父層 position:relative
+                btn.parentElement.style.position = 'relative';
+                const input = document.querySelector(btn.getAttribute('data-target'));
+                btn.addEventListener('click', function () {
+                    const icon = btn.querySelector('i');
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        icon.classList.remove('bi-eye-slash');
+                        icon.classList.add('bi-eye');
+                    } else {
+                        input.type = 'password';
+                        icon.classList.remove('bi-eye');
+                        icon.classList.add('bi-eye-slash');
                     }
                 });
-                const json = await res.json();
-                const result = json.quoteResponse.result;
-                const marketData = [
-                    {
-                        name: "S&P500",
-                        value: result.find(x => x.symbol === "^GSPC")?.regularMarketPrice ?? "-",
-                        change: formatChange(result.find(x => x.symbol === "^GSPC"))
-                    },
-                    {
-                        name: "納斯達克指數",
-                        value: result.find(x => x.symbol === "^IXIC")?.regularMarketPrice ?? "-",
-                        change: formatChange(result.find(x => x.symbol === "^IXIC"))
-                    },
-                    {
-                        name: "道瓊指數",
-                        value: result.find(x => x.symbol === "^DJI")?.regularMarketPrice ?? "-",
-                        change: formatChange(result.find(x => x.symbol === "^DJI"))
-                    },
-                    {
-                        name: "台灣加權",
-                        value: result.find(x => x.symbol === "^TWII")?.regularMarketPrice ?? "-",
-                        change: formatChange(result.find(x => x.symbol === "^TWII"))
-                    },
-                    {
-                        name: "日經225",
-                        value: result.find(x => x.symbol === "^N225")?.regularMarketPrice ?? "-",
-                        change: formatChange(result.find(x => x.symbol === "^N225"))
-                    }
-                ];
-                renderMarketTable(marketData);
-            } catch (e) {
-                renderMarketTable([
-                    { name: "S&P500", value: "6,812.63", change: "-0.53%" },
-                    { name: "納斯達克指數", value: "23,275.92", change: "-0.38%" },
-                    { name: "道瓊指數", value: "47,289", change: "+5.6%" },
-                    { name: "台灣加權", value: "17,500.12", change: "+0.21%" },
-                    { name: "日經225", value: "33,200.88", change: "-0.12%" }
-                ]);
-            }
+            });
+        });
+    </script>
+    <!-- <script src="./SP_js/login_register.js"></script> -->
+    <script>
+        // 驗證 email 格式
+        function validateEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
         }
 
-        // 頁面載入自動執行
-        fetchMarketData();
+
+        // 驗證密碼複雜度（至少8碼，含大寫、小寫、數字、特殊符號）
+        function validatePasswordComplexity(pwd) {
+            // 至少8碼，含大寫、小寫、數字、特殊符號
+            return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/.test(pwd);
+        }
+
+        // 登入表單驗證
+        document.addEventListener('DOMContentLoaded', function () {
+            const loginForm = document.querySelector('#loginModal form');
+            if (loginForm) {
+                loginForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    let valid = true;
+                    // 移除舊訊息
+                    loginForm.querySelectorAll('.invalid-feedback').forEach(el => el.remove());
+                    loginForm.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+                    // 取得欄位
+                    const email = loginForm.querySelector('#loginEmail');
+                    const pwd = loginForm.querySelector('#loginPassword');
+                    // 驗證 email
+                    if (!email.value.trim()) {
+                        valid = false;
+                        email.classList.add('is-invalid');
+                        email.insertAdjacentHTML('afterend', '<div class="invalid-feedback">請輸入電子郵件</div>');
+                    } else if (!validateEmail(email.value)) {
+                        valid = false;
+                        email.classList.add('is-invalid');
+                        email.insertAdjacentHTML('afterend', '<div class="invalid-feedback">電子郵件格式錯誤</div>');
+                    }
+                    // 驗證密碼
+                    if (!pwd.value.trim()) {
+                        valid = false;
+                        pwd.classList.add('is-invalid');
+                        pwd.insertAdjacentHTML('afterend', '<div class="invalid-feedback">請輸入密碼</div>');
+                    } else if (pwd.value.length < 8) {
+                        valid = false;
+                        pwd.classList.add('is-invalid');
+                        pwd.insertAdjacentHTML('afterend', '<div class="invalid-feedback">密碼至少8碼</div>');
+                    } else if (!validatePasswordComplexity(pwd.value)) {
+                        valid = false;
+                        pwd.classList.add('is-invalid');
+                        pwd.insertAdjacentHTML('afterend', '<div class="invalid-feedback">密碼需含大寫、小寫、數字、特殊符號</div>');
+                    }
+                    if (valid) {
+                        // 通過驗證，可送出（此處僅示範）
+                        alert('登入驗證通過！');
+                        // loginForm.submit(); // 實際串接後端時再啟用
+                    }
+                });
+            }
+
+            // 註冊表單驗證
+            const regForm = document.querySelector('#registerModal form');
+            if (regForm) {
+                regForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    let valid = true;
+                    regForm.querySelectorAll('.invalid-feedback').forEach(el => el.remove());
+                    regForm.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+                    const email = regForm.querySelector('#registerEmail');
+                    const pwd = regForm.querySelector('#registerPassword');
+                    const pwd2 = regForm.querySelector('#registerPassword2');
+                    // 驗證 email
+                    if (!email.value.trim()) {
+                        valid = false;
+                        email.classList.add('is-invalid');
+                        email.insertAdjacentHTML('afterend', '<div class="invalid-feedback">請輸入電子郵件</div>');
+                    } else if (!validateEmail(email.value)) {
+                        valid = false;
+                        email.classList.add('is-invalid');
+                        email.insertAdjacentHTML('afterend', '<div class="invalid-feedback">電子郵件格式錯誤</div>');
+                    }
+                    // 驗證密碼
+                    if (!pwd.value.trim()) {
+                        valid = false;
+                        pwd.classList.add('is-invalid');
+                        pwd.insertAdjacentHTML('afterend', '<div class="invalid-feedback">請輸入密碼</div>');
+                    } else if (pwd.value.length < 8) {
+                        valid = false;
+                        pwd.classList.add('is-invalid');
+                        pwd.insertAdjacentHTML('afterend', '<div class="invalid-feedback">密碼至少8碼</div>');
+                    } else if (!validatePasswordComplexity(pwd.value)) {
+                        valid = false;
+                        pwd.classList.add('is-invalid');
+                        pwd.insertAdjacentHTML('afterend', '<div class="invalid-feedback">密碼需含大寫、小寫、數字、特殊符號</div>');
+                    }
+                    // 驗證確認密碼
+                    if (!pwd2.value.trim()) {
+                        valid = false;
+                        pwd2.classList.add('is-invalid');
+                        pwd2.insertAdjacentHTML('afterend', '<div class="invalid-feedback">請再次輸入密碼</div>');
+                    } else if (pwd.value !== pwd2.value) {
+                        valid = false;
+                        pwd2.classList.add('is-invalid');
+                        pwd2.insertAdjacentHTML('afterend', '<div class="invalid-feedback">兩次密碼不一致</div>');
+                    }
+                    if (valid) {
+                        alert('註冊驗證通過！');
+                        // regForm.submit(); // 實際串接後端時再啟用
+                    }
+                });
+            }
+        });
     </script>
 </body>
 
