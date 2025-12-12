@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>test2</title>
     <link rel="stylesheet" href="./bootstrap-5.3.8-dist/css/bootstrap.css">
-    <link rel="stylesheet" href="./SP_css/BS_SP_header.css">
     <link rel="stylesheet" href="./bootstrap-icons-1.13.1/bootstrap-icons.css">
     <link rel="stylesheet" href="./bootstrap-5.3.8-examples/modals/modals.css">
+    <link rel="stylesheet" href="./SP_css/BS_SP_header.css">
 
     <style>
 
@@ -58,9 +58,22 @@
             </div>
         </nav>
     </header>
-    <main class="container my-4">
-        <h1>測試頁面</h1>
-        <p>這是一個用於測試登入和註冊 Modal 的頁面。</p>
+
+
+
+    <main class="container">
+        <div class="p-5 mb-4 bg-light rounded-3">
+            <div class="container-fluid py-5">
+                <h1 class="display-5 fw-bold">測試頁面</h1>
+                <p class="col-md-8 fs-4">這是一個用於測試登入和註冊 Modal 的頁面。</p>
+                <button class="btn btn-primary btn-lg" type="button" data-bs-toggle="modal"
+                    data-bs-target="#loginModal">打開登入 Modal</button>
+                <button class="btn btn-secondary btn-lg" type="button" data-bs-toggle="modal"
+                    data-bs-target="#registerModal">打開註冊 Modal</button>
+            </div>
+        </div>
+
+
     </main>
 
     <footer class="p-2 text-bg-dark">
@@ -91,25 +104,33 @@
                             <label for="loginEmail">電子郵件</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="password" class="form-control rounded-3" id="loginPassword" placeholder="請輸入密碼">
+                            <input type="password" class="form-control rounded-3" id="loginPassword"
+                                placeholder="請輸入密碼">
                             <label for="loginPassword">密碼</label>
-                            <button type="button" tabindex="-1" class="btn btn-link position-absolute top-50 end-0 translate-middle-y px-2 py-0 text-secondary password-toggle" data-target="#loginPassword" style="z-index:2; margin-right:8px;">
-                                <i class="bi bi-eye-slash" id="loginPasswordEye"></i>
-                            </button>
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" id="showLoginPassword">
+                                <label class="form-check-label" for="showLoginPassword">顯示密碼</label>
+                            </div>
                         </div>
                         <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit">登入</button>
                         <small class="d-flex text-body-secondary justify-content-center">登入即表示同意本站使用條款。</small>
                         <hr class="my-4" />
                         <h2 class="fs-5 fw-bold mb-3 d-flex justify-content-center">或使用第三方登入</h2>
-                        <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="button">
-                            <i class="bi bi-google me-1"></i> Google 登入
-                        </button>
-                        <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" type="button">
-                            <i class="bi bi-facebook me-1"></i> Facebook 登入
-                        </button>
-                        <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="button">
-                            <i class="bi bi-github me-1"></i> GitHub 登入
-                        </button>
+                        <a href="https://www.google.com/" target="_blank" rel="noopener">
+                            <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="button">
+                                <i class="bi bi-google me-1"></i> Google 登入
+                            </button>
+                        </a>
+                        <a href="https://www.facebook.com/" target="_blank" rel="noopener">
+                            <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" type="button">
+                                <i class="bi bi-facebook me-1"></i> Facebook 登入
+                            </button>
+                        </a>
+                        <a href="https://github.com/" target="_blank" rel="noopener">
+                            <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="button">
+                                <i class="bi bi-github me-1"></i> GitHub 登入
+                            </button>
+                        </a>
                     </form>
                 </div>
             </div>
@@ -136,32 +157,38 @@
                             <label for="registerEmail">電子郵件</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="password" class="form-control rounded-3" id="registerPassword" placeholder="請輸入密碼">
+                            <input type="password" class="form-control rounded-3" id="registerPassword"
+                                placeholder="請輸入密碼">
                             <label for="registerPassword">密碼</label>
-                            <button type="button" tabindex="-1" class="btn btn-link position-absolute top-50 end-0 translate-middle-y px-2 py-0 text-secondary password-toggle" data-target="#registerPassword" style="z-index:2; margin-right:8px;">
-                                <i class="bi bi-eye-slash" id="registerPasswordEye"></i>
-                            </button>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="password" class="form-control rounded-3" id="registerPassword2" placeholder="請再次輸入密碼">
+                            <input type="password" class="form-control rounded-3" id="registerPassword2"
+                                placeholder="請再次輸入密碼">
                             <label for="registerPassword2">確認密碼</label>
-                            <button type="button" tabindex="-1" class="btn btn-link position-absolute top-50 end-0 translate-middle-y px-2 py-0 text-secondary password-toggle" data-target="#registerPassword2" style="z-index:2; margin-right:8px;">
-                                <i class="bi bi-eye-slash" id="registerPassword2Eye"></i>
-                            </button>
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" id="showRegisterPassword">
+                                <label class="form-check-label" for="showRegisterPassword">顯示密碼</label>
+                            </div>
                         </div>
                         <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit">註冊</button>
                         <small class="text-body-secondary d-flex justify-content-center">註冊即表示同意本站使用條款。</small>
                         <hr class="my-4" />
                         <h2 class="fs-5 fw-bold mb-3 d-flex justify-content-center">或使用第三方登入</h2>
-                        <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="button">
-                            <i class="bi bi-google me-1"></i> Google 登入
-                        </button>
-                        <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" type="button">
-                            <i class="bi bi-facebook me-1"></i> Facebook 登入
-                        </button>
-                        <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="button">
-                            <i class="bi bi-github me-1"></i> GitHub 登入
-                        </button>
+                        <a href="https://www.google.com/" target="_blank" rel="noopener">
+                            <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="button">
+                                <i class="bi bi-google me-1"></i> Google 登入
+                            </button>
+                        </a>
+                        <a href="https://www.facebook.com/" target="_blank" rel="noopener">
+                            <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" type="button">
+                                <i class="bi bi-facebook me-1"></i> Facebook 登入
+                            </button>
+                        </a>
+                        <a href="https://github.com/" target="_blank" rel="noopener">
+                            <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="button">
+                                <i class="bi bi-github me-1"></i> GitHub 登入
+                            </button>
+                        </a>
                     </form>
                 </div>
             </div>
@@ -170,43 +197,43 @@
 
     <script src="./bootstrap-5.3.8-dist/js/bootstrap.js"></script>
     <script>
-        // 密碼顯示/隱藏切換
         document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('.password-toggle').forEach(function (btn) {
-                // 讓 form-floating 正常顯示，需設置父層 position:relative
-                btn.parentElement.style.position = 'relative';
-                const input = document.querySelector(btn.getAttribute('data-target'));
-                btn.addEventListener('click', function () {
-                    const icon = btn.querySelector('i');
-                    if (input.type === 'password') {
-                        input.type = 'text';
-                        icon.classList.remove('bi-eye-slash');
-                        icon.classList.add('bi-eye');
-                    } else {
-                        input.type = 'password';
-                        icon.classList.remove('bi-eye');
-                        icon.classList.add('bi-eye-slash');
-                    }
+
+            // 驗證 email格式 及 密碼複雜度
+            const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            const validatePasswordComplexity = (pwd) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/.test(pwd);
+
+            // Modal 關閉時自動清空表單並移除驗證提示
+            const loginModalEl = document.getElementById('loginModal');
+            const registerModalEl = document.getElementById('registerModal');
+            function clearFormValidation(form) {
+                if (!form) return;
+                form.reset();
+                // 移除所有 is-invalid class
+                form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+                // 移除所有 invalid-feedback 元素
+                form.querySelectorAll('.invalid-feedback').forEach(el => el.remove());
+                // 強制密碼欄位 type 設回 password
+                const pwd1 = form.querySelector('#loginPassword') || form.querySelector('#registerPassword');
+                const pwd2 = form.querySelector('#registerPassword2');
+                if (pwd1) pwd1.type = 'password';
+                if (pwd2) pwd2.type = 'password';
+            }
+            if (loginModalEl) {
+                loginModalEl.addEventListener('hidden.bs.modal', function () {
+                    const form = loginModalEl.querySelector('form');
+                    clearFormValidation(form);
                 });
-            });
-        });
-    </script>
-    <!-- <script src="./SP_js/login_register.js"></script> -->
-    <script>
-        // 驗證 email 格式
-        function validateEmail(email) {
-            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-        }
+            }
+            if (registerModalEl) {
+                registerModalEl.addEventListener('hidden.bs.modal', function () {
+                    const form = registerModalEl.querySelector('form');
+                    clearFormValidation(form);
+                });
+            }
 
 
-        // 驗證密碼複雜度（至少8碼，含大寫、小寫、數字、特殊符號）
-        function validatePasswordComplexity(pwd) {
-            // 至少8碼，含大寫、小寫、數字、特殊符號
-            return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/.test(pwd);
-        }
-
-        // 登入表單驗證
-        document.addEventListener('DOMContentLoaded', function () {
+            // 登入表單驗證
             const loginForm = document.querySelector('#loginModal form');
             if (loginForm) {
                 loginForm.addEventListener('submit', function (e) {
@@ -245,6 +272,7 @@
                     if (valid) {
                         // 通過驗證，可送出（此處僅示範）
                         alert('登入驗證通過！');
+                        loginForm.reset(); // 清空欄位
                         // loginForm.submit(); // 實際串接後端時再啟用
                     }
                 });
@@ -285,7 +313,7 @@
                         pwd.classList.add('is-invalid');
                         pwd.insertAdjacentHTML('afterend', '<div class="invalid-feedback">密碼需含大寫、小寫、數字、特殊符號</div>');
                     }
-                    // 驗證確認密碼
+                    // 驗證確認密碼 
                     if (!pwd2.value.trim()) {
                         valid = false;
                         pwd2.classList.add('is-invalid');
@@ -297,12 +325,40 @@
                     }
                     if (valid) {
                         alert('註冊驗證通過！');
+                        regForm.reset(); // 清空欄位
                         // regForm.submit(); // 實際串接後端時再啟用
                     }
                 });
             }
+
+
+            // 顯示/隱藏密碼切換
+            const loginPwd = document.getElementById('loginPassword');
+            const showLoginPwd = document.getElementById('showLoginPassword');
+            if (loginPwd && showLoginPwd) {
+                showLoginPwd.addEventListener('change', function () {
+                    loginPwd.type = this.checked ? 'text' : 'password';
+                });
+            }
+
+            // 註冊（同時控制兩個欄位）
+            const regPwd = document.getElementById('registerPassword');
+            const regPwd2 = document.getElementById('registerPassword2');
+            const showRegPwd = document.getElementById('showRegisterPassword');
+            if (regPwd && regPwd2 && showRegPwd) {
+                showRegPwd.addEventListener('change', function () {
+                    const type = this.checked ? 'text' : 'password';
+                    regPwd.type = type;
+                    regPwd2.type = type;
+                });
+            }
+
         });
+
     </script>
+
+
+
 </body>
 
 </html>

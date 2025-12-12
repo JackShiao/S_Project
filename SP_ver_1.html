@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EEIT14小專-財經資訊網站</title>
     <link rel="stylesheet" href="./bootstrap-5.3.8-dist/css/bootstrap.css">
-    <link rel="stylesheet" href="./SP_css/BS_SP_header.css">
     <link rel="stylesheet" href="./bootstrap-icons-1.13.1/bootstrap-icons.css">
     <link rel="stylesheet" href="./bootstrap-5.3.8-examples/modals/modals.css">
+    <link rel="stylesheet" href="./SP_css/BS_SP_header.css">
 
     <style>
 
@@ -73,7 +73,7 @@
             <div class="carousel-inner">
                 <div class="carousel-item active">
                     <img src="./SP_img/banner1.jpg" class="d-block w-100" alt="財經網介紹Banner"
-                        style="height:400px ;object-fit:cover ;">
+                        style="height:400px ; object-fit:cover;">
                     <div class="text-center">
                         <div class="container">
                             <div class="carousel-caption mx-auto my-5 text-center"
@@ -256,6 +256,10 @@
                             <input type="password" class="form-control rounded-3" id="loginPassword"
                                 placeholder="請輸入密碼">
                             <label for="loginPassword">密碼</label>
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" id="showLoginPassword">
+                                <label class="form-check-label" for="showLoginPassword">顯示密碼</label>
+                            </div>
                         </div>
                         <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit">登入</button>
                         <small class="d-flex text-body-secondary justify-content-center">登入即表示同意本站使用條款。</small>
@@ -310,20 +314,24 @@
                             <input type="password" class="form-control rounded-3" id="registerPassword2"
                                 placeholder="請再次輸入密碼">
                             <label for="registerPassword2">確認密碼</label>
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" id="showRegisterPassword">
+                                <label class="form-check-label" for="showRegisterPassword">顯示密碼</label>
+                            </div>
                         </div>
                         <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit">註冊</button>
                         <small class="text-body-secondary d-flex justify-content-center">註冊即表示同意本站使用條款。</small>
                         <hr class="my-4" />
                         <h2 class="fs-5 fw-bold mb-3 d-flex justify-content-center">或使用第三方登入</h2>
                         <a href="https://www.google.com/" target="_blank" rel="noopener">
-                        <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="button">
-                            <i class="bi bi-google me-1"></i> Google 登入
-                        </button>
+                            <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="button">
+                                <i class="bi bi-google me-1"></i> Google 登入
+                            </button>
                         </a>
                         <a href="https://www.facebook.com/" target="_blank" rel="noopener">
-                        <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" type="button">
-                            <i class="bi bi-facebook me-1"></i> Facebook 登入
-                        </button>
+                            <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" type="button">
+                                <i class="bi bi-facebook me-1"></i> Facebook 登入
+                            </button>
                         </a>
                         <a href="https://github.com/" target="_blank" rel="noopener">
                             <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="button">
