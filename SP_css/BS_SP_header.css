@@ -19,3 +19,21 @@
 .dropdown-toggle:not(:focus) {
     outline: 0;
 }
+
+@media (max-width: 576px) {
+    /* 輪播文字說明在小畫面調整 */
+    .carousel-caption {
+        padding: 1rem !important;
+        border-radius: 0.75rem !important;
+        max-width: 95vw !important;
+    }
+
+    /* 登入/註冊框在小畫面置中 */
+    .modal-dialog {
+        margin: 1.75rem auto;
+    }
+
+    .modal-content {
+        border-radius: 1.5rem;
+    }
+}
