@@ -8,10 +8,11 @@
     <link rel="stylesheet" href="./bootstrap-icons-1.13.1/bootstrap-icons.css">
     <link rel="stylesheet" href="./bootstrap-5.3.8-dist/css/bootstrap.css">
     <link rel="stylesheet" href="./bootstrap-5.3.8-examples/modals/modals.css">
-    <link rel="stylesheet" href="./SP_css/BS_SP_header.css">
+    <link rel="stylesheet" href="./SP_css/BS_home_header.css">
+    <link rel="stylesheet" href="./SP_css/home_news.css">
 
     <style>
-        
+
     </style>
 
 </head>
@@ -80,7 +81,8 @@
                                 style="background:rgba(0,0,0,0.4); border-radius:20px; padding:2rem; max-width:700px;">
                                 <h1 class="display-4 fw-bold mt-3 mb-3 text-white">掌握全球財經脈動</h1>
                                 <p class="lead mb-4 text-white">投資決策最佳夥伴，提供即時指數、新聞與專業分析</p>
-                                <p><a class="btn btn-lg btn-warning " href="./market.html" target="_blank">查看市場指數</a></p>
+                                <p><a class="btn btn-lg btn-warning " href="./market.html" target="_blank">查看市場指數</a>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -143,55 +145,129 @@
             <div class="row g-3">
                 <div class="col-lg-4">
                     <div class="border rounded shadow-sm h-100 p-3 bg-white">
-                        <h4 class="mb-3"><a href="#" class="text-decoration-none text-dark">國際新聞<i
-                                    class="bi bi-caret-right-fill"></i></a></h4>
-                        <div class="mb-3">
-                            <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80"
-                                class="w-100 rounded" style="height:140px; object-fit:cover;" alt="國際新聞預覽圖">
-                            <div class="mt-2 small text-secondary">路透社</div>
-                            <div class="fw-bold mb-1">美國聯準會維持利率不變，全球市場反應正面</div>
-                            <div class="small text-muted">1小時前</div>
+                        <a href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx1YlY4U0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                            target="_blank" class="text-decoration-none text-dark">
+                            <h4 class="news-header mb-3">國際新聞<i class="bi bi-caret-right-fill"></i></h4>
+                        </a>
+                        <div>
+                            <a href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx1YlY4U0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                                target="_blank">
+                                <img src="./SP_img/news1.png" id="intl-news-main-img" class="w-100 rounded news-img"
+                                    onerror="this.src='./SP_img/default.png'" alt="國際新聞預覽圖">
+                            </a>
                         </div>
-                        <ul class="list-unstyled" id="news-intl">
-                            <li class="mb-2"><a href="#" class="text-decoration-none">美國聯準會維持利率不變，全球市場反應正面</a></li>
-                            <li class="mb-2"><a href="#" class="text-decoration-none">歐洲央行預計明年調整貨幣政策</a></li>
-                            <li class="mb-2"><a href="#" class="text-decoration-none">中國出口數據回升，亞洲股市走揚</a></li>
+                        <div class="fw-bold mt-2 mb-1 border-bottom pb-2">
+                            <a id="intl-news-main-link" class="news-link"
+                                href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx1YlY4U0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                                target="_blank">
+                                國際主新聞1
+                            </a>
+                            <div id="intl-news-main-time" class="news-main-time"></div>
+                        </div>
+                        <ul class="list-unstyled" id="intl-news">
+                            <li class="my-2 border-bottom pb-2">
+                                <a id="intl-news-link-2" class="news-link"
+                                    href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx1YlY4U0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                                    target="_blank">國際副新聞2</a>
+                                <div id="intl-news-time-2" class="news-time"></div>
+                            </li>
+                            <li class="my-2 border-bottom pb-2">
+                                <a id="intl-news-link-3" class="news-link"
+                                    href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx1YlY4U0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                                    target="_blank">國際副新聞3</a>
+                                <div id="intl-news-time-3" class="news-time"></div>
+                            </li>
+                            <li class="my-2">
+                                <a id="intl-news-link-4" class="news-link"
+                                    href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx1YlY4U0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                                    target="_blank">國際副新聞4</a>
+                                <div id="intl-news-time-4" class="news-time"></div>
+                            </li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <div class="border rounded shadow-sm h-100 p-3 bg-white">
-                        <h4 class="mb-3"><a href="#" class="text-decoration-none text-dark">台灣新聞<i
-                                    class="bi bi-caret-right-fill"></i></a></h4>
-                        <div class="mb-3">
-                            <img src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80"
-                                class="w-100 rounded" style="height:140px; object-fit:cover;" alt="台灣新聞預覽圖">
-                            <div class="mt-2 small text-secondary">中央社</div>
-                            <div class="fw-bold mb-1">台積電宣布新廠投資計畫，股價創新高</div>
-                            <div class="small text-muted">20分鐘前</div>
+                        <a href="https://news.google.com/topics/CAAqJQgKIh9DQkFTRVFvSUwyMHZNRFptTXpJU0JYcG9MVlJYS0FBUAE?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                            target="_blank" class="text-decoration-none text-dark">
+                            <h4 class="news-header mb-3">台灣新聞<i class="bi bi-caret-right-fill"></i></h4>
+                        </a>
+                        <div>
+                            <a href="https://news.google.com/topics/CAAqJQgKIh9DQkFTRVFvSUwyMHZNRFptTXpJU0JYcG9MVlJYS0FBUAE?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                                target="_blank">
+                                <img src="./SP_img/news2.png" id="tw-news-main-img" class="w-100 rounded news-img"
+                                    onerror="this.src='./SP_img/default.png'" alt="台灣新聞預覽圖">
+                            </a>
+                        </div>
+                        <div class="fw-bold mt-2 mb-1 border-bottom pb-2">
+                            <a id="tw-news-main-link" class="news-link"
+                                href="https://news.google.com/topics/CAAqJQgKIh9DQkFTRVFvSUwyMHZNRFptTXpJU0JYcG9MVlJYS0FBUAE?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                                target="_blank">
+                                台灣主新聞1
+                            </a>
+                            <div id="tw-news-main-time" class="news-main-time"></div>
                         </div>
                         <ul class="list-unstyled" id="news-tw">
-                            <li class="mb-2"><a href="#" class="text-decoration-none">台積電宣布新廠投資計畫，股價創新高</a></li>
-                            <li class="mb-2"><a href="#" class="text-decoration-none">金管會推動金融科技創新實驗</a></li>
-                            <li class="mb-2"><a href="#" class="text-decoration-none">台灣出口連續三月成長</a></li>
+                            <li class="my-2 border-bottom pb-2">
+                                <a id="tw-news-link-2" class="news-link"
+                                    href="https://news.google.com/topics/CAAqJQgKIh9DQkFTRVFvSUwyMHZNRFptTXpJU0JYcG9MVlJYS0FBUAE?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                                    target="_blank">台灣副新聞2</a>
+                                <div id="tw-news-time-2" class="news-time"></div>
+                            </li>
+                            <li class="my-2 border-bottom pb-2">
+                                <a id="tw-news-link-3" class="news-link"
+                                    href="https://news.google.com/topics/CAAqJQgKIh9DQkFTRVFvSUwyMHZNRFptTXpJU0JYcG9MVlJYS0FBUAE?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                                    target="_blank">台灣副新聞3</a>
+                                <div id="tw-news-time-3" class="news-time"></div>
+                            </li>
+                            <li class="my-2">
+                                <a id="tw-news-link-4" class="news-link"
+                                    href="https://news.google.com/topics/CAAqJQgKIh9DQkFTRVFvSUwyMHZNRFptTXpJU0JYcG9MVlJYS0FBUAE?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                                    target="_blank">台灣副新聞4</a>
+                                <div id="tw-news-time-4" class="news-time"></div>
+                            </li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <div class="border rounded shadow-sm h-100 p-3 bg-white">
-                        <h4 class="mb-3"><a href="#" class="text-decoration-none text-dark">產業新聞<i
-                                    class="bi bi-caret-right-fill"></i></a></h4>
-                        <div class="mb-3">
-                            <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=400&q=80"
-                                class="w-100 rounded" style="height:140px; object-fit:cover;" alt="產業新聞預覽圖">
-                            <div class="mt-2 small text-secondary">工商時報</div>
-                            <div class="fw-bold mb-1">AI 晶片需求強勁，半導體產業受惠</div>
-                            <div class="small text-muted">2小時前</div>
+                        <a href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx6TVdZU0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                            target="_blank" class="text-decoration-none text-dark">
+                            <h4 class="news-header mb-3">商業新聞<i class="bi bi-caret-right-fill"></i></h4>
+                        </a>
+                        <div>
+                            <a href="">
+                                <img src="./SP_img/news3.png" id="business-news-main-img" class="w-100 rounded news-img"
+                                    onerror="this.src='./SP_img/default.png'" alt="商業新聞預覽圖">
+                            </a>
                         </div>
-                        <ul class="list-unstyled" id="news-industry">
-                            <li class="mb-2"><a href="#" class="text-decoration-none">AI 晶片需求強勁，半導體產業受惠</a></li>
-                            <li class="mb-2"><a href="#" class="text-decoration-none">電動車市場擴大，供應鏈加速轉型</a></li>
-                            <li class="mb-2"><a href="#" class="text-decoration-none">綠能產業投資熱潮持續</a></li>
+                        <div class="fw-bold mt-2 mb-1 border-bottom pb-2">
+                            <a id="business-news-main-link" class="news-link"
+                                href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx6TVdZU0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                                target="_blank">
+                                商業主新聞1
+                            </a>
+                            <div id="business-news-main-time" class="news-main-time"></div>
+                        </div>
+                        <ul class="list-unstyled" id="news-business">
+                            <li class="my-2 border-bottom pb-2">
+                                <a id="business-news-link-2" class="news-link"
+                                    href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx6TVdZU0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                                    target="_blank">商業副新聞2</a>
+                                <div id="business-news-time-2" class="news-time"></div>
+                            </li>
+                            <li class="my-2 border-bottom pb-2">
+                                <a id="business-news-link-3" class="news-link"
+                                    href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx6TVdZU0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                                    target="_blank">商業副新聞3</a>
+                                <div id="business-news-time-3" class="news-time"></div>
+                            </li>
+                            <li class="my-2">
+                                <a id="business-news-link-4" class="news-link"
+                                    href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx6TVdZU0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                                    target="_blank">商業副新聞4</a>
+                                <div id="business-news-time-4" class="news-time"></div>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -214,8 +290,8 @@
                     <p class="card-text">
                         「台股今日震盪收高，分析師建議關注電子與金融族群表現，短線資金輪動明顯。」
                     </p>
-                    <a href="https://hao.cnyes.com/ch/361680" class="btn btn-outline-secondary btn-sm"
-                        target="_blank" rel="noopener">
+                    <a href="https://hao.cnyes.com/ch/361680" class="btn btn-outline-secondary btn-sm" target="_blank"
+                        rel="noopener">
                         查看完整原文 <i class="bi bi-box-arrow-up-right"></i>
                     </a>
                 </div>
@@ -347,6 +423,7 @@
     <script src="./bootstrap-5.3.8-dist/js/bootstrap.js"></script>
     <script src="./SP_js/home_market.js"></script>
     <script src="./SP_js/login_register.js"></script>
+    <script src="./SP_js/home_news.js"></script>
 </body>
 
 </html>

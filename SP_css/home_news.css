@@ -1,0 +1,26 @@
+.news-header:hover {
+    color: #0044ff;
+}
+
+.news-link {
+    text-decoration: none;
+}
+
+.news-link:hover {
+    text-decoration: underline;
+}
+
+.news-img {
+    height: 140px;
+    object-fit: cover;
+}
+
+.news-main-time {
+    font-size: 0.9rem;
+    color: #888;
+}
+
+.news-time {
+    font-size: 0.85rem;
+    color: #888;
+}
