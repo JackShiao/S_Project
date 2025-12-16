@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="./bootstrap-icons-1.13.1/bootstrap-icons.css">
     <link rel="stylesheet" href="./bootstrap-5.3.8-dist/css/bootstrap.css">
     <link rel="stylesheet" href="./bootstrap-5.3.8-examples/modals/modals.css">
-    <link rel="stylesheet" href="./SP_css/BS_SP_header.css">
+    <link rel="stylesheet" href="./SP_css/BS_home_header.css">
 
     <style>
         .news-header:hover {
@@ -58,9 +58,9 @@
 
                 <div class="collapse navbar-collapse" id="mainNavbar">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li><a href="#" class="nav-link px-2 text-secondary active " aria-current="page">首頁</a></li>
+                        <li><a href="./SP_ver_1.html" class="nav-link px-2 text-white">首頁</a></li>
                         <li><a href="./market.html" class="nav-link px-2 text-white">市場指數</a></li>
-                        <li><a href="#" class="nav-link px-2 text-white">新聞</a></li>
+                        <li><a href="#" class="nav-link px-2 text-secondary active" aria-current="page">新聞</a></li>
                         <li><a href="#" class="nav-link px-2 text-white">觀點分析</a></li>
                         <li><a href="#" class="nav-link px-2 text-white">關於</a></li>
                     </ul>
@@ -84,410 +84,725 @@
         </nav>
     </header>
 
+    <div class="container">
 
-    <main class="container">
+        <!-- 焦點新聞 -->
+        <div class="border rounded shadow-sm h-100 p-3 bg-white my-3">
 
+            <a href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRFZxYUdjU0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                target="_blank" class="text-decoration-none text-dark">
+                <h4 class="news-header mb-3 border-bottom pb-2">焦點新聞<i class="bi bi-caret-right-fill"></i></h4>
+            </a>
 
-
-        <!-- 新聞區 -->
-        <section class="mt-2">
-            <div class="row g-3">
-                <div class="col-lg-4">
-                    <div class="border rounded shadow-sm h-100 p-3 bg-white">
+            <div class="row g-0">
+                <div class="col-12 col-md-5 pe-md-3 mb-3 mb-md-0 d-flex flex-column align-items-center">
+                    <div class="w-100">
                         <a href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx1YlY4U0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
-                            target="_blank" class="text-decoration-none text-dark">
-                            <h4 class="news-header mb-3">國際新聞<i class="bi bi-caret-right-fill"></i></h4>
+                            target="_blank">
+                            <img src="./SP_img/news/focus.png" id="focus-news-main-img" class="w-100 rounded"
+                                style="height: 300px; object-fit: cover; object-position: center 5%;"
+                                onerror="this.src='./SP_img/default.png'" alt="焦點新聞預覽圖">
                         </a>
-                        <div>
-                            <a href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx1YlY4U0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
-                                target="_blank">
-                                <img src="./SP_img/news1.png" id="intl-news-main-img" class="w-100 rounded news-img"
-                                    alt="國際新聞預覽圖">
-                            </a>
-                        </div>
-                        <div class="fw-bold mt-2 mb-1">
-                            <a id="intl-news-main-link" class="news-link" href="#" target="_blank">
-                                國際主新聞1
-                            </a>
-                            <div id="intl-news-main-time" class="news-main-time"></div>
-                        </div>
-                        <ul class="list-unstyled" id="intl-news">
-                            <li class="my-3">
-                                <a id="intl-news-link-2" class="news-link" href="#" target="_blank">國際副新聞2</a>
-                                <div id="intl-news-time-2" class="news-time"></div>
-                            </li>
-                            <li class="my-3">
-                                <a id="intl-news-link-3" class="news-link" href="#" target="_blank">國際副新聞3</a>
-                                <div id="intl-news-time-3" class="news-time"></div>
-                            </li>
-                            <li class="my-3">
-                                <a id="intl-news-link-4" class="news-link" href="#" target="_blank">國際副新聞4</a>
-                                <div id="intl-news-time-4" class="news-time"></div>
-                            </li>
-                        </ul>
+                    </div>
+                    <div class="fw-bold mt-2 mb-1">
+                        <a id="focus-news-main-link" class="news-link"
+                            href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx1YlY4U0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                            target="_blank">
+                            焦點主新聞1
+                        </a>
+                        <div id="focus-news-main-time" class="news-main-time"></div>
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="border rounded shadow-sm h-100 p-3 bg-white">
-                        <a href="https://news.google.com/topics/CAAqJQgKIh9DQkFTRVFvSUwyMHZNRFptTXpJU0JYcG9MVlJYS0FBUAE?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
-                            target="_blank" class="text-decoration-none text-dark">
-                            <h4 class="news-header mb-3">台灣新聞<i class="bi bi-caret-right-fill"></i></h4>
-                        </a>
-                        <div>
-                            <a href="https://news.google.com/topics/CAAqJQgKIh9DQkFTRVFvSUwyMHZNRFptTXpJU0JYcG9MVlJYS0FBUAE?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
-                                target="_blank">
-                                <img src="./SP_img/news2.png" id="tw-news-main-img" class="w-100 rounded news-img"
-                                    alt="台灣新聞預覽圖">
-                            </a>
-                        </div>
-                        <div class="fw-bold mt-2 mb-1">
-                            <a id="tw-news-main-link" class="news-link" href="#" target="_blank">
-                                台灣主新聞1
-                            </a>
-                            <div id="tw-news-main-time" class="news-main-time"></div>
-                        </div>
-                        <ul class="list-unstyled" id="news-tw">
-                            <li class="my-3">
-                                <a id="tw-news-link-2" class="news-link" href="#" target="_blank">台灣副新聞2</a>
-                                <div id="tw-news-time-2" class="news-time"></div>
-                            </li>
-                            <li class="my-3">
-                                <a id="tw-news-link-3" class="news-link" href="#" target="_blank">台灣副新聞3</a>
-                                <div id="tw-news-time-3" class="news-time"></div>
-                            </li>
-                            <li class="my-3">
-                                <a id="tw-news-link-4" class="news-link" href="#" target="_blank">台灣副新聞4</a>
-                                <div id="tw-news-time-4" class="news-time"></div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="border rounded shadow-sm h-100 p-3 bg-white">
-                        <a href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx6TVdZU0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
-                            target="_blank" class="text-decoration-none text-dark">
-                            <h4 class="news-header mb-3">商業新聞<i class="bi bi-caret-right-fill"></i></h4>
-                        </a>
-                        <div>
-                            <a href="">
-                                <img src="./SP_img/news3.png"
-                                    id="business-news-main-img" class="w-100 rounded news-img" alt="商業新聞預覽圖">
-                            </a>
-                        </div>
-                        <div class="fw-bold mt-2 mb-1">
-                            <a id="business-news-main-link" class="news-link" href="#" target="_blank">
-                                商業主新聞1
-                            </a>
-                            <div id="business-news-main-time" class="news-main-time"></div>
-                        </div>
-                        <ul class="list-unstyled" id="news-business">
-                            <li class="my-3">
-                                <a id="business-news-link-2" class="news-link" href="#" target="_blank">商業副新聞2</a>
-                                <div id="business-news-time-2" class="news-time"></div>
-                            </li>
-                            <li class="my-3">
-                                <a id="business-news-link-3" class="news-link" href="#" target="_blank">商業副新聞3</a>
-                                <div id="business-news-time-3" class="news-time"></div>
-                            </li>
-                            <li class="my-3">
-                                <a id="business-news-link-4" class="news-link" href="#" target="_blank">商業副新聞4</a>
-                                <div id="business-news-time-4" class="news-time"></div>
-                            </li>
-                        </ul>
-                    </div>
+                <div class="col-12 col-md-7 ps-md-3">
+                    <div class="d-md-none border-bottom"></div>
+                    <ul class="list-unstyled" id="focus-news">
+                        <li class="my-2 border-bottom pb-2">
+                            <a id="focus-news-link-2" class="news-link"
+                                href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx1YlY4U0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                                target="_blank">焦點副新聞2</a>
+                            <div id="focus-news-time-2" class="news-time"></div>
+                        </li>
+                        <li class="my-2 border-bottom pb-2">
+                            <a id="focus-news-link-3" class="news-link"
+                                href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx1YlY4U0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                                target="_blank">焦點副新聞3</a>
+                            <div id="focus-news-time-3" class="news-time"></div>
+                        </li>
+                        <li class="my-2 border-bottom pb-2">
+                            <a id="focus-news-link-4" class="news-link"
+                                href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx1YlY4U0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                                target="_blank">焦點副新聞4</a>
+                            <div id="focus-news-time-4" class="news-time"></div>
+                        </li>
+                        <li class="my-2 border-bottom pb-2">
+                            <a id="focus-news-link-5" class="news-link"
+                                href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx1YlY4U0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                                target="_blank">焦點副新聞5</a>
+                            <div id="focus-news-time-5" class="news-time"></div>
+                        </li>
+                        <li class="my-2 border-bottom pb-2">
+                            <a id="focus-news-link-6" class="news-link"
+                                href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx1YlY4U0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                                target="_blank">焦點副新聞6</a>
+                            <div id="focus-news-time-6" class="news-time"></div>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </section>
-
-    </main>
+        </div>
 
 
+        <!-- 各類新聞 -->
+        <div class="row g-3 mb-3">
+            <!-- 國際 -->
+            <div class="col-lg-4">
+                <div class="border rounded shadow-sm h-100 p-3 bg-white">
+                    <a href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx1YlY4U0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                        target="_blank" class="text-decoration-none text-dark">
+                        <h4 class="news-header mb-3 border-bottom pb-2">國際新聞<i class="bi bi-caret-right-fill"></i>
+                        </h4>
+                    </a>
+                    <div>
+                        <a href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx1YlY4U0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                            target="_blank">
+                            <img src="./SP_img/news1.png" id="intl-news-main-img" class="w-100 rounded news-img"
+                                onerror="this.src='./SP_img/default.png'" alt="國際新聞預覽圖">
+                        </a>
+                    </div>
+                    <div class="fw-bold mt-2 mb-1 border-bottom pb-2">
+                        <a id="intl-news-main-link" class="news-link"
+                            href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx1YlY4U0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                            target="_blank">
+                            國際主新聞1
+                        </a>
+                        <div id="intl-news-main-time" class="news-main-time"></div>
+                    </div>
+                    <ul class="list-unstyled" id="intl-news">
+                        <li class="my-2 border-bottom pb-2">
+                            <a id="intl-news-link-2" class="news-link"
+                                href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx1YlY4U0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                                target="_blank">國際副新聞2</a>
+                            <div id="intl-news-time-2" class="news-time"></div>
+                        </li>
+                        <li class="my-2 border-bottom pb-2">
+                            <a id="intl-news-link-3" class="news-link"
+                                href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx1YlY4U0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                                target="_blank">國際副新聞3</a>
+                            <div id="intl-news-time-3" class="news-time"></div>
+                        </li>
+                        <li class="my-2">
+                            <a id="intl-news-link-4" class="news-link"
+                                href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx1YlY4U0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                                target="_blank">國際副新聞4</a>
+                            <div id="intl-news-time-4" class="news-time"></div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- 台灣 -->
+            <div class="col-lg-4">
+                <div class="border rounded shadow-sm h-100 p-3 bg-white">
+                    <a href="https://news.google.com/topics/CAAqJQgKIh9DQkFTRVFvSUwyMHZNRFptTXpJU0JYcG9MVlJYS0FBUAE?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                        target="_blank" class="text-decoration-none text-dark">
+                        <h4 class="news-header mb-3 border-bottom pb-2">台灣新聞<i class="bi bi-caret-right-fill"></i>
+                        </h4>
+                    </a>
+                    <div>
+                        <a href="https://news.google.com/topics/CAAqJQgKIh9DQkFTRVFvSUwyMHZNRFptTXpJU0JYcG9MVlJYS0FBUAE?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                            target="_blank">
+                            <img src="./SP_img/news2.png" id="tw-news-main-img" class="w-100 rounded news-img"
+                                onerror="this.src='./SP_img/default.png'" alt="台灣新聞預覽圖">
+                        </a>
+                    </div>
+                    <div class="fw-bold mt-2 mb-1 border-bottom pb-2">
+                        <a id="tw-news-main-link" class="news-link"
+                            href="https://news.google.com/topics/CAAqJQgKIh9DQkFTRVFvSUwyMHZNRFptTXpJU0JYcG9MVlJYS0FBUAE?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                            target="_blank">
+                            台灣主新聞1
+                        </a>
+                        <div id="tw-news-main-time" class="news-main-time"></div>
+                    </div>
+                    <ul class="list-unstyled" id="news-tw">
+                        <li class="my-2 border-bottom pb-2">
+                            <a id="tw-news-link-2" class="news-link"
+                                href="https://news.google.com/topics/CAAqJQgKIh9DQkFTRVFvSUwyMHZNRFptTXpJU0JYcG9MVlJYS0FBUAE?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                                target="_blank">台灣副新聞2</a>
+                            <div id="tw-news-time-2" class="news-time"></div>
+                        </li>
+                        <li class="my-2 border-bottom pb-2">
+                            <a id="tw-news-link-3" class="news-link"
+                                href="https://news.google.com/topics/CAAqJQgKIh9DQkFTRVFvSUwyMHZNRFptTXpJU0JYcG9MVlJYS0FBUAE?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                                target="_blank">台灣副新聞3</a>
+                            <div id="tw-news-time-3" class="news-time"></div>
+                        </li>
+                        <li class="my-2">
+                            <a id="tw-news-link-4" class="news-link"
+                                href="https://news.google.com/topics/CAAqJQgKIh9DQkFTRVFvSUwyMHZNRFptTXpJU0JYcG9MVlJYS0FBUAE?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                                target="_blank">台灣副新聞4</a>
+                            <div id="tw-news-time-4" class="news-time"></div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- 商業 -->
+            <div class="col-lg-4">
+                <div class="border rounded shadow-sm h-100 p-3 bg-white">
+                    <a href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx6TVdZU0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                        target="_blank" class="text-decoration-none text-dark">
+                        <h4 class="news-header mb-3 border-bottom pb-2">商業新聞<i class="bi bi-caret-right-fill"></i>
+                        </h4>
+                    </a>
+                    <div>
+                        <a href="">
+                            <img src="./SP_img/news3.png" id="business-news-main-img" class="w-100 rounded news-img"
+                                onerror="this.src='./SP_img/default.png'" alt="商業新聞預覽圖">
+                        </a>
+                    </div>
+                    <div class="fw-bold mt-2 mb-1 border-bottom pb-2">
+                        <a id="business-news-main-link" class="news-link"
+                            href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx6TVdZU0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                            target="_blank">
+                            商業主新聞1
+                        </a>
+                        <div id="business-news-main-time" class="news-main-time"></div>
+                    </div>
+                    <ul class="list-unstyled" id="news-business">
+                        <li class="my-2 border-bottom pb-2">
+                            <a id="business-news-link-2" class="news-link"
+                                href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx6TVdZU0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                                target="_blank">商業副新聞2</a>
+                            <div id="business-news-time-2" class="news-time"></div>
+                        </li>
+                        <li class="my-2 border-bottom pb-2">
+                            <a id="business-news-link-3" class="news-link"
+                                href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx6TVdZU0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                                target="_blank">商業副新聞3</a>
+                            <div id="business-news-time-3" class="news-time"></div>
+                        </li>
+                        <li class="my-2">
+                            <a id="business-news-link-4" class="news-link"
+                                href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx6TVdZU0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+                                target="_blank">商業副新聞4</a>
+                            <div id="business-news-time-4" class="news-time"></div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+
+    <footer class="p-2 text-bg-dark">
+        <p class="text-center fs-5">財經資訊網站</p>
+    </footer>
 
 
 
 
 
+    <!-- 登入 Modal -->
+    <div class="modal modal-sheet fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content rounded-4 shadow">
+                <div class="modal-header p-5 pb-4 border-bottom-0">
+                    <div class="d-flex w-100 align-items-center justify-content-center position-relative">
+                        <h1 class="fw-bold mb-0 fs-2" id="loginModalLabel">登入</h1>
+                        <button type="button" class="btn-close position-absolute end-0" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                </div>
+                <div class="modal-body p-5 pt-0">
+                    <form>
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control rounded-3" id="loginEmail"
+                                placeholder="name@example.com">
+                            <label for="loginEmail">電子郵件</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control rounded-3" id="loginPassword"
+                                placeholder="請輸入密碼">
+                            <label for="loginPassword">密碼</label>
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" id="showLoginPassword">
+                                <label class="form-check-label" for="showLoginPassword">顯示密碼</label>
+                            </div>
+                        </div>
+                        <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit">登入</button>
+                        <small class="d-flex text-body-secondary justify-content-center">登入即表示同意本站使用條款。</small>
+                        <hr class="my-4" />
+                        <h2 class="fs-5 fw-bold mb-3 d-flex justify-content-center">或使用第三方登入</h2>
+                        <a href="https://www.google.com/" target="_blank" rel="noopener">
+                            <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="button">
+                                <i class="bi bi-google me-1"></i> Google 登入
+                            </button>
+                        </a>
+                        <a href="https://www.facebook.com/" target="_blank" rel="noopener">
+                            <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" type="button">
+                                <i class="bi bi-facebook me-1"></i> Facebook 登入
+                            </button>
+                        </a>
+                        <a href="https://github.com/" target="_blank" rel="noopener">
+                            <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="button">
+                                <i class="bi bi-github me-1"></i> GitHub 登入
+                            </button>
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- 註冊 Modal -->
+    <div class="modal modal-sheet fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content rounded-4 shadow">
+                <div class="modal-header p-5 pb-4 border-bottom-0">
+                    <div class="d-flex w-100 align-items-center justify-content-center position-relative">
+                        <h1 class="fw-bold mb-0 fs-2" id="registerModalLabel">註冊會員</h1>
+                        <button type="button" class="btn-close position-absolute end-0" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                </div>
+                <div class="modal-body p-5 pt-0">
+                    <form>
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control rounded-3" id="registerEmail"
+                                placeholder="name@example.com">
+                            <label for="registerEmail">電子郵件</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control rounded-3" id="registerPassword"
+                                placeholder="請輸入密碼">
+                            <label for="registerPassword">密碼</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control rounded-3" id="registerPassword2"
+                                placeholder="請再次輸入密碼">
+                            <label for="registerPassword2">確認密碼</label>
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" id="showRegisterPassword">
+                                <label class="form-check-label" for="showRegisterPassword">顯示密碼</label>
+                            </div>
+                        </div>
+                        <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit">註冊</button>
+                        <small class="text-body-secondary d-flex justify-content-center">註冊即表示同意本站使用條款。</small>
+                        <hr class="my-4" />
+                        <h2 class="fs-5 fw-bold mb-3 d-flex justify-content-center">或使用第三方登入</h2>
+                        <a href="https://www.google.com/" target="_blank" rel="noopener">
+                            <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="button">
+                                <i class="bi bi-google me-1"></i> Google 登入
+                            </button>
+                        </a>
+                        <a href="https://www.facebook.com/" target="_blank" rel="noopener">
+                            <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" type="button">
+                                <i class="bi bi-facebook me-1"></i> Facebook 登入
+                            </button>
+                        </a>
+                        <a href="https://github.com/" target="_blank" rel="noopener">
+                            <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="button">
+                                <i class="bi bi-github me-1"></i> GitHub 登入
+                            </button>
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="./bootstrap-5.3.8-dist/js/bootstrap.js"></script>
-
+    <script src="./SP_js/login_register.js"></script>
     <script>
         // Google News RSS 取得主新聞（CORS 限制下用 rss2json 代理）
         document.addEventListener('DOMContentLoaded', function () {
 
-            // 國際新聞
-            // 連結 rss 轉 api 再 fetch
-            const intlrssUrl = 'https://news.google.com/rss/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx1YlY4U0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW:zh-Hant';
-            const intlapiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(intlrssUrl);
-            fetch(intlapiUrl)
-                .then(res => res.json())
-                .then(data => {
-                    // 檢查是否有資料
-                    if (!data.items || data.items.length < 1) {
-                        // 主新聞區塊顯示暫無新聞
-                        document.getElementById('intl-news-main-link').href = '#';
-                        document.getElementById('intl-news-main-link').innerHTML =
-                            '<div class="mt-3 btn btn-primary text-decoration-none d-flex align-items-center justify-content-center reload-btn">重新整理</div>';
-                        document.getElementById('intl-news-main-time').textContent = '';
-                        document.getElementById('intl-news-main-img').src = './SP_img/news1.png';
-                        // 清空副新聞
-                        for (let i = 2; i <= 4; i++) {
-                            const a = document.getElementById('intl-news-link-' + i);
-                            const t = document.getElementById('intl-news-time-' + i);
-                            if (a) a.textContent = '';
-                            if (t) t.textContent = '';
-                        }
-                        // 顯示提示
-                        const intlNews = document.getElementById('intl-news');
-                        if (intlNews) {
-                            intlNews.innerHTML =
-                                '<div class="d-flex justify-content-center align-items-center text-muted" style="height: 200px;">暫無新聞</div>';
-                        }
+            // 正確的新聞時間格式化函式
+            function formatAdd8Hours(dateStr) {
+                if (!dateStr) return '';
+                const date = new Date(dateStr);
+                const forced = new Date(date.getTime() + 8 * 60 * 60 * 1000);
+                const y = forced.getFullYear();
+                const m = (forced.getMonth() + 1).toString().padStart(2, '0');
+                const d = forced.getDate().toString().padStart(2, '0');
+                const h = forced.getHours().toString().padStart(2, '0');
+                const min = forced.getMinutes().toString().padStart(2, '0');
+                const s = forced.getSeconds().toString().padStart(2, '0');
+                return `${y}/${m}/${d} ${h}:${min}:${s}`;
+            }
+
+            // ====== 新增：快取與刷新間隔設定 ======
+            const FOCUS_CACHE_KEY = 'focusNewsCache';
+            const FOCUS_CACHE_TIME_KEY = 'focusNewsCacheTime';
+            const FOCUS_CACHE_INTERVAL = 10 * 60 * 1000; // 10分鐘
+            
+            // 取得焦點新聞資料（含快取判斷）
+            function getFocusNews() {
+                const now = Date.now();
+                const cacheTime = parseInt(localStorage.getItem(FOCUS_CACHE_TIME_KEY) || '0', 10);
+                const cacheData = localStorage.getItem(FOCUS_CACHE_KEY);
+                if (cacheData && (now - cacheTime < FOCUS_CACHE_INTERVAL)) {
+                    // 用快取資料
+                    try {
+                        const data = JSON.parse(cacheData);
+                        renderFocusNews(data);
                         return;
+                    } catch (e) {
+                        // 解析失敗則清除快取
+                        localStorage.removeItem(FOCUS_CACHE_KEY);
+                        localStorage.removeItem(FOCUS_CACHE_TIME_KEY);
                     }
-                    // 主新聞
-                    const item = data.items[0];
-                    document.getElementById('intl-news-main-link').href = item.link;
-                    document.getElementById('intl-news-main-link').textContent = item.title;
-                    document.getElementById('intl-news-main-time').textContent = new Date(item.pubDate).toLocaleString();
-                    // 主新聞圖片
-                    let img = item.enclosure && item.enclosure.link ? item.enclosure.link : '';
-                    if (!img && item.thumbnail) img = item.thumbnail;
-                    if (!img && item.description) {
-                        const match = item.description.match(/<img[^>]+src=["']([^"']+)["']/);
-                        if (match) img = match[1];
-                    }
-                    if (img) {
-                        document.getElementById('intl-news-main-img').src = img;
-                        // 同步更新圖片外層 <a> 的 href
-                        const imgLink = document.querySelector('#intl-news-main-img').closest('a');
-                        if (imgLink) imgLink.href = item.link;
-                    }
-                    // 2~4條
-                    for (let i = 1; i <= 3; i++) {
-                        const news = data.items[i];
-                        const a = document.getElementById('intl-news-link-' + (i + 1));
-                        const t = document.getElementById('intl-news-time-' + (i + 1));
-                        if (a && news) {
-                            a.href = news.link;
-                            a.textContent = news.title;
-                            if (t) t.textContent = new Date(news.pubDate).toLocaleString();
-                        } else if (a) {
-                            a.textContent = '';
-                            if (t) t.textContent = '';
-                        }
-                    }
-                })
-                .catch(() => {
-                    // 網路錯誤時的 fallback
-                    document.getElementById('intl-news-main-link').href = '#';
-                    document.getElementById('intl-news-main-link').innerHTML =
-                        '<div class="mt-3 btn btn-primary text-decoration-none d-flex align-items-center justify-content-center reload-btn">重新整理</div>';
-                    document.getElementById('intl-news-main-time').textContent = '';
-                    document.getElementById('intl-news-main-img').src = './SP_img/news1.png';
-                    for (let i = 2; i <= 4; i++) {
-                        const a = document.getElementById('intl-news-link-' + i);
-                        const t = document.getElementById('intl-news-time-' + i);
-                        if (a) a.textContent = '';
-                        if (t) t.textContent = '';
-                    }
-                    const intlNews = document.getElementById('intl-news');
-                    if (intlNews) {
-                        intlNews.innerHTML =
-                            '<div class="d-flex justify-content-center align-items-center text-muted" style="height: 200px;">暫無新聞</div>';
-                    }
-                });
+                }
+                // 無快取或過期，發送請求
+                const focusrssUrl = 'https://news.google.com/rss/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRFZxYUdjU0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant';
+                const focusapiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(focusrssUrl);
+                fetch(focusapiUrl)
+                    .then(res => res.json())
+                    .then(data => {
+                        // 存入快取
+                        localStorage.setItem(FOCUS_CACHE_KEY, JSON.stringify(data));
+                        localStorage.setItem(FOCUS_CACHE_TIME_KEY, now.toString());
+                        renderFocusNews(data);
+                    })
+                    .catch(() => {
+                        // 網路錯誤時 fallback
+                        renderFocusNews({ items: [] });
+                    });
+            }
+
+            // 頁面載入時執行
+            getFocusNews();
 
 
-            // 台灣新聞
-            // 連結 rss 轉 api 再 fetch
-            const twrssUrl = 'https://news.google.com/rss/topics/CAAqJQgKIh9DQkFTRVFvSUwyMHZNRFptTXpJU0JYcG9MVlJYS0FBUAE?hl=zh-TW&gl=TW&ceid=TW:zh-Hant';
-            const twapiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(twrssUrl);
-            fetch(twapiUrl)
-                .then(res => res.json())
-                .then(data => {
-                    // 檢查是否有資料
-                    if (!data.items || data.items.length < 1) {
-                        // 主新聞區塊顯示暫無新聞
-                        document.getElementById('tw-news-main-link').href = '#';
-                        document.getElementById('tw-news-main-link').target = '';
-                        document.getElementById('tw-news-main-link').innerHTML =
-                            '<div class="mt-3 btn btn-primary d-flex align-items-center justify-content-center reload-btn">重新整理</div>';
-                        document.getElementById('tw-news-main-time').textContent = '';
-                        document.getElementById('tw-news-main-img').src = './SP_img/news21.png';
-                        // 清空副新聞
-                        for (let i = 2; i <= 4; i++) {
-                            const a = document.getElementById('tw-news-link-' + i);
-                            const t = document.getElementById('tw-news-time-' + i);
-                            if (a) a.textContent = '';
-                            if (t) t.textContent = '';
-                        }
-                        // 顯示提示
-                        const twNews = document.getElementById('news-tw');
-                        if (twNews) {
-                            twNews.innerHTML =
-                                '<div class="d-flex justify-content-center align-items-center text-muted" style="height: 200px;">暫無新聞</div>';
-                        }
-                        return;
-                    }
-                    // 主新聞
-                    const item = data.items[0];
-                    document.getElementById('tw-news-main-link').href = item.link;
-                    document.getElementById('tw-news-main-link').textContent = item.title;
-                    document.getElementById('tw-news-main-time').textContent = new Date(item.pubDate).toLocaleString();
-                    // 主新聞圖片
-                    let img = item.enclosure && item.enclosure.link ? item.enclosure.link : '';
-                    if (!img && item.thumbnail) img = item.thumbnail;
-                    if (!img && item.description) {
-                        const match = item.description.match(/<img[^>]+src=["']([^"']+)["']/);
-                        if (match) img = match[1];
-                    }
-                    if (img) {
-                        document.getElementById('tw-news-main-img').src = img;
-                        // 同步更新圖片外層 <a> 的 href
-                        const imgLink = document.querySelector('#tw-news-main-img').closest('a');
-                        if (imgLink) imgLink.href = item.link;
-                    }
-                    // 2~4條
-                    for (let i = 1; i <= 3; i++) {
-                        const news = data.items[i];
-                        const a = document.getElementById('tw-news-link-' + (i + 1));
-                        const t = document.getElementById('tw-news-time-' + (i + 1));
-                        if (a && news) {
-                            a.href = news.link;
-                            a.textContent = news.title;
-                            if (t) t.textContent = new Date(news.pubDate).toLocaleString();
-                        } else if (a) {
-                            a.textContent = '';
-                            if (t) t.textContent = '';
-                        }
-                    };
-                })
-                .catch(() => {
-                    // 網路錯誤時的 fallback
-                    document.getElementById('tw-news-main-link').href = '#';
-                    document.getElementById('tw-news-main-link').target = '';
-                    document.getElementById('tw-news-main-link').innerHTML =
-                        '<div class="mt-3 btn btn-primary d-flex align-items-center justify-content-center reload-btn">重新整理</div>';
-                    document.getElementById('tw-news-main-time').textContent = '';
-                    document.getElementById('tw-news-main-img').src = './SP_img/news21.png';
-                    for (let i = 2; i <= 4; i++) {
-                        const a = document.getElementById('tw-news-link-' + i);
-                        const t = document.getElementById('tw-news-time-' + i);
-                        if (a) a.textContent = '';
-                        if (t) t.textContent = '';
-                    }
-                    const twNews = document.getElementById('news-tw');
-                    if (twNews) {
-                        twNews.innerHTML =
-                            '<div class="d-flex justify-content-center align-items-center text-muted" style="height: 200px;">暫無新聞</div>';
-                    }
-                });
-
-            // 商業新聞
-            // 連結 rss 轉 api 再 fetch
-            const businessrssUrl = 'https://news.google.com/rss/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx6TVdZU0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW:zh-Hant';
-            const businessapiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(businessrssUrl);
-            fetch(businessapiUrl)
-                .then(res => res.json())
-                .then(data => {
-                    // 檢查是否有資料
-                    if (!data.items || data.items.length < 1) {
-                        // 主新聞區塊顯示暫無新聞
-                        document.getElementById('business-news-main-link').href = '#';
-                        document.getElementById('business-news-main-link').target = '';
-                        document.getElementById('business-news-main-link').innerHTML =
-                            '<div class="mt-3 btn btn-primary d-flex align-items-center justify-content-center reload-btn">重新整理</div>';
-                        document.getElementById('business-news-main-time').textContent = '';
-                        document.getElementById('business-news-main-img').src = 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=400&q=80';
-                        // 清空副新聞
-                        for (let i = 2; i <= 4; i++) {
-                            const a = document.getElementById('business-news-link-' + i);
-                            const t = document.getElementById('business-news-time-' + i);
-                            if (a) a.textContent = '';
-                            if (t) t.textContent = '';
-                        }
-                        // 顯示提示
-                        const businessNews = document.getElementById('news-business');
-                        if (businessNews) {
-                            businessNews.innerHTML =
-                                '<div class="d-flex justify-content-center align-items-center text-muted" style="height: 200px;">暫無新聞</div>';
-                        }
-                        return;
-                    }
-                    // 主新聞
-                    const item = data.items[0];
-                    document.getElementById('business-news-main-link').href = item.link;
-                    document.getElementById('business-news-main-link').textContent = item.title;
-                    document.getElementById('business-news-main-time').textContent = new Date(item.pubDate).toLocaleString();
-                    // 主新聞圖片
-                    let img = item.enclosure && item.enclosure.link ? item.enclosure.link : '';
-                    if (!img && item.thumbnail) img = item.thumbnail;
-                    if (!img && item.description) {
-                        const match = item.description.match(/<img[^>]+src=["']([^"']+)["']/);
-                        if (match) img = match[1];
-                    }
-                    if (img) {
-                        document.getElementById('business-news-main-img').src = img;
-                        // 同步更新圖片外層 <a> 的 href
-                        const imgLink = document.querySelector('#business-news-main-img').closest('a');
-                        if (imgLink) imgLink.href = item.link;
-                    }
-                    // 2~4條
-                    for (let i = 1; i <= 3; i++) {
-                        const news = data.items[i];
-                        const a = document.getElementById('business-news-link-' + (i + 1));
-                        const t = document.getElementById('business-news-time-' + (i + 1));
-                        if (a && news) {
-                            a.href = news.link;
-                            a.textContent = news.title;
-                            if (t) t.textContent = new Date(news.pubDate).toLocaleString();
-                        } else if (a) {
-                            a.textContent = '';
-                            if (t) t.textContent = '';
-                        }
-                    };
-                })
-                .catch(() => {
-                    // 網路錯誤時的 fallback
-                    document.getElementById('business-news-main-link').href = '#';
-                    document.getElementById('business-news-main-link').target = '';
-                    document.getElementById('business-news-main-link').innerHTML =
-                        '<div class="mt-3 btn btn-primary d-flex align-items-center justify-content-center reload-btn">重新整理</div>';
-                    document.getElementById('business-news-main-time').textContent = '';
-                    document.getElementById('business-news-main-img').src = 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=400&q=80';
-                    for (let i = 2; i <= 4; i++) {
-                        const a = document.getElementById('business-news-link-' + i);
-                        const t = document.getElementById('business-news-time-' + i);
-                        if (a) a.textContent = '';
-                        if (t) t.textContent = '';
-                    }
-                    const businessNews = document.getElementById('news-business');
-                    if (businessNews) {
-                        businessNews.innerHTML =
-                            '<div class="d-flex justify-content-center align-items-center text-muted" style="height: 200px;">暫無新聞</div>';
-                    }
-                });
+            
 
             // 事件代理：重整按鈕
-            document.getElementById('intl-news-main-link').addEventListener('click', function (e) {
+            document.getElementById('focus-news-main-link').addEventListener('click', function (e) {
                 if (e.target && e.target.classList.contains('reload-btn')) {
                     e.preventDefault();
+                    // 強制清除快取並重新載入
+                    localStorage.removeItem(FOCUS_CACHE_KEY);
+                    localStorage.removeItem(FOCUS_CACHE_TIME_KEY);
                     location.reload();
                 }
             });
-            document.getElementById('tw-news-main-link').addEventListener('click', function (e) {
-                if (e.target && e.target.classList.contains('reload-btn')) {
-                    e.preventDefault();
-                    location.reload();
+            // ...existing code for other reload-btn handlers...
+
+            // 渲染焦點新聞資料
+            function renderFocusNews(data) {
+                if (!data.items || data.items.length < 1) {
+                    document.getElementById('focus-news-main-link').href = '#';
+                    document.getElementById('focus-news-main-link').target = '';
+                    document.getElementById('focus-news-main-link').innerHTML =
+                        '<div class="mt-3 btn btn-primary d-flex align-items-center justify-content-center reload-btn">重新整理</div>';
+                    document.getElementById('focus-news-main-time').textContent = '';
+                    document.getElementById('focus-news-main-img').src = './SP_img/news/focus.png';
+                    for (let i = 2; i <= 6; i++) {
+                        const a = document.getElementById('focus-news-link-' + i);
+                        const t = document.getElementById('focus-news-time-' + i);
+                        if (a) a.textContent = '';
+                        if (t) t.textContent = '';
+                    }
+                    const focusNews = document.getElementById('news-focus');
+                    if (focusNews) {
+                        // ...existing code...
+                    }
+                    return;
                 }
-            });
-            document.getElementById('business-news-main-link').addEventListener('click', function (e) {
-                if (e.target && e.target.classList.contains('reload-btn')) {
-                    e.preventDefault();
-                    location.reload();
+                // 主新聞
+                const item = data.items[0];
+                document.getElementById('focus-news-main-link').href = item.link;
+                document.getElementById('focus-news-main-link').textContent = item.title;
+                document.getElementById('focus-news-main-time').textContent = formatAdd8Hours(item.pubDate);
+                // 主新聞圖片
+                let img = item.enclosure && item.enclosure.link ? item.enclosure.link : '';
+                if (!img && item.thumbnail) img = item.thumbnail;
+                if (!img && item.description) {
+                    const match = item.description.match(/<img[^>]+src=["']([^"']+)["']/);
+                    if (match) img = match[1];
                 }
-            });
+                if (img) {
+                    document.getElementById('focus-news-main-img').src = img;
+                    const imgLink = document.querySelector('#focus-news-main-img').closest('a');
+                    if (imgLink) imgLink.href = item.link;
+                }
+                // 2~6條
+                for (let i = 1; i <= 5; i++) {
+                    const news = data.items[i];
+                    const a = document.getElementById('focus-news-link-' + (i + 1));
+                    const t = document.getElementById('focus-news-time-' + (i + 1));
+                    if (a && news) {
+                        a.href = news.link;
+                        a.textContent = news.title;
+                        if (t) t.textContent = formatAdd8Hours(news.pubDate);
+                    } else if (a) {
+                        a.textContent = '';
+                        if (t) t.textContent = '';
+                    }
+                }
+            }
+
+
+
+            // ...existing code for 其他新聞區塊 fetch，可依此模式擴充...
+
+            // // 國際新聞
+            // // 連結 rss 轉 api 再 fetch
+            // const intlrssUrl = 'https://news.google.com/rss/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx1YlY4U0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW:zh-Hant';
+            // const intlapiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(intlrssUrl);
+            // fetch(intlapiUrl)
+            //     .then(res => res.json())
+            //     .then(data => {
+            //         // 檢查是否有資料
+            //         if (!data.items || data.items.length < 1) {
+            //             // 主新聞區塊顯示暫無新聞
+            //             document.getElementById('intl-news-main-link').href = '#';
+            //             document.getElementById('intl-news-main-link').innerHTML =
+            //                 '<div class="mt-3 btn btn-primary text-decoration-none d-flex align-items-center justify-content-center reload-btn">重新整理</div>';
+            //             document.getElementById('intl-news-main-time').textContent = '';
+            //             document.getElementById('intl-news-main-img').src = './SP_img/news1.png';
+            //             // 清空副新聞
+            //             for (let i = 2; i <= 4; i++) {
+            //                 const a = document.getElementById('intl-news-link-' + i);
+            //                 const t = document.getElementById('intl-news-time-' + i);
+            //                 if (a) a.textContent = '';
+            //                 if (t) t.textContent = '';
+            //             }
+            //             // 顯示提示
+            //             const intlNews = document.getElementById('intl-news');
+            //             if (intlNews) {
+            //                 intlNews.innerHTML =
+            //                     '<div class="d-flex justify-content-center align-items-center text-muted" style="height: 200px;">暫無新聞</div>';
+            //             }
+            //             return;
+            //         }
+            //         // 主新聞
+            //         const item = data.items[0];
+            //         document.getElementById('intl-news-main-link').href = item.link;
+            //         document.getElementById('intl-news-main-link').textContent = item.title;
+            //         document.getElementById('intl-news-main-time').textContent = formatAdd8Hours(item.pubDate);
+            //         // 主新聞圖片
+            //         let img = item.enclosure && item.enclosure.link ? item.enclosure.link : '';
+            //         if (!img && item.thumbnail) img = item.thumbnail;
+            //         if (!img && item.description) {
+            //             const match = item.description.match(/<img[^>]+src=["']([^"']+)["']/);
+            //             if (match) img = match[1];
+            //         }
+            //         if (img) {
+            //             document.getElementById('intl-news-main-img').src = img;
+            //             // 同步更新圖片外層 <a> 的 href
+            //             const imgLink = document.querySelector('#intl-news-main-img').closest('a');
+            //             if (imgLink) imgLink.href = item.link;
+            //         }
+            //         // 2~4條
+            //         for (let i = 1; i <= 3; i++) {
+            //             const news = data.items[i];
+            //             const a = document.getElementById('intl-news-link-' + (i + 1));
+            //             const t = document.getElementById('intl-news-time-' + (i + 1));
+            //             if (a && news) {
+            //                 a.href = news.link;
+            //                 a.textContent = news.title;
+            //                 if (t) t.textContent = formatAdd8Hours(news.pubDate);
+            //             } else if (a) {
+            //                 a.textContent = '';
+            //                 if (t) t.textContent = '';
+            //             }
+            //         }
+            //     })
+            //     .catch(() => {
+            //         // 網路錯誤時的 fallback
+            //         document.getElementById('intl-news-main-link').href = '#';
+            //         document.getElementById('intl-news-main-link').innerHTML =
+            //             '<div class="mt-3 btn btn-primary text-decoration-none d-flex align-items-center justify-content-center reload-btn">重新整理</div>';
+            //         document.getElementById('intl-news-main-time').textContent = '';
+            //         document.getElementById('intl-news-main-img').src = './SP_img/news1.png';
+            //         for (let i = 2; i <= 4; i++) {
+            //             const a = document.getElementById('intl-news-link-' + i);
+            //             const t = document.getElementById('intl-news-time-' + i);
+            //             if (a) a.textContent = '';
+            //             if (t) t.textContent = '';
+            //         }
+            //         const intlNews = document.getElementById('intl-news');
+            //         if (intlNews) {
+            //             intlNews.innerHTML =
+            //                 '<div class="d-flex justify-content-center align-items-center text-muted" style="height: 200px;">暫無新聞</div>';
+            //         }
+            //     });
+
+
+            // // 台灣新聞
+            // // 連結 rss 轉 api 再 fetch
+            // const twrssUrl = 'https://news.google.com/rss/topics/CAAqJQgKIh9DQkFTRVFvSUwyMHZNRFptTXpJU0JYcG9MVlJYS0FBUAE?hl=zh-TW&gl=TW&ceid=TW:zh-Hant';
+            // const twapiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(twrssUrl);
+            // fetch(twapiUrl)
+            //     .then(res => res.json())
+            //     .then(data => {
+            //         // 檢查是否有資料
+            //         if (!data.items || data.items.length < 1) {
+            //             // 主新聞區塊顯示暫無新聞
+            //             document.getElementById('tw-news-main-link').href = '#';
+            //             document.getElementById('tw-news-main-link').target = '';
+            //             document.getElementById('tw-news-main-link').innerHTML =
+            //                 '<div class="mt-3 btn btn-primary d-flex align-items-center justify-content-center reload-btn">重新整理</div>';
+            //             document.getElementById('tw-news-main-time').textContent = '';
+            //             document.getElementById('tw-news-main-img').src = './SP_img/news2.png';
+            //             // 清空副新聞
+            //             for (let i = 2; i <= 4; i++) {
+            //                 const a = document.getElementById('tw-news-link-' + i);
+            //                 const t = document.getElementById('tw-news-time-' + i);
+            //                 if (a) a.textContent = '';
+            //                 if (t) t.textContent = '';
+            //             }
+            //             // 顯示提示
+            //             const twNews = document.getElementById('news-tw');
+            //             if (twNews) {
+            //                 twNews.innerHTML =
+            //                     '<div class="d-flex justify-content-center align-items-center text-muted" style="height: 200px;">暫無新聞</div>';
+            //             }
+            //             return;
+            //         }
+            //         // 主新聞
+            //         const item = data.items[0];
+            //         document.getElementById('tw-news-main-link').href = item.link;
+            //         document.getElementById('tw-news-main-link').textContent = item.title;
+            //         document.getElementById('tw-news-main-time').textContent = formatAdd8Hours(item.pubDate);
+            //         // 主新聞圖片
+            //         let img = item.enclosure && item.enclosure.link ? item.enclosure.link : '';
+            //         if (!img && item.thumbnail) img = item.thumbnail;
+            //         if (!img && item.description) {
+            //             const match = item.description.match(/<img[^>]+src=["']([^"']+)["']/);
+            //             if (match) img = match[1];
+            //         }
+            //         if (img) {
+            //             document.getElementById('tw-news-main-img').src = img;
+            //             // 同步更新圖片外層 <a> 的 href
+            //             const imgLink = document.querySelector('#tw-news-main-img').closest('a');
+            //             if (imgLink) imgLink.href = item.link;
+            //         }
+            //         // 2~4條
+            //         for (let i = 1; i <= 3; i++) {
+            //             const news = data.items[i];
+            //             const a = document.getElementById('tw-news-link-' + (i + 1));
+            //             const t = document.getElementById('tw-news-time-' + (i + 1));
+            //             if (a && news) {
+            //                 a.href = news.link;
+            //                 a.textContent = news.title;
+            //                 if (t) t.textContent = formatAdd8Hours(news.pubDate);
+            //             } else if (a) {
+            //                 a.textContent = '';
+            //                 if (t) t.textContent = '';
+            //             }
+            //         };
+            //     })
+            //     .catch(() => {
+            //         // 網路錯誤時的 fallback
+            //         document.getElementById('tw-news-main-link').href = '#';
+            //         document.getElementById('tw-news-main-link').target = '';
+            //         document.getElementById('tw-news-main-link').innerHTML =
+            //             '<div class="mt-3 btn btn-primary d-flex align-items-center justify-content-center reload-btn">重新整理</div>';
+            //         document.getElementById('tw-news-main-time').textContent = '';
+            //         document.getElementById('tw-news-main-img').src = './SP_img/news2.png';
+            //         for (let i = 2; i <= 4; i++) {
+            //             const a = document.getElementById('tw-news-link-' + i);
+            //             const t = document.getElementById('tw-news-time-' + i);
+            //             if (a) a.textContent = '';
+            //             if (t) t.textContent = '';
+            //         }
+            //         const twNews = document.getElementById('news-tw');
+            //         if (twNews) {
+            //             twNews.innerHTML =
+            //                 '<div class="d-flex justify-content-center align-items-center text-muted" style="height: 200px;">暫無新聞</div>';
+            //         }
+            //     });
+
+            // // 商業新聞
+            // // 連結 rss 轉 api 再 fetch
+            // const businessrssUrl = 'https://news.google.com/rss/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx6TVdZU0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW:zh-Hant';
+            // const businessapiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(businessrssUrl);
+            // fetch(businessapiUrl)
+            //     .then(res => res.json())
+            //     .then(data => {
+            //         // 檢查是否有資料
+            //         if (!data.items || data.items.length < 1) {
+            //             // 主新聞區塊顯示暫無新聞
+            //             document.getElementById('business-news-main-link').href = '#';
+            //             document.getElementById('business-news-main-link').target = '';
+            //             document.getElementById('business-news-main-link').innerHTML =
+            //                 '<div class="mt-3 btn btn-primary d-flex align-items-center justify-content-center reload-btn">重新整理</div>';
+            //             document.getElementById('business-news-main-time').textContent = '';
+            //             document.getElementById('business-news-main-img').src = './SP_img/news3.png';
+            //             // 清空副新聞
+            //             for (let i = 2; i <= 4; i++) {
+            //                 const a = document.getElementById('business-news-link-' + i);
+            //                 const t = document.getElementById('business-news-time-' + i);
+            //                 if (a) a.textContent = '';
+            //                 if (t) t.textContent = '';
+            //             }
+            //             // 顯示提示
+            //             const businessNews = document.getElementById('news-business');
+            //             if (businessNews) {
+            //                 businessNews.innerHTML =
+            //                     '<div class="d-flex justify-content-center align-items-center text-muted" style="height: 200px;">暫無新聞</div>';
+            //             }
+            //             return;
+            //         }
+            //         // 主新聞
+            //         const item = data.items[0];
+            //         document.getElementById('business-news-main-link').href = item.link;
+            //         document.getElementById('business-news-main-link').textContent = item.title;
+            //         document.getElementById('business-news-main-time').textContent = formatAdd8Hours(item.pubDate);
+            //         // 主新聞圖片
+            //         let img = item.enclosure && item.enclosure.link ? item.enclosure.link : '';
+            //         if (!img && item.thumbnail) img = item.thumbnail;
+            //         if (!img && item.description) {
+            //             const match = item.description.match(/<img[^>]+src=["']([^"']+)["']/);
+            //             if (match) img = match[1];
+            //         }
+            //         if (img) {
+            //             document.getElementById('business-news-main-img').src = img;
+            //             // 同步更新圖片外層 <a> 的 href
+            //             const imgLink = document.querySelector('#business-news-main-img').closest('a');
+            //             if (imgLink) imgLink.href = item.link;
+            //         }
+            //         // 2~4條
+            //         for (let i = 1; i <= 3; i++) {
+            //             const news = data.items[i];
+            //             const a = document.getElementById('business-news-link-' + (i + 1));
+            //             const t = document.getElementById('business-news-time-' + (i + 1));
+            //             if (a && news) {
+            //                 a.href = news.link;
+            //                 a.textContent = news.title;
+            //                 if (t) t.textContent = formatAdd8Hours(news.pubDate);
+            //             } else if (a) {
+            //                 a.textContent = '';
+            //                 if (t) t.textContent = '';
+            //             }
+            //         };
+            //     })
+            //     .catch(() => {
+            //         // 網路錯誤時的 fallback
+            //         document.getElementById('business-news-main-link').href = '#';
+            //         document.getElementById('business-news-main-link').target = '';
+            //         document.getElementById('business-news-main-link').innerHTML =
+            //             '<div class="mt-3 btn btn-primary d-flex align-items-center justify-content-center reload-btn">重新整理</div>';
+            //         document.getElementById('business-news-main-time').textContent = '';
+            //         document.getElementById('business-news-main-img').src = './SP_img/news3.png';
+            //         for (let i = 2; i <= 4; i++) {
+            //             const a = document.getElementById('business-news-link-' + i);
+            //             const t = document.getElementById('business-news-time-' + i);
+            //             if (a) a.textContent = '';
+            //             if (t) t.textContent = '';
+            //         }
+            //         const businessNews = document.getElementById('news-business');
+            //         if (businessNews) {
+            //             businessNews.innerHTML =
+            //                 '<div class="d-flex justify-content-center align-items-center text-muted" style="height: 200px;">暫無新聞</div>';
+            //         }
+            //     });
 
         });
     </script>

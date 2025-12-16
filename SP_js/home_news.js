@@ -1,6 +1,41 @@
 // Google News RSS 取得主新聞（CORS 限制下用 rss2json 代理）
 document.addEventListener('DOMContentLoaded', function () {
 
+    // 正確的新聞時間格式化函式
+    function formatAdd8Hours(dateStr) {
+        if (!dateStr) return '';
+        const date = new Date(dateStr);
+        const forced = new Date(date.getTime() + 8 * 60 * 60 * 1000);
+        const y = forced.getFullYear();
+        const m = (forced.getMonth() + 1).toString().padStart(2, '0');
+        const d = forced.getDate().toString().padStart(2, '0');
+        const h = forced.getHours().toString().padStart(2, '0');
+        const min = forced.getMinutes().toString().padStart(2, '0');
+        const s = forced.getSeconds().toString().padStart(2, '0');
+        return `${y}/${m}/${d} ${h}:${min}:${s}`;
+    }
+
+    // 事件代理：重整按鈕
+    document.getElementById('intl-news-main-link').addEventListener('click', function (e) {
+        if (e.target && e.target.classList.contains('reload-btn')) {
+            e.preventDefault();
+            location.reload();
+        }
+    });
+    document.getElementById('tw-news-main-link').addEventListener('click', function (e) {
+        if (e.target && e.target.classList.contains('reload-btn')) {
+            e.preventDefault();
+            location.reload();
+        }
+    });
+    document.getElementById('business-news-main-link').addEventListener('click', function (e) {
+        if (e.target && e.target.classList.contains('reload-btn')) {
+            e.preventDefault();
+            location.reload();
+        }
+    });
+
+
     // 國際新聞
     // 連結 rss 轉 api 再 fetch
     const intlrssUrl = 'https://news.google.com/rss/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx1YlY4U0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW:zh-Hant';
@@ -35,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const item = data.items[0];
             document.getElementById('intl-news-main-link').href = item.link;
             document.getElementById('intl-news-main-link').textContent = item.title;
-            document.getElementById('intl-news-main-time').textContent = new Date(item.pubDate).toLocaleString();
+            document.getElementById('intl-news-main-time').textContent = formatAdd8Hours(item.pubDate);
             // 主新聞圖片
             let img = item.enclosure && item.enclosure.link ? item.enclosure.link : '';
             if (!img && item.thumbnail) img = item.thumbnail;
@@ -57,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (a && news) {
                     a.href = news.link;
                     a.textContent = news.title;
-                    if (t) t.textContent = new Date(news.pubDate).toLocaleString();
+                    if (t) t.textContent = formatAdd8Hours(news.pubDate);
                 } else if (a) {
                     a.textContent = '';
                     if (t) t.textContent = '';
@@ -120,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const item = data.items[0];
             document.getElementById('tw-news-main-link').href = item.link;
             document.getElementById('tw-news-main-link').textContent = item.title;
-            document.getElementById('tw-news-main-time').textContent = new Date(item.pubDate).toLocaleString();
+            document.getElementById('tw-news-main-time').textContent = formatAdd8Hours(item.pubDate);
             // 主新聞圖片
             let img = item.enclosure && item.enclosure.link ? item.enclosure.link : '';
             if (!img && item.thumbnail) img = item.thumbnail;
@@ -142,7 +177,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (a && news) {
                     a.href = news.link;
                     a.textContent = news.title;
-                    if (t) t.textContent = new Date(news.pubDate).toLocaleString();
+                    if (t) t.textContent = formatAdd8Hours(news.pubDate);
                 } else if (a) {
                     a.textContent = '';
                     if (t) t.textContent = '';
@@ -205,7 +240,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const item = data.items[0];
             document.getElementById('business-news-main-link').href = item.link;
             document.getElementById('business-news-main-link').textContent = item.title;
-            document.getElementById('business-news-main-time').textContent = new Date(item.pubDate).toLocaleString();
+            document.getElementById('business-news-main-time').textContent = formatAdd8Hours(item.pubDate);
             // 主新聞圖片
             let img = item.enclosure && item.enclosure.link ? item.enclosure.link : '';
             if (!img && item.thumbnail) img = item.thumbnail;
@@ -227,7 +262,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (a && news) {
                     a.href = news.link;
                     a.textContent = news.title;
-                    if (t) t.textContent = new Date(news.pubDate).toLocaleString();
+                    if (t) t.textContent = formatAdd8Hours(news.pubDate);
                 } else if (a) {
                     a.textContent = '';
                     if (t) t.textContent = '';
@@ -254,25 +289,5 @@ document.addEventListener('DOMContentLoaded', function () {
                     '<div class="d-flex justify-content-center align-items-center text-muted" style="height: 200px;">暫無新聞</div>';
             }
         });
-
-    // 事件代理：重整按鈕
-    document.getElementById('intl-news-main-link').addEventListener('click', function (e) {
-        if (e.target && e.target.classList.contains('reload-btn')) {
-            e.preventDefault();
-            location.reload();
-        }
-    });
-    document.getElementById('tw-news-main-link').addEventListener('click', function (e) {
-        if (e.target && e.target.classList.contains('reload-btn')) {
-            e.preventDefault();
-            location.reload();
-        }
-    });
-    document.getElementById('business-news-main-link').addEventListener('click', function (e) {
-        if (e.target && e.target.classList.contains('reload-btn')) {
-            e.preventDefault();
-            location.reload();
-        }
-    });
 
 });
