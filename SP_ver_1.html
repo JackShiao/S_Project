@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="./bootstrap-5.3.8-examples/modals/modals.css">
     <link rel="stylesheet" href="./SP_css/BS_home_header.css">
     <link rel="stylesheet" href="./SP_css/news.css">
+    <link rel="stylesheet" href="./SP_css/g_search.css">
 
     <style>
 
@@ -36,15 +37,13 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li><a href="#" class="nav-link px-2 text-secondary active " aria-current="page">首頁</a></li>
                         <li><a href="./market.html" class="nav-link px-2 text-white">市場指數</a></li>
-                        <li><a href="./news.html" class="nav-link px-2 text-white">新聞</a></li>
-                        <li><a href="#" class="nav-link px-2 text-white">觀點分析</a></li>
+                        <li><a href="./news.html" class="nav-link px-2 text-white">新聞專區</a></li>
                         <li><a href="#" class="nav-link px-2 text-white">關於</a></li>
                     </ul>
 
-                    <form class="d-flex align-items-center mb-3 mb-lg-0 me-lg-3" role="search">
-                        <input type="search" class="form-control form-control-dark text-bg-dark search_p"
-                            placeholder="搜尋..." aria-label="Search" />
-                    </form>
+                    <div class="me-lg-2 mb-lg-0 mb-2">
+                        <div class="gcse-search" aria-label="站內搜尋"></div>
+                    </div>
 
                     <div class="d-flex flex-lg-row flex-column align-items-center">
                         <button type="button" class="btn btn-outline-light w-100 w-lg-auto mb-2 mb-lg-0 me-lg-2"
@@ -62,7 +61,8 @@
 
     <!-- Banner 參考 BS Carousel -->
     <section class="border-bottom">
-        <div id="bannerCarousel" class="carousel slide mb-6" data-bs-ride="carousel" aria-live="polite">
+        <div id="bannerCarousel" class="carousel slide mb-6" data-bs-ride="carousel" data-bs-interval="5000"
+            aria-live="polite">
             <div class="carousel-indicators">
                 <button type="button" data-bs-target="#bannerCarousel" data-bs-slide-to="0" class="active"
                     aria-current="true" aria-label="網站介紹"></button>
@@ -73,7 +73,7 @@
             </div>
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="./SP_img/banner1.jpg" class="d-block w-100" alt="財經網介紹Banner"
+                    <img src="./SP_img/banner1.jpg" class="d-block w-100" alt="財經網介紹Banner" loading="lazy"
                         style="height:400px ; object-fit:cover;">
                     <div class="text-center">
                         <div class="container">
@@ -88,7 +88,7 @@
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="./SP_img/banner2.png" class="d-block w-100" alt="時事新聞Banner"
+                    <img src="./SP_img/banner2.png" class="d-block w-100" alt="時事新聞Banner" loading="lazy"
                         style="height:400px; object-fit:cover; object-position:center 25%;">
                     <div class="text-center">
                         <div class="container">
@@ -102,7 +102,7 @@
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="./SP_img/banner3.jpg" class="d-block w-100 " alt="市場觀點Banner"
+                    <img src="./SP_img/banner3.jpg" class="d-block w-100 " alt="市場觀點Banner" loading="lazy"
                         style="height:400px; object-fit:cover;">
                     <div class="text-center">
                         <div class="container">
@@ -110,7 +110,8 @@
                                 style="background:rgba(0,0,0,0.4); border-radius:20px; padding:2rem; max-width:700px;">
                                 <h1 class="display-4 fw-bold mt-3 mb-3 text-white">市場觀點</h1>
                                 <p class="lead mb-4 text-white">深度解析產業趨勢，華爾街分析師看法！</p>
-                                <p><a class="btn btn-lg btn-success" href="#">探索更多</a></p>
+                                <p><a class="btn btn-lg btn-success" href="https://hao.cnyes.com/ch/361680"
+                                        target="_blank">探索更多</a></p>
                             </div>
                         </div>
                     </div>
@@ -132,7 +133,7 @@
         <!-- 指數區 -->
         <section class="mt-4">
             <div class="border rounded shadow-sm p-3 mb-4">
-                <h3 class="mb-3">市場指數(即時展示)</h3>
+                <h3 class="mb-3">市場指數(模擬展示)</h3>
                 <div id="market-table-js"></div>
                 <div class="mt-2">
                     <a href="./market.html" class="btn btn-warning w-100" target="_blank">查看更多</a>
@@ -147,13 +148,14 @@
                     <div class="border rounded shadow-sm h-100 p-3 bg-white">
                         <a href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx1YlY4U0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
                             target="_blank" class="text-decoration-none text-dark">
-                            <h4 class="news-header mb-3 border-bottom pb-2">國際新聞<i class="bi bi-caret-right-fill"></i></h4>
+                            <h4 class="news-header mb-3 border-bottom pb-2">國際新聞<i class="bi bi-caret-right-fill"></i>
+                            </h4>
                         </a>
                         <div>
                             <a href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx1YlY4U0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
                                 target="_blank">
                                 <img src="./SP_img/news1.png" id="intl-news-main-img" class="w-100 rounded news-img"
-                                    onerror="this.src='./SP_img/default.png'" alt="國際新聞預覽圖">
+                                    loading="lazy" onerror="this.src='./SP_img/default.png'" alt="國際新聞預覽圖">
                             </a>
                         </div>
                         <div class="fw-bold mt-2 mb-1 border-bottom pb-2">
@@ -190,13 +192,14 @@
                     <div class="border rounded shadow-sm h-100 p-3 bg-white">
                         <a href="https://news.google.com/topics/CAAqJQgKIh9DQkFTRVFvSUwyMHZNRFptTXpJU0JYcG9MVlJYS0FBUAE?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
                             target="_blank" class="text-decoration-none text-dark">
-                            <h4 class="news-header mb-3 border-bottom pb-2">台灣新聞<i class="bi bi-caret-right-fill"></i></h4>
+                            <h4 class="news-header mb-3 border-bottom pb-2">台灣新聞<i class="bi bi-caret-right-fill"></i>
+                            </h4>
                         </a>
                         <div>
                             <a href="https://news.google.com/topics/CAAqJQgKIh9DQkFTRVFvSUwyMHZNRFptTXpJU0JYcG9MVlJYS0FBUAE?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
                                 target="_blank">
                                 <img src="./SP_img/news2.png" id="tw-news-main-img" class="w-100 rounded news-img"
-                                    onerror="this.src='./SP_img/default.png'" alt="台灣新聞預覽圖">
+                                    loading="lazy" onerror="this.src='./SP_img/default.png'" alt="台灣新聞預覽圖">
                             </a>
                         </div>
                         <div class="fw-bold mt-2 mb-1 border-bottom pb-2">
@@ -233,12 +236,13 @@
                     <div class="border rounded shadow-sm h-100 p-3 bg-white">
                         <a href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx6TVdZU0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
                             target="_blank" class="text-decoration-none text-dark">
-                            <h4 class="news-header mb-3 border-bottom pb-2">商業新聞<i class="bi bi-caret-right-fill"></i></h4>
+                            <h4 class="news-header mb-3 border-bottom pb-2">商業新聞<i class="bi bi-caret-right-fill"></i>
+                            </h4>
                         </a>
                         <div>
                             <a href="">
                                 <img src="./SP_img/news3.png" id="business-news-main-img" class="w-100 rounded news-img"
-                                    onerror="this.src='./SP_img/default.png'" alt="商業新聞預覽圖">
+                                    loading="lazy" onerror="this.src='./SP_img/default.png'" alt="商業新聞預覽圖">
                             </a>
                         </div>
                         <div class="fw-bold mt-2 mb-1 border-bottom pb-2">
@@ -283,16 +287,17 @@
                         <i class="bi bi-chat-right-quote fs-2 me-2 mb-1"></i>
                         <div>
                             <div class="fw-bold">Joe’s華爾街脈動</div>
-                            <div class="text-muted small">來源：鉅亨網｜2025/12/09</div>
+                            <div class="text-muted small">來源：鉅亨網</div>
                         </div>
                     </div>
-                    <h5 class="card-title">台股盤勢分析</h5>
+                    <h5 class="card-title">分析師簡介</h5>
                     <p class="card-text">
-                        「台股今日震盪收高，分析師建議關注電子與金融族群表現，短線資金輪動明顯。」
+                        Joe （CFA）是知名財經專欄作家與市場分析師，擁有特許金融分析師（CFA）資格，長期關注美股、台股、AI、半導體、ETF、貨幣、商品等多元市場。
+                        並以深入淺出的分析、專業的總經與技術面觀察，為投資人提供即時且具前瞻性的市場評論，協助讀者掌握最新趨勢與投資機會。
                     </p>
                     <a href="https://hao.cnyes.com/ch/361680" class="btn btn-outline-secondary btn-sm" target="_blank"
                         rel="noopener">
-                        查看完整原文 <i class="bi bi-box-arrow-up-right"></i>
+                        查看完整內容 <i class="bi bi-box-arrow-up-right"></i>
                     </a>
                 </div>
             </div>
@@ -421,9 +426,11 @@
     </div>
 
     <script src="./bootstrap-5.3.8-dist/js/bootstrap.js"></script>
-    <script src="./SP_js/home_market.js"></script>
     <script src="./SP_js/login_register.js"></script>
+    <script src="./SP_js/home_banner.js"></script>
+    <script src="./SP_js/home_market.js"></script>
     <script src="./SP_js/home_news.js"></script>
+    <script async src="https://cse.google.com/cse.js?cx=77c73c23d18594f95"></script>
 </body>
 
 </html>

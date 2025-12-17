@@ -1,0 +1,21 @@
+.gsc-control-cse {
+    border-style: none !important;
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.25rem !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.gsc-input-box {
+    border-radius: 0.375rem !important;
+    padding: 0 !important;
+}
+
+.gsc-input {
+    padding: 0 !important;
+}
+
+.gsc-search-button-v2 {
+    display: inline-block !important;
+    display: none !important;
+}
