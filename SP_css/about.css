@@ -1,0 +1,75 @@
+/* 自訂 Carousel 輪播區塊
+-------------------------------------------------- */
+
+/* Carousel 基本類別 */
+.carousel {
+    margin-bottom: 4rem;
+}
+
+/* 讓 Carousel 標題內容上下左右完全置中 */
+.carousel-caption {
+    top: 35%;
+    z-index: 10;
+}
+
+/* 因圖片定位，需宣告 carousel-item 高度 */
+.carousel-item {
+    height: 32rem;
+}
+
+
+/* 行銷內容區塊
+-------------------------------------------------- */
+
+/* 輪播下方三欄文字置中 */
+.marketing .col-lg-4 {
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+/* rtl:begin:ignore（忽略 RTL 排版）*/
+.marketing .col-lg-4 p {
+    margin-right: .75rem;
+    margin-left: .75rem;
+}
+
+/* rtl:end:ignore */
+
+
+/* 特色內容區塊
+------------------------- */
+
+.featurette-divider {
+    margin: 5rem 0;
+    /* Space out the Bootstrap <hr> more */
+}
+
+/* 行銷標題字距縮小 */
+/* rtl:begin:remove（移除 RTL 排版）*/
+.featurette-heading {
+    letter-spacing: -.05rem;
+}
+
+
+/* 響應式 CSS
+-------------------------------------------------- */
+
+@media (min-width: 40em) {
+
+    /* 提高輪播內容字體大小 */
+    .carousel-caption p {
+        margin-bottom: 1.25rem;
+        font-size: 1.25rem;
+        line-height: 1.4;
+    }
+
+    .featurette-heading {
+        font-size: 50px;
+    }
+}
+
+@media (min-width: 62em) {
+    .featurette-heading {
+        margin-top: 7rem;
+    }
+}

@@ -11,9 +11,10 @@
     <link rel="stylesheet" href="./SP_css/BS_home_header.css">
     <link rel="stylesheet" href="./SP_css/news.css">
     <link rel="stylesheet" href="./SP_css/g_search.css">
+    <link rel="stylesheet" href="./SP_css/footer.css">
 
     <style>
-
+        
     </style>
 
 </head>
@@ -38,11 +39,11 @@
                         <li><a href="#" class="nav-link px-2 text-secondary active " aria-current="page">首頁</a></li>
                         <li><a href="./market.html" class="nav-link px-2 text-white">市場指數</a></li>
                         <li><a href="./news.html" class="nav-link px-2 text-white">新聞專區</a></li>
-                        <li><a href="#" class="nav-link px-2 text-white">關於</a></li>
+                        <li><a href="./about.html" class="nav-link px-2 text-white">關於我</a></li>
                     </ul>
 
                     <div class="me-lg-2 mb-lg-0 mb-2">
-                        <div class="gcse-search" aria-label="站內搜尋"></div>
+                        <div class="gcse-search" aria-label="Google全站搜尋"></div>
                     </div>
 
                     <div class="d-flex flex-lg-row flex-column align-items-center">
@@ -292,7 +293,7 @@
                     </div>
                     <h5 class="card-title">分析師簡介</h5>
                     <p class="card-text">
-                        Joe （CFA）是知名財經專欄作家與市場分析師，擁有特許金融分析師（CFA）資格，長期關注美股、台股、AI、半導體、ETF、貨幣、商品等多元市場。
+                        Joe 是知名財經專欄作家與市場分析師，擁有特許金融分析師（CFA）資格，長期關注美股、台股、AI、半導體、ETF、貨幣、商品等多元市場。
                         並以深入淺出的分析、專業的總經與技術面觀察，為投資人提供即時且具前瞻性的市場評論，協助讀者掌握最新趨勢與投資機會。
                     </p>
                     <a href="https://hao.cnyes.com/ch/361680" class="btn btn-outline-secondary btn-sm" target="_blank"
@@ -303,17 +304,21 @@
             </div>
         </section>
 
-
     </main>
 
-    <footer class="p-2 text-bg-dark">
-        <p class="text-center fs-5">財經資訊網站</p>
+
+    <!-- 參考BS sticky-footer -->
+    <footer class="footer mt-auto py-3 text-bg-dark">
+        <div class="container text-center">
+            <span class="fs-5"> 財經資訊網站
+            </span>
+        </div>
     </footer>
 
 
 
 
-
+    <!-- 參考BS modal -->
     <!-- 登入 Modal -->
     <div class="modal modal-sheet fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel"
         aria-hidden="true">
@@ -367,7 +372,7 @@
         </div>
     </div>
 
-    <!-- 註冊 Modal -->
+    <!-- 註冊 Modals -->
     <div class="modal modal-sheet fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
@@ -425,12 +430,12 @@
         </div>
     </div>
 
+    <script async src="https://cse.google.com/cse.js?cx=77c73c23d18594f95"></script>
     <script src="./bootstrap-5.3.8-dist/js/bootstrap.js"></script>
     <script src="./SP_js/login_register.js"></script>
     <script src="./SP_js/home_banner.js"></script>
     <script src="./SP_js/home_market.js"></script>
     <script src="./SP_js/home_news.js"></script>
-    <script async src="https://cse.google.com/cse.js?cx=77c73c23d18594f95"></script>
 </body>
 
 </html>
