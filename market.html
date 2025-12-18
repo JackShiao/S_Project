@@ -21,7 +21,11 @@
   <header class="sticky-top">
     <nav class="p-2 navbar navbar-expand-lg navbar-dark bg-dark" aria-label="主導覽列">
       <div class="container">
-        <a class="navbar-brand fs-3 mx-lg-0 me-lg-4 text-decoration-none text-white" href="./SP_ver_1.html">財經網</a>
+
+        <a href="./SP_ver_1.html">
+          <img class="navbar-brand fs-3 mx-lg-0 me-lg-4 text-decoration-none text-white" src="./SP_img/Jlogo.png"
+            alt="J財經網" style="height: 50px; width: auto;">
+        </a>
 
         <button class="btn btn-outline-light d-lg-none ms-auto me-3" type="button" id="sidebarToggleBtn"
           data-bs-toggle="offcanvas" data-bs-target="#sidebarOffcanvas" aria-controls="sidebarOffcanvas">
@@ -38,7 +42,7 @@
             <li><a href="./SP_ver_1.html" class="nav-link px-2 text-white">首頁</a></li>
             <li><a href="#" class="nav-link px-2 text-secondary active" aria-current="page">市場指數</a></li>
             <li><a href="./news.html" class="nav-link px-2 text-white">新聞專區</a></li>
-            <li><a href="#" class="nav-link px-2 text-white">關於</a></li>
+            <li><a href="./about.html" class="nav-link px-2 text-white">關於</a></li>
           </ul>
 
           <div class="me-lg-2 mb-lg-0 mb-2">
@@ -225,7 +229,7 @@
       </aside>
 
       <!-- 主內容 -->
-      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
         <div
           class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -288,13 +292,15 @@
           </table>
         </div>
 
-      </main>
+      </div>
     </div>
   </div>
 
-  <footer class="p-2 text-bg-dark">
-    <p class="text-center fs-5">財經資訊網站</p>
-  </footer>
+  <footer class="footer mt-auto py-3 text-bg-dark">
+        <div class="container text-center">
+            <span class="fs-5"> Copyright © 2025 傑的財經資訊網站</span>
+        </div>
+    </footer>
 
   <!-- 登入 Modal -->
   <div class="modal modal-sheet fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel"
@@ -403,7 +409,7 @@
   </div>
 
 
-  
+
   <script async src="https://cse.google.com/cse.js?cx=77c73c23d18594f95"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.2/dist/chart.umd.js"></script>
   <script src="./bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>

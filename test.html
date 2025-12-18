@@ -9,24 +9,12 @@
     <link rel="stylesheet" href="./bootstrap-5.3.8-dist/css/bootstrap.css">
     <link rel="stylesheet" href="./bootstrap-5.3.8-examples/modals/modals.css">
     <link rel="stylesheet" href="./SP_css/BS_home_header.css">
+    <link rel="stylesheet" href="./SP_css/g_search.css">
+    <link rel="stylesheet" href="./SP_css/about.css">
+    <link rel="stylesheet" href="./SP_css/footer.css">
 
     <style>
-        .gsc-control-cse {
-            border-radius: 0.375rem !important;
-            /* border-color: rgba(255, 255, 255, 0.6) !important; */
-            padding-top: 0.5rem !important;
-            padding-bottom: 0.25rem !important;
-            border-style: none !important;
-        }
 
-        .gsc-input-box {
-            border-radius: 0.375rem !important;
-        }
-
-        .gsc-search-button-v2 {
-            border-radius: 0.375rem !important;
-            border-color: rgba(255, 255, 255, 0.6) !important;
-        }
     </style>
 
 </head>
@@ -48,15 +36,16 @@
 
                 <div class="collapse navbar-collapse" id="mainNavbar">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li><a href="./SP_ver_1.html" class="nav-link px-2 text-white">首頁</a></li>
+                        <li><a href="./SP_ver_1.html" class="nav-link px-2 text-white ">首頁</a></li>
                         <li><a href="./market.html" class="nav-link px-2 text-white">市場指數</a></li>
-                        <li><a href="#" class="nav-link px-2 text-secondary active" aria-current="page">新聞</a></li>
-                        <li><a href="#" class="nav-link px-2 text-white">觀點分析</a></li>
-                        <li><a href="#" class="nav-link px-2 text-white">關於</a></li>
+                        <li><a href="./news.html" class="nav-link px-2 text-white">新聞專區</a></li>
+                        <li><a href="#" class="nav-link px-2 text-secondary active" aria-current="page">關於我</a></li>
                     </ul>
-                    <div class=" mb-lg-0 mb-2">
-                        <div class="gcse-search"></div>
+
+                    <div class="me-lg-2 mb-lg-0 mb-2">
+                        <div class="gcse-search" aria-label="Google全站搜尋"></div>
                     </div>
+
                     <div class="d-flex flex-lg-row flex-column align-items-center">
                         <button type="button" class="btn btn-outline-light w-100 w-lg-auto mb-2 mb-lg-0 me-lg-2"
                             data-bs-toggle="modal" data-bs-target="#loginModal">登入</button>
@@ -72,7 +61,164 @@
     </header>
 
 
+    <main>
+        <!-- carousel -->
+        <div id="myCarousel" class="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="./SP_img/aboutme/GforMe.png" class="d-block w-100" alt="關於大圖"
+                        style="height: 500px; object-fit: cover; object-position: center 40%;" aria-hidden="true"
+                        loading="lazy" />
+                    <div class="container">
+                        <div class="carousel-caption">
+                            <h1>About Me</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <!-- marketing -->
+        <div class="container marketing">
+            <div class="row featurette">
+                <div class="col-md-5 order-md-1">
+                    <!-- <img src="./SP_img/aboutme/969A9964-2F07-4CDA-A417-B75F040991DB.jpg" alt="J"
+                        class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto"
+                        loading="lazy"
+                        style="width: 400px; height: 500px; object-fit: cover; object-position: center 90%;" /> -->
+                    <svg aria-label="Placeholder: 500x500"
+                        class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" height="500"
+                        preserveAspectRatio="xMidYMid slice" role="img" width="500" xmlns="http://www.w3.org/2000/svg">
+                        <title>Placeholder</title>
+                        <rect width="100%" height="100%" fill="var(--bs-secondary-bg)"></rect>
+                        <text x="50%" y="50%" fill="var(--bs-secondary-color)" dy=".3em">
+                            500x500
+                        </text>
+                    </svg>
+                </div>
+                <div
+                    class="col-md-7 order-md-2 mt-md-0 mt-4 d-flex align-items-center justify-content-center flex-column">
+                    <p class="fs-4 fw-bold">
+                        哈摟，我是蕭宇傑，這是一個由我個人興趣所建立的財經資訊網站，目的是希望能夠提供一個簡單實用的平台，
+                        讓使用者可以方便地查詢各種財經資訊，追蹤一些即時新聞等。
+                    </p>
+                    <p class="fs-5">製作這個網站的動機，主要是因為上一份工作是在銀行做理財專員，時不時會跟主管報告目前市場狀況，
+                        網站的內容是我平常蒐集資料的方向，目前仍在持續完善中，若有任何建議或想法，請不吝指教！</p>
+                </div>
+
+            </div>
+
+            <!-- START THE FEATURETTES -->
+            <hr class="featurette-divider" />
+            <!-- marketing -->
+            <div class="row">
+                <div class="col-lg-4">
+                    <img src="./SP_img/aboutme/NUTC_logo.gif" alt="學歷" class="bd-placeholder-img rounded-circle"
+                        height="140" style="object-fit: cover; object-position: center;" width="140" />
+
+                    <h2 class="fw-normal mt-4">學歷：<br>
+                        國立臺中科技大學</h2>
+                    <ul>
+                        <li>
+                            學士學位，保險金融管理系，2021 - 2023 (二技)
+                        </li>
+                        <li>
+                            副學士學位，保險金融管理科，2016 - 2021 (五專)
+                        </li>
+                    </ul>
+
+                </div>
+                <div class="col-lg-4">
+                    <img src="./SP_img/aboutme/Gemini_Generated_Image_l0vay7l0vay7l0va.png" alt="興趣"
+                        class="bd-placeholder-img rounded-circle" height="140"
+                        style="object-fit: cover; object-position: center;" width="140" />
+                    <h2 class="fw-normal mt-4">興趣</h2>
+                    <p class="fs-5">嗜好：彈吉他、健身</p>
+                    <p class="fs-5">運動：排球、撞球</p>
+
+                </div>
+                <div class="col-lg-4">
+                    <svg aria-label="Placeholder" class="bd-placeholder-img rounded-circle" height="140"
+                        preserveAspectRatio="xMidYMid slice" role="img" width="140" xmlns="http://www.w3.org/2000/svg">
+                        <title>Placeholder</title>
+                        <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
+                    </svg>
+                    <h2 class="fw-normal">Heading</h2>
+                    <p>
+                        And lastly this, the third column of representative placeholder
+                        content.
+                    </p>
+                    <p>
+                        <a class="btn btn-secondary" href="#">View details &raquo;</a>
+                    </p>
+                </div>
+            </div>
+
+            <hr class="featurette-divider" />
+            <div class="row featurette">
+                <div class="col-md-7 order-md-2">
+                    <h2 class="featurette-heading fw-normal lh-1">
+                        Oh yeah, it’s that good.
+                        <span class="text-body-secondary">See for yourself.</span>
+                    </h2>
+                    <p class="lead">
+                        Another featurette? Of course. More placeholder content here to
+                        give you an idea of how this layout would work with some actual
+                        real-world content in place.
+                    </p>
+                </div>
+                <div class="col-md-5 order-md-1">
+                    <svg aria-label="Placeholder: 500x500"
+                        class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" height="500"
+                        preserveAspectRatio="xMidYMid slice" role="img" width="500" xmlns="http://www.w3.org/2000/svg">
+                        <title>Placeholder</title>
+                        <rect width="100%" height="100%" fill="var(--bs-secondary-bg)"></rect>
+                        <text x="50%" y="50%" fill="var(--bs-secondary-color)" dy=".3em">
+                            500x500
+                        </text>
+                    </svg>
+                </div>
+            </div>
+            <hr class="featurette-divider" />
+            <div class="row featurette">
+                <div class="col-md-7">
+                    <h2 class="featurette-heading fw-normal lh-1">
+                        And lastly, this one.
+                        <span class="text-body-secondary">Checkmate.</span>
+                    </h2>
+                    <p class="lead">
+                        And yes, this is the last block of representative placeholder
+                        content. Again, not really intended to be actually read, simply
+                        here to give you a better view of what this would look like with
+                        some actual content. Your content.
+                    </p>
+                </div>
+                <div class="col-md-5">
+                    <svg aria-label="Placeholder: 500x500"
+                        class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" height="500"
+                        preserveAspectRatio="xMidYMid slice" role="img" width="500" xmlns="http://www.w3.org/2000/svg">
+                        <title>Placeholder</title>
+                        <rect width="100%" height="100%" fill="var(--bs-secondary-bg)"></rect>
+                        <text x="50%" y="50%" fill="var(--bs-secondary-color)" dy=".3em">
+                            500x500
+                        </text>
+                    </svg>
+                </div>
+            </div>
+            <hr class="featurette-divider" />
+            <!-- /END THE FEATURETTES -->
+        </div>
+    </main>
+
+
+
+
+    <footer class="footer mt-auto py-3 text-bg-dark">
+        <div class="container text-center">
+            <span class="fs-5"> 財經資訊網站
+            </span>
+        </div>
+    </footer>
 
 
 
@@ -189,10 +335,9 @@
         </div>
     </div>
 
+    <script async src="https://cse.google.com/cse.js?cx=77c73c23d18594f95"></script>
     <script src="./bootstrap-5.3.8-dist/js/bootstrap.js"></script>
     <script src="./SP_js/login_register.js"></script>
-    <script async src="https://cse.google.com/cse.js?cx=77c73c23d18594f95">
-    </script>
 </body>
 
 </html>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>關於我</title>
+    <title>關於財經網 About</title>
     <link rel="stylesheet" href="./bootstrap-icons-1.13.1/bootstrap-icons.css">
     <link rel="stylesheet" href="./bootstrap-5.3.8-dist/css/bootstrap.css">
     <link rel="stylesheet" href="./bootstrap-5.3.8-examples/modals/modals.css">
@@ -26,8 +26,10 @@
         <nav class="p-2 navbar navbar-expand-lg navbar-dark bg-dark" aria-label="主導覽列">
             <div class="container">
 
-                <a class="navbar-brand fs-3 mx-lg-0 me-lg-4 text-decoration-none text-white"
-                    href="./SP_ver_1.html">財經網</a>
+                <a href="./SP_ver_1.html">
+                    <img class="navbar-brand fs-3 mx-lg-0 me-lg-4 text-decoration-none text-white"
+                        src="./SP_img/Jlogo.png" alt="J財經網" style="height: 50px; width: auto;">
+                </a>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
                     aria-controls="mainNavbar" aria-expanded="false" aria-label="切換選單">
@@ -39,7 +41,7 @@
                         <li><a href="./SP_ver_1.html" class="nav-link px-2 text-white ">首頁</a></li>
                         <li><a href="./market.html" class="nav-link px-2 text-white">市場指數</a></li>
                         <li><a href="./news.html" class="nav-link px-2 text-white">新聞專區</a></li>
-                        <li><a href="#" class="nav-link px-2 text-secondary active" aria-current="page">關於我</a></li>
+                        <li><a href="#" class="nav-link px-2 text-secondary active" aria-current="page">關於</a></li>
                     </ul>
 
                     <div class="me-lg-2 mb-lg-0 mb-2">
@@ -66,12 +68,12 @@
         <div id="myCarousel" class="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="./SP_img/aboutme/GforMe.png" class="d-block w-100" alt="關於大圖"
+                    <img src="./SP_img/about/GforMe.png" class="d-block w-100" alt="關於大圖"
                         style="height: 500px; object-fit: cover; object-position: center 40%;" aria-hidden="true"
                         loading="lazy" />
                     <div class="container">
                         <div class="carousel-caption">
-                            <h1>About Me</h1>
+                            <h1>About</h1>
                         </div>
                     </div>
                 </div>
@@ -80,139 +82,58 @@
 
         <!-- marketing -->
         <div class="container marketing">
+            <!-- START THE FEATURETTES -->
             <div class="row featurette">
+
                 <div class="col-md-5 order-md-1">
-                    <!-- <img src="./SP_img/aboutme/969A9964-2F07-4CDA-A417-B75F040991DB.jpg" alt="J"
+                    <img src="./SP_img/about/969A9964-2F07-4CDA-A417-B75F040991DB.jpg" alt="J"
                         class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto"
                         loading="lazy"
-                        style="width: 400px; height: 500px; object-fit: cover; object-position: center 90%;" /> -->
-                    <svg aria-label="Placeholder: 500x500"
-                        class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" height="500"
-                        preserveAspectRatio="xMidYMid slice" role="img" width="500" xmlns="http://www.w3.org/2000/svg">
-                        <title>Placeholder</title>
-                        <rect width="100%" height="100%" fill="var(--bs-secondary-bg)"></rect>
-                        <text x="50%" y="50%" fill="var(--bs-secondary-color)" dy=".3em">
-                            500x500
-                        </text>
-                    </svg>
+                        style="width: 400px; height: 500px; object-fit: cover; object-position: center 90%;" />
                 </div>
-                <div class="col-md-7 order-md-2 mt-md-0 mt-4">
-                    <h2 class="featurette-heading fw-normal lh-1">
-                        First featurette heading.
-                        <span class="text-body-secondary">It’ll blow your mind.</span>
-                    </h2>
-                    <p class="lead">
-                        Some great placeholder content for the first featurette here.
-                        Imagine some exciting prose here.
+                <div
+                    class="col-md-7 order-md-2 mt-md-0 mt-4 d-flex align-items-center justify-content-center flex-column">
+                    <p class="fs-4 fw-bold">
+                        哈摟，我是蕭宇傑，這是一個由我個人興趣所建立的財經資訊網站，目的是希望能夠提供一個簡單實用的平台，
+                        讓使用者可以方便地查詢各種財經資訊，追蹤一些即時新聞等。
                     </p>
+                    <p class="fs-5">製作這個網站的動機，主要是因為上一份工作是在銀行做理財專員，時不時會跟主管報告目前市場狀況，
+                        網站的內容是我平常蒐集資料的方向，目前仍在持續完善中，若有任何建議或想法，請不吝指教！</p>
                 </div>
 
             </div>
 
-            <!-- START THE FEATURETTES -->
             <hr class="featurette-divider" />
-            <!-- marketing -->
-            <div class="row">
-                <div class="col-lg-4">
-                    <svg aria-label="Placeholder" class="bd-placeholder-img rounded-circle" height="140"
-                        preserveAspectRatio="xMidYMid slice" role="img" width="140" xmlns="http://www.w3.org/2000/svg">
-                        <title>Placeholder</title>
-                        <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
-                    </svg>
-                    <h2 class="fw-normal">Heading</h2>
-                    <p>
-                        Some representative placeholder content for the three columns of
-                        text below the carousel. This is the first column.
-                    </p>
-                    <p>
-                        <a class="btn btn-secondary" href="#">View details &raquo;</a>
-                    </p>
-                </div>
-                <div class="col-lg-4">
-                    <svg aria-label="Placeholder" class="bd-placeholder-img rounded-circle" height="140"
-                        preserveAspectRatio="xMidYMid slice" role="img" width="140" xmlns="http://www.w3.org/2000/svg">
-                        <title>Placeholder</title>
-                        <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
-                    </svg>
-                    <h2 class="fw-normal">Heading</h2>
-                    <p>
-                        Another exciting bit of representative placeholder content. This
-                        time, we've moved on to the second column.
-                    </p>
-                    <p>
-                        <a class="btn btn-secondary" href="#">View details &raquo;</a>
-                    </p>
-                </div>
-                <div class="col-lg-4">
-                    <svg aria-label="Placeholder" class="bd-placeholder-img rounded-circle" height="140"
-                        preserveAspectRatio="xMidYMid slice" role="img" width="140" xmlns="http://www.w3.org/2000/svg">
-                        <title>Placeholder</title>
-                        <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
-                    </svg>
-                    <h2 class="fw-normal">Heading</h2>
-                    <p>
-                        And lastly this, the third column of representative placeholder
-                        content.
-                    </p>
-                    <p>
-                        <a class="btn btn-secondary" href="#">View details &raquo;</a>
-                    </p>
-                </div>
-            </div>
 
-            <hr class="featurette-divider" />
-            <div class="row featurette">
-                <div class="col-md-7 order-md-2">
-                    <h2 class="featurette-heading fw-normal lh-1">
-                        Oh yeah, it’s that good.
-                        <span class="text-body-secondary">See for yourself.</span>
-                    </h2>
-                    <p class="lead">
-                        Another featurette? Of course. More placeholder content here to
-                        give you an idea of how this layout would work with some actual
-                        real-world content in place.
-                    </p>
-                </div>
-                <div class="col-md-5 order-md-1">
-                    <svg aria-label="Placeholder: 500x500"
-                        class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" height="500"
-                        preserveAspectRatio="xMidYMid slice" role="img" width="500" xmlns="http://www.w3.org/2000/svg">
-                        <title>Placeholder</title>
-                        <rect width="100%" height="100%" fill="var(--bs-secondary-bg)"></rect>
-                        <text x="50%" y="50%" fill="var(--bs-secondary-color)" dy=".3em">
-                            500x500
-                        </text>
-                    </svg>
-                </div>
-            </div>
-            <hr class="featurette-divider" />
             <div class="row featurette">
                 <div class="col-md-7">
                     <h2 class="featurette-heading fw-normal lh-1">
-                        And lastly, this one.
-                        <span class="text-body-secondary">Checkmate.</span>
+                        你有發現嗎？
                     </h2>
-                    <p class="lead">
-                        And yes, this is the last block of representative placeholder
-                        content. Again, not really intended to be actually read, simply
-                        here to give you a better view of what this would look like with
-                        some actual content. Your content.
+                    <p class="mt-2 text-body-secondary fs-1">其實網站裡很多張圖片是使用AI生成</p>
+                    <p class="fs-5">
+                        像是這張圖片就是用Google Gemini生成，你應該會發現吉他上面的Gemini logo，
+                        我在每張AI生成的圖片都放上了對應的AI logo
+                    </p>
+                    <p class="mt-5 fs-5">財經網總共有11張圖片是由AI生成，你能找到藏在圖片裡所有的logo嗎？</p>
+                    <div>
+                        <div class="btn btn-light" onclick="showAnswer()">解答</div>
+                        <span id="answer"></span>
+                    </div>
+                    <p class="mt-3">圖片來源：
+                        <a href="./SP_img/圖片資訊.txt" target="_blank" rel="noopener">圖片資訊.txt</a>
+                        、Google Gemini <img src="./SP_img/Gemini.png" alt="Google Gemini logo" style="width: 30px;">
+                        、ChatGPT <img src="./SP_img/chatGPT.png" alt="ChatGPT logo" style="width: 30px;">
+                        、Nanobanana.io <span style="font-size: 20px;">🍌</span>
                     </p>
                 </div>
-                <div class="col-md-5">
-                    <svg aria-label="Placeholder: 500x500"
-                        class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" height="500"
-                        preserveAspectRatio="xMidYMid slice" role="img" width="500" xmlns="http://www.w3.org/2000/svg">
-                        <title>Placeholder</title>
-                        <rect width="100%" height="100%" fill="var(--bs-secondary-bg)"></rect>
-                        <text x="50%" y="50%" fill="var(--bs-secondary-color)" dy=".3em">
-                            500x500
-                        </text>
-                    </svg>
+                <div class="col-md-5 d-flex align-items-center justify-content-center">
+                    <img src="./SP_img/about/myFAV.png" alt="興趣"
+                        class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto"
+                        loading="lazy" style="object-fit: cover;" />
                 </div>
             </div>
             <hr class="featurette-divider" />
-            <!-- /END THE FEATURETTES -->
         </div>
     </main>
 
@@ -221,8 +142,7 @@
 
     <footer class="footer mt-auto py-3 text-bg-dark">
         <div class="container text-center">
-            <span class="fs-5"> 財經資訊網站
-            </span>
+            <span class="fs-5"> Copyright © 2025 傑的財經資訊網站</span>
         </div>
     </footer>
 
@@ -344,6 +264,14 @@
     <script async src="https://cse.google.com/cse.js?cx=77c73c23d18594f95"></script>
     <script src="./bootstrap-5.3.8-dist/js/bootstrap.js"></script>
     <script src="./SP_js/login_register.js"></script>
+    <script>
+        function showAnswer() {
+            document.getElementById("answer").innerHTML =
+                `14<img src="./SP_img/Gemini.png" alt="Google Gemini logo" style="width: 30px;">
+                、1<img src="./SP_img/chatGPT.png" alt="ChatGPT logo" style="width: 30px;">
+                、1<span style="font-size: 20px;">🍌</span>`;
+        }
+    </script>
 </body>
 
 </html>
