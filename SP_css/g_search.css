@@ -1,9 +1,23 @@
-.gsc-control-cse {
+@media (min-width: 992px) {
+    #___gcse_0 {
+        width: 30% !important;
+        margin-right: 0.5rem !important;
+        margin-bottom: 0 !important;
+    }
+}
+
+#___gcse_0 {
+    margin-bottom: 0.5rem !important;
+}
+
+ .gsc-control-cse {
     border-style: none !important;
+    background-color: #212529 !important;
     padding-top: 0.5rem !important;
     padding-bottom: 0.25rem !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
+
 }
 
 .gsc-input-box {
@@ -18,4 +32,4 @@
 .gsc-search-button-v2 {
     display: inline-block !important;
     display: none !important;
-}
+} 
