@@ -5,10 +5,16 @@
         margin-bottom: 0 !important;
         margin-left: auto !important;
     }
+
+    .gsc-input-box {
+    border-radius: 0.375rem !important;
+    height: 40px !important;
+    margin-top: 0.75rem !important;
+}
 }
 
 #___gcse_0 {
-    margin-bottom: 0.5rem !important;
+    margin-bottom: 0.75rem !important;
     }
 
 .gsc-control-cse {
@@ -22,9 +28,7 @@
 
 .gsc-input-box {
     border-radius: 0.375rem !important;
-    padding: 0 !important;
     height: 40px !important;
-    margin-top: 0.5rem !important;
 }
 
 .gsc-input {

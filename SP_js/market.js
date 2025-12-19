@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const stockTableBody = document.querySelector('#stock-table tbody');
     const bondTableBody = document.querySelector('#bond-table tbody');
     const fxTableBody = document.querySelector('#fx-table tbody');
+    const sidebarOffcanvas = document.getElementById('sidebarOffcanvas');
+
 
     // 控制側邊欄 collapse 圖示 +/− 切換（點擊立即切換，動畫結束再同步）
     function updateCollapseIcons() {
@@ -51,6 +53,16 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('index-list-offcanvas').addEventListener('shown.bs.collapse', updateCollapseIcons);
     document.getElementById('index-list-offcanvas').addEventListener('hidden.bs.collapse', updateCollapseIcons);
 
+    // 小畫面：點 offcanvas 側邊欄選單自動收合
+    if (sidebarOffcanvas) {
+        sidebarOffcanvas.addEventListener('click', function (e) {
+            // 只在小螢幕且點到 a.nav-link 時觸發
+            if (window.innerWidth < 992 && e.target.matches('a.nav-link')) {
+                const offcanvasInstance = bootstrap.Offcanvas.getOrCreateInstance(sidebarOffcanvas);
+                offcanvasInstance.hide();
+            }
+        });
+    }
 
     // 產生近6日日期陣列（全域共用）
     window.getRecentDates = function (n) {
