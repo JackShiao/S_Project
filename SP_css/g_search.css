@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @media (min-width: 992px) {
     #___gcse_0 {
         width: 30% !important;
@@ -24,6 +25,14 @@
     padding-left: 0 !important;
     padding-right: 0 !important;
     background-color: #212529 !important;
+=======
+.gsc-control-cse {
+    border-style: none !important;
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.25rem !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+>>>>>>> parent of 5886baa (改良匿名google搜尋欄css)
 }
 
 .gsc-input-box {
