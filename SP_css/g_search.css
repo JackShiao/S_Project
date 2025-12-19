@@ -1,35 +1,38 @@
 @media (min-width: 992px) {
     #___gcse_0 {
         width: 30% !important;
-        margin-right: 0.5rem !important;
+        margin-right: 0.25rem !important;
         margin-bottom: 0 !important;
+        margin-left: auto !important;
     }
 }
 
 #___gcse_0 {
     margin-bottom: 0.5rem !important;
-}
+    }
 
- .gsc-control-cse {
+.gsc-control-cse {
     border-style: none !important;
-    background-color: #212529 !important;
-    padding-top: 0.5rem !important;
-    padding-bottom: 0.25rem !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
-
+    background-color: #212529 !important;
 }
 
 .gsc-input-box {
     border-radius: 0.375rem !important;
     padding: 0 !important;
+    height: 40px !important;
+    margin-top: 0.5rem !important;
 }
 
 .gsc-input {
     padding: 0 !important;
+    margin-top: -8px !important;
 }
 
 .gsc-search-button-v2 {
     display: inline-block !important;
     display: none !important;
-} 
+}
