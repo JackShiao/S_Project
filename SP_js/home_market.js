@@ -1,9 +1,9 @@
 const marketData = [
-    { name: "台灣加權指數", value: "17,500.12", change: "+0.21%" },
-    { name: "S&P500", value: "6,812.63", change: "-0.53%" },
-    { name: "納斯達克指數", value: "23,275.92", change: "-0.38%" },
-    { name: "道瓊工業指數", value: "47,289", change: "+5.6%" },
-    { name: "日經225", value: "33,200.88", change: "-0.12%" }
+    { name: "台灣加權指數", value: "28080.31", change: "+1.37%" },
+    { name: "S&P500", value: "6,834.50", change: "+0.88%" },
+    { name: "納斯達克指數", value: "23,307.62", change: "+1.31%" },
+    { name: "道瓊工業指數", value: "48,134.89", change: "+0.38%" },
+    { name: "日經225", value: "50461.00", change: "+1.93%" }
 ];
 
 function renderMarketTable() {
