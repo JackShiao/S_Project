@@ -1,11 +1,43 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
+import { getMarketIndices } from './api/marketApi'
 import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+  const [marketIndices, setMarketIndices] = useState(null)
+  const [isLoadingMarket, setIsLoadingMarket] = useState(true)
+  const [marketError, setMarketError] = useState('')
+
+  useEffect(() => {
+    let isMounted = true
+
+    async function fetchMarketIndices() {
+      try {
+        const data = await getMarketIndices()
+
+        if (isMounted) {
+          setMarketIndices(data)
+        }
+      } catch (error) {
+        if (isMounted) {
+          setMarketError(error?.message || '無法取得市場指數資料')
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoadingMarket(false)
+        }
+      }
+    }
+
+    fetchMarketIndices()
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   return (
     <>
@@ -19,6 +51,19 @@ function App() {
           <h1>Get started</h1>
           <p>
             Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
+          </p>
+          <p>
+            {isLoadingMarket && '市場指數載入中...'}
+            {!isLoadingMarket && marketError && marketError}
+            {!isLoadingMarket && !marketError && marketIndices && (
+              <>
+                <strong>測試指數標題：</strong>
+                {marketIndices.title}
+                <br />
+                <strong>測試指數內容：</strong>
+                {marketIndices.body}
+              </>
+            )}
           </p>
         </div>
         <button
