@@ -4,6 +4,22 @@
   object-fit: contain;
 }
 
+/* 
+  ========================================
+  Navbar 結構優化 - 最外層滿版設計
+  ========================================
+*/
+
+/* 確保 header 最外層 100% 滿版延展，不受任何寬度限制 */
+header {
+  width: 100%;
+}
+
+/* 
+  nav.navbar 本身就是 fluid 的（寬度 100%）
+  內部的 container 則自動根據螢幕尺寸調整寬度並居中
+*/
+
 .brand-text {
   font-weight: 700;
   letter-spacing: 0.08em;
