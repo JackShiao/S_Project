@@ -1,0 +1,30 @@
+.brand-logo {
+  width: auto;
+  height: 3rem;
+  object-fit: contain;
+}
+
+.brand-text {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.navbar-search-placeholder {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.55rem 0.9rem;
+  margin: 1rem 0;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+}
+
+@media (min-width: 992px) {
+  .navbar-search-placeholder {
+    margin: 0 1rem 0 0;
+  }
+}

@@ -1,0 +1,14 @@
+.market-page .market-sidebar {
+  position: sticky;
+  top: 84px;
+}
+
+.market-page .market-chart-wrap {
+  height: 380px;
+}
+
+@media (max-width: 991.98px) {
+  .market-page .market-sidebar {
+    position: static;
+  }
+}
