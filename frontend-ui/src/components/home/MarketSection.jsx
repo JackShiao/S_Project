@@ -1,15 +1,7 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getMarketIndices } from '../../api/marketApi'
 import { Link } from 'react-router-dom'
 import './MarketSection.css'
-
-const fallbackIndices = [
-  { name: '台灣加權指數', value: '28080.31', change: '+1.37%' },
-  { name: 'S&P500', value: '6,834.50', change: '+0.88%' },
-  { name: '納斯達克指數', value: '23,307.62', change: '+1.31%' },
-  { name: '道瓊工業指數', value: '48,134.89', change: '+0.38%' },
-  { name: '日經225', value: '50,461.00', change: '+1.93%' },
-]
 
 function normalizeItems(payload) {
   if (!payload) {
@@ -60,10 +52,14 @@ function getTrendStyle(changeValue) {
 }
 
 function MarketSection() {
-  const [indices, setIndices] = useState(fallbackIndices)
+  // marketData: 儲存 API 正規化後的市場指數陣列，成功取得資料後由此驅動畫面。
+  const [marketData, setMarketData] = useState([])
+
+  // isLoading: 控制首次載入中的 UI，在請求開始到結束前都維持 true。
   const [isLoading, setIsLoading] = useState(true)
-  const [errorMessage, setErrorMessage] = useState('')
-  const [note, setNote] = useState('')
+
+  // error: 記錄 API 失敗時的友善訊息，讓畫面能改顯示錯誤提醒而不是空白。
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     let isMounted = true
@@ -77,23 +73,14 @@ function MarketSection() {
           return
         }
 
-        if (normalized.length > 0) {
-          setIndices(normalized)
-          setNote('')
-          return
-        }
-
-        setIndices(fallbackIndices)
-        if (payload?.title) {
-          setNote(`目前後端回傳測試資料：${payload.title}，先顯示模擬指數。`)
-        }
+        setMarketData(normalized)
+        setError(null)
       } catch (error) {
         if (!isMounted) {
           return
         }
 
-        setIndices(fallbackIndices)
-        setErrorMessage(error?.message || '無法取得市場指數資料，先顯示模擬資料。')
+        setError(error?.message || '目前無法取得市場指數資料，請稍後再試。')
       } finally {
         if (isMounted) {
           setIsLoading(false)
@@ -108,56 +95,76 @@ function MarketSection() {
     }
   }, [])
 
-  const rows = useMemo(() => indices, [indices])
+  // 條件渲染邏輯：載入中優先顯示 Spinner，其次處理錯誤訊息，最後才顯示成功取得的資料內容。
+  if (isLoading) {
+    return (
+      <section className="market-section py-5" aria-label="市場指數區塊載入中">
+        <div className="container">
+          <div className="market-card text-center py-5">
+            <div className="spinner-border text-warning mb-3" role="status" aria-hidden="true" />
+            <p className="mb-0 text-muted">市場指數載入中，請稍候...</p>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  if (error) {
+    return (
+      <section className="market-section py-5" aria-label="市場指數區塊錯誤狀態">
+        <div className="container">
+          <div className="alert alert-danger mb-0" role="alert">
+            {error}
+          </div>
+        </div>
+      </section>
+    )
+  }
 
   return (
-    <main className="container">
-      <section className="market-section">
+    <section className="market-section py-5">
+      <div className="container">
         <div className="market-card">
           <h3 className="mb-3">市場指數快覽</h3>
 
-          {isLoading && <div className="alert alert-light mb-3">市場指數載入中...</div>}
-          {!isLoading && note && <div className="alert alert-warning market-note">{note}</div>}
-          {!isLoading && errorMessage && (
-            <div className="alert alert-secondary market-note">{errorMessage}</div>
+          {marketData.length === 0 ? (
+            <div className="alert alert-light mb-0" role="status">
+              目前沒有可顯示的市場指數資料。
+            </div>
+          ) : (
+            <div className="row g-3">
+              {marketData.map((item, index) => {
+                const trend = getTrendStyle(item.change)
+                const cleanChange = String(item.change ?? '--').replace(/^[+-]/, '')
+
+                return (
+                  <div key={`${item.name}-${index}`} className="col-12 col-md-6 col-xl-4">
+                    <article className="border rounded-3 h-100 p-3 bg-white">
+                      <div className="d-flex justify-content-between align-items-start gap-3">
+                        <div>
+                          <p className="text-muted small mb-2">市場指數</p>
+                          <h4 className="h5 mb-2">{item.name}</h4>
+                        </div>
+                        <span className={`badge bg-light border ${trend.className}`}>
+                          <i className={trend.icon} aria-hidden="true" /> {cleanChange}
+                        </span>
+                      </div>
+                      <p className="display-6 mb-0">{item.value}</p>
+                    </article>
+                  </div>
+                )
+              })}
+            </div>
           )}
 
-          <div className="table-responsive">
-            <table className="table table-hover mb-0" aria-label="市場指數資料表">
-              <thead>
-                <tr>
-                  <th scope="col">指數名稱</th>
-                  <th scope="col">收盤指數</th>
-                  <th scope="col">昨日漲跌幅</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((item, index) => {
-                  const trend = getTrendStyle(item.change)
-                  const cleanChange = String(item.change ?? '--').replace(/^[+-]/, '')
-
-                  return (
-                    <tr key={`${item.name}-${index}`}>
-                      <td>{item.name}</td>
-                      <td>{item.value}</td>
-                      <td className={trend.className}>
-                        <i className={trend.icon} aria-hidden="true" /> {cleanChange}
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
-
-          <div className="mt-2">
+          <div className="mt-3">
             <Link to="/market" className="btn btn-warning w-100">
               查看更多
             </Link>
           </div>
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
   )
 }
 

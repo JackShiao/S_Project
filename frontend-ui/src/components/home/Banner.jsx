@@ -38,14 +38,16 @@ const bannerSlides = [
 
 function Banner() {
   return (
-    <section className="banner-section" aria-label="首頁輪播Banner">
+    // 最外層維持滿版，不使用 container，讓 Banner 視覺可橫跨整個視窗。
+    <section className="banner-section w-100" aria-label="首頁輪播Banner">
       <div
         id="bannerCarousel"
-        className="carousel slide mb-0"
+        className="carousel slide carousel-fade mb-0 w-100"
         data-bs-ride="carousel"
-        data-bs-interval="5000"
+        data-bs-interval="3000"
         aria-live="polite"
       >
+        {/* 輪播指示器：使用 bannerSlides 動態產生每一張投影片對應的切換按鈕。 */}
         <div className="carousel-indicators">
           {bannerSlides.map((slide) => (
             <button
@@ -60,6 +62,7 @@ function Banner() {
           ))}
         </div>
 
+        {/* 輪播內容：每張投影片包含背景圖片與 caption 文案。 */}
         <div className="carousel-inner">
           {bannerSlides.map((slide) => (
             <div
@@ -69,7 +72,7 @@ function Banner() {
               <div className={`w-100 banner-visual ${slide.visualClass}`}>
                 <img
                   src={slide.image}
-                  className="w-100 banner-image"
+                  className="d-block w-100 banner-image"
                   alt={slide.indicatorLabel}
                   loading="lazy"
                   onError={(event) => {
@@ -78,27 +81,26 @@ function Banner() {
                 />
               </div>
               <div className="text-center">
-                <div className="container">
-                  <div className="carousel-caption mx-auto my-5 text-center banner-caption">
-                    <h1 className="display-4 fw-bold mt-3 mb-3 text-white">{slide.title}</h1>
-                    <p className="lead mb-4 text-white">{slide.description}</p>
-                    <p>
-                      <a
-                        className={`btn btn-lg ${slide.buttonClass}`}
-                        href={slide.href}
-                        target={slide.href.startsWith('http') ? '_blank' : undefined}
-                        rel={slide.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                      >
-                        {slide.buttonText}
-                      </a>
-                    </p>
-                  </div>
+                <div className="carousel-caption mx-auto my-5 text-center banner-caption">
+                  <h1 className="display-4 fw-bold mt-3 mb-3 text-white">{slide.title}</h1>
+                  <p className="lead mb-4 text-white">{slide.description}</p>
+                  <p>
+                    <a
+                      className={`btn btn-lg ${slide.buttonClass}`}
+                      href={slide.href}
+                      target={slide.href.startsWith('http') ? '_blank' : undefined}
+                      rel={slide.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                    >
+                      {slide.buttonText}
+                    </a>
+                  </p>
                 </div>
               </div>
             </div>
           ))}
         </div>
 
+        {/* 左右控制按鈕：提供使用者手動切換上一張 / 下一張投影片。 */}
         <button
           className="carousel-control-prev"
           type="button"

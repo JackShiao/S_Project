@@ -27,21 +27,50 @@ const NEWS_CATEGORIES = [
   },
 ]
 
-function formatAdd8Hours(dateStr) {
+function parseNewsTitle(rawTitle) {
+  const title = String(rawTitle ?? '').trim()
+  if (!title) {
+    return { headline: '', source: '' }
+  }
+
+  const match = title.match(/^(.*?)(?:\s[-｜|]\s?)([^-｜|]+)$/)
+  if (match) {
+    return {
+      headline: match[1].trim(),
+      source: match[2].trim(),
+    }
+  }
+
+  return { headline: title, source: '' }
+}
+
+function formatNewsDate(dateStr) {
   if (!dateStr) {
     return ''
   }
 
   const date = new Date(dateStr)
-  const forced = new Date(date.getTime() + 8 * 60 * 60 * 1000)
-  const y = forced.getFullYear()
-  const m = String(forced.getMonth() + 1).padStart(2, '0')
-  const d = String(forced.getDate()).padStart(2, '0')
-  const h = String(forced.getHours()).padStart(2, '0')
-  const min = String(forced.getMinutes()).padStart(2, '0')
-  const s = String(forced.getSeconds()).padStart(2, '0')
+  if (Number.isNaN(date.getTime())) {
+    return ''
+  }
 
-  return `${y}/${m}/${d} ${h}:${min}:${s}`
+  const diffMinutes = Math.floor((Date.now() - date.getTime()) / (1000 * 60))
+  if (diffMinutes >= 0 && diffMinutes < 60) {
+    return `${Math.max(diffMinutes, 1)} 分鐘前`
+  }
+
+  if (diffMinutes >= 60 && diffMinutes < 24 * 60) {
+    return `${Math.floor(diffMinutes / 60)} 小時前`
+  }
+
+  return new Intl.DateTimeFormat('zh-TW', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(date)
 }
 
 function pickImageUrl(item) {
@@ -71,66 +100,115 @@ function NewsCard({ title, topicUrl, items, isLoading, fallbackImage }) {
   const main = items[0]
   const subItems = items.slice(1, 4)
   const mainImage = pickImageUrl(main)
+  const mainTitle = parseNewsTitle(main?.title)
+
+  if (isLoading) {
+    return (
+      <div className="news-card border rounded shadow-sm h-100 p-3 bg-white">
+        <div className="placeholder-glow mb-3">
+          <span className="placeholder col-5" />
+        </div>
+        {[0, 1, 2].map((index) => (
+          <div key={index} className="news-skeleton-item mb-3">
+            <div className="placeholder-glow mb-2">
+              <span className="placeholder news-skeleton-image col-12" />
+            </div>
+            <div className="placeholder-glow mb-2">
+              <span className="placeholder col-10" />
+            </div>
+            <div className="placeholder-glow mb-2">
+              <span className="placeholder col-8" />
+            </div>
+            <div className="placeholder-glow">
+              <span className="placeholder col-4" />
+            </div>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  if (!main) {
+    return (
+      <div className="news-card border rounded shadow-sm h-100 p-3 bg-white">
+        <a
+          href={topicUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-decoration-none text-dark"
+        >
+          <h4 className="news-header mb-3 border-bottom pb-2">
+            {title}
+            <i className="bi bi-caret-right-fill" />
+          </h4>
+        </a>
+        <div className="text-muted py-5 text-center">目前暫無新聞資料</div>
+      </div>
+    )
+  }
 
   return (
-    <div className="border rounded shadow-sm h-100 p-3 bg-white">
-      <a href={topicUrl} target="_blank" rel="noopener noreferrer" className="text-decoration-none text-dark">
+    <div className="news-card border rounded shadow-sm h-100 p-3 bg-white">
+      <a
+        href={topicUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-decoration-none text-dark"
+      >
         <h4 className="news-header mb-3 border-bottom pb-2">
           {title}
           <i className="bi bi-caret-right-fill" />
         </h4>
       </a>
 
-      {isLoading && <div className="text-muted py-5 text-center">新聞載入中...</div>}
+      <a href={main.link || topicUrl} target="_blank" rel="noopener noreferrer">
+        {mainImage || fallbackImage ? (
+          <img
+            src={mainImage || fallbackImage}
+            className="news-image"
+            loading="lazy"
+            alt={`${title}預覽圖`}
+            onError={(event) => {
+              event.currentTarget.src = fallbackImage || '/img/default.png'
+            }}
+          />
+        ) : (
+          <div className="news-image-placeholder">暫無圖片</div>
+        )}
+      </a>
+      <div className="fw-bold mt-2 mb-1 border-bottom pb-2">
+        <a
+          className="news-link"
+          href={main.link || topicUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {mainTitle.headline}
+        </a>
+        {mainTitle.source && <div className="news-source">來源：{mainTitle.source}</div>}
+        <div className="news-main-time">{formatNewsDate(main.pubDate)}</div>
+      </div>
 
-      {!isLoading && !main && <div className="text-muted py-5 text-center">暫無新聞</div>}
+      <ul className="list-unstyled mb-0">
+        {subItems.map((item) => {
+          const parsed = parseNewsTitle(item.title)
 
-      {!isLoading && main && (
-        <>
-          <a href={main.link || topicUrl} target="_blank" rel="noopener noreferrer">
-            {mainImage || fallbackImage ? (
-              <img
-                src={mainImage || fallbackImage}
-                className="news-image"
-                loading="lazy"
-                alt={`${title}預覽圖`}
-                onError={(event) => {
-                  event.currentTarget.src = '/img/default.png'
-                }}
-              />
-            ) : (
-              <div className="news-image-placeholder">暫無圖片</div>
-            )}
-          </a>
-          <div className="fw-bold mt-2 mb-1 border-bottom pb-2">
-            <a
-              className="news-link"
-              href={main.link || topicUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {main.title}
-            </a>
-            <div className="news-main-time">{formatAdd8Hours(main.pubDate)}</div>
-          </div>
-
-          <ul className="list-unstyled mb-0">
-            {subItems.map((item) => (
-              <li key={item.guid || item.link || item.title} className="my-2 border-bottom pb-2">
-                <a
-                  className="news-link"
-                  href={item.link || topicUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {item.title}
-                </a>
-                <div className="news-time">{formatAdd8Hours(item.pubDate)}</div>
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
+          return (
+            <li key={item.guid || item.link || item.title} className="my-2 border-bottom pb-2">
+              <a
+                className="news-link"
+                href={item.link || topicUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {parsed.headline}
+              </a>
+              {parsed.source && <div className="news-source">來源：{parsed.source}</div>}
+              <div className="news-time">{formatNewsDate(item.pubDate)}</div>
+            </li>
+          )
+        })}
+      </ul>
     </div>
   )
 }
@@ -187,25 +265,27 @@ function NewsSection() {
   const categories = useMemo(() => NEWS_CATEGORIES, [])
 
   return (
-    <section className="news-section container">
-      <div className="row g-3">
-        {categories.map((category) => (
-          <div key={category.key} className="col-lg-4">
-            <NewsCard
-              title={category.title}
-              topicUrl={category.topicUrl}
-              items={newsMap[category.key] || []}
-              isLoading={isLoading}
-              fallbackImage={category.fallbackImage}
-            />
-          </div>
-        ))}
-      </div>
+    <section className="news-section py-5">
+      <div className="container">
+        <div className="row g-3">
+          {categories.map((category) => (
+            <div key={category.key} className="col-lg-4">
+              <NewsCard
+                title={category.title}
+                topicUrl={category.topicUrl}
+                items={newsMap[category.key] || []}
+                isLoading={isLoading}
+                fallbackImage={category.fallbackImage}
+              />
+            </div>
+          ))}
+        </div>
 
-      <div className="mt-3">
-        <Link to="/news" className="btn btn-warning w-100">
-          查看更多新聞
-        </Link>
+        <div className="mt-3">
+          <Link to="/news" className="btn btn-warning w-100">
+            查看更多新聞
+          </Link>
+        </div>
       </div>
     </section>
   )
