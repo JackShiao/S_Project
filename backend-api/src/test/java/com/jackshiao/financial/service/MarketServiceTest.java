@@ -1,11 +1,11 @@
 package com.jackshiao.financial.service;
 
-import org.junit.jupiter.api.Disabled;
+import com.jackshiao.financial.entity.MarketIndex;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Map;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -21,9 +21,8 @@ class MarketServiceTest {
     }
 
     @Test
-    @Disabled("連外部 API 的 smoke test，預設不在 CI 啟用")
-    void shouldFetchMarketIndicesFromExternalApi() {
-        Map<String, Object> data = marketService.getMarketIndices();
+    void shouldFetchAllMarketIndicesFromDatabase() {
+        List<MarketIndex> data = marketService.getAllMarketIndices();
         assertNotNull(data);
     }
 }

@@ -1,33 +1,19 @@
 package com.jackshiao.financial.service;
 
+import com.jackshiao.financial.entity.MarketIndex;
+import com.jackshiao.financial.repository.MarketIndexRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.Map;
+import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class MarketService {
 
-    private static final String MOCK_INDICES_API_URL = "https://jsonplaceholder.typicode.com/posts/1";
+    private final MarketIndexRepository marketIndexRepository;
 
-    private final RestTemplate restTemplate;
-
-    public MarketService() {
-        this.restTemplate = new RestTemplate();
-    }
-
-    public Map<String, Object> getMarketIndices() {
-        try {
-            Map<String, Object> result = restTemplate.getForObject(MOCK_INDICES_API_URL, Map.class);
-
-            if (result == null || result.isEmpty()) {
-                throw new IllegalStateException("External API returned empty market indices data");
-            }
-
-            return result;
-        } catch (RestClientException e) {
-            throw new IllegalStateException("Failed to fetch market indices from external API", e);
-        }
+    public List<MarketIndex> getAllMarketIndices() {
+        return marketIndexRepository.findAll();
     }
 }

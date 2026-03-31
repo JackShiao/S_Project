@@ -1,5 +1,6 @@
 import './Navbar.css'
 import { Link, NavLink } from 'react-router-dom'
+import { useAuthStore } from '../../store/authStore'
 
 const navItems = [
   { label: '首頁', to: '/', end: true },
@@ -9,6 +10,8 @@ const navItems = [
 ]
 
 function Navbar() {
+  const { isLoggedIn, userInfo, openModal, logout } = useAuthStore()
+
   return (
     <header className="sticky-top">
       <nav
@@ -66,22 +69,37 @@ function Navbar() {
             </div>
 
             <div className="d-flex flex-lg-row flex-column align-items-center gap-2">
-              <button
-                type="button"
-                className="btn btn-outline-light w-100 w-lg-auto"
-                data-bs-toggle="modal"
-                data-bs-target="#loginModal"
-              >
-                登入
-              </button>
-              <button
-                type="button"
-                className="btn btn-warning w-100 w-lg-auto text-nowrap"
-                data-bs-toggle="modal"
-                data-bs-target="#registerModal"
-              >
-                註冊會員
-              </button>
+              {isLoggedIn ? (
+                <>
+                  <span className="text-white text-nowrap">
+                    歡迎，{userInfo?.name || '會員'}
+                  </span>
+                  <button
+                    type="button"
+                    className="btn btn-outline-light w-100 w-lg-auto"
+                    onClick={logout}
+                  >
+                    登出
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    className="btn btn-outline-light w-100 w-lg-auto"
+                    onClick={() => openModal('login')}
+                  >
+                    登入
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-warning w-100 w-lg-auto text-nowrap"
+                    onClick={() => openModal('register')}
+                  >
+                    註冊會員
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>

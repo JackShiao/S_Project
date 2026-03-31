@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getMarketIndices } from '../../api/marketApi'
+import { fetchMarketIndices } from '../../api/marketApi'
 import { Link } from 'react-router-dom'
 import './MarketSection.css'
 
@@ -11,9 +11,11 @@ function normalizeItems(payload) {
   if (Array.isArray(payload)) {
     return payload
       .map((item, index) => ({
+        id: item?.id,
         name: item?.name ?? item?.indexName ?? item?.symbol ?? `指數 ${index + 1}`,
-        value: item?.value ?? item?.close ?? item?.price ?? item?.last ?? '--',
+        value: item?.currentPrice ?? item?.value ?? item?.close ?? item?.price ?? item?.last ?? '--',
         change:
+          item?.changePoint ??
           item?.change ??
           item?.changePercent ??
           item?.pctChange ??
@@ -39,15 +41,15 @@ function normalizeItems(payload) {
 }
 
 function getTrendStyle(changeValue) {
+  const num = typeof changeValue === 'number' ? changeValue : parseFloat(changeValue)
+  if (!isNaN(num)) {
+    if (num < 0) return { icon: 'bi bi-caret-down-fill', className: 'text-success' }
+    if (num > 0) return { icon: 'bi bi-caret-up-fill', className: 'text-danger' }
+    return { icon: 'bi bi-dash', className: 'text-secondary' }
+  }
   const text = String(changeValue ?? '').trim()
-  if (text.startsWith('-')) {
-    return { icon: 'bi bi-caret-down-fill', className: 'text-success' }
-  }
-
-  if (text.startsWith('+')) {
-    return { icon: 'bi bi-caret-up-fill', className: 'text-danger' }
-  }
-
+  if (text.startsWith('-')) return { icon: 'bi bi-caret-down-fill', className: 'text-success' }
+  if (text.startsWith('+')) return { icon: 'bi bi-caret-up-fill', className: 'text-danger' }
   return { icon: 'bi bi-dash', className: 'text-secondary' }
 }
 
@@ -66,7 +68,7 @@ function MarketSection() {
 
     async function fetchMarketData() {
       try {
-        const payload = await getMarketIndices()
+        const payload = await fetchMarketIndices()
         const normalized = normalizeItems(payload)
 
         if (!isMounted) {
@@ -138,7 +140,7 @@ function MarketSection() {
                 const cleanChange = String(item.change ?? '--').replace(/^[+-]/, '')
 
                 return (
-                  <div key={`${item.name}-${index}`} className="col-12 col-md-6 col-xl-4">
+                  <div key={item.id ?? `${item.name}-${index}`} className="col-12 col-md-6 col-xl-4">
                     <article className="border rounded-3 h-100 p-3 bg-white">
                       <div className="d-flex justify-content-between align-items-start gap-3">
                         <div>
