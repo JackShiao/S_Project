@@ -109,7 +109,7 @@ public class MarketService {
                     .uri("https://api.stlouisfed.org/fred/series/observations"
                             + "?series_id=" + seriesId
                             + "&api_key=" + fredApiKey
-                            + "&file_type=json&sort_order=desc&limit=1")
+                    + "&file_type=json&sort_order=desc&limit=5")
                     .retrieve()
                     .body(new ParameterizedTypeReference<Map<String, Object>>() {});
 
@@ -119,38 +119,62 @@ public class MarketService {
                 return;
             }
 
-            Object firstObs = observations.getFirst();
-            if (!(firstObs instanceof Map<?, ?> obsMap)) {
-                log.warn("FRED [{}] observations 第一筆格式異常", seriesId);
-                return;
-            }
+            BigDecimal latestValue = null;
+            BigDecimal previousValue = null;
 
-            Object valueObj = obsMap.get("value");
-            if (valueObj == null || ".".equals(valueObj.toString())) {
+            for (Object observation : observations) {
+                if (!(observation instanceof Map<?, ?> obsMap)) {
+                    continue;
+                }
+
+                Object valueObj = obsMap.get("value");
+                if (valueObj == null) {
+                    continue;
+                }
+
+                String valueText = valueObj.toString();
                 // FRED 在假日或資料缺漏時會回 "."
-                log.warn("FRED [{}] 最新資料尚未更新（值為 '.'），略過本次", seriesId);
+                if (".".equals(valueText)) {
+                    continue;
+                }
+
+                BigDecimal value = new BigDecimal(valueText);
+                if (latestValue == null) {
+                    latestValue = value;
+                } else {
+                    previousValue = value;
+                    break;
+                }
+            }
+
+            if (latestValue == null) {
+                log.warn("FRED [{}] 找不到可用觀測值（全為空值或 '.'）", seriesId);
                 return;
             }
 
-            BigDecimal newValue = new BigDecimal(valueObj.toString());
+            BigDecimal changePoint = previousValue == null
+                    ? BigDecimal.ZERO
+                    : latestValue.subtract(previousValue);
             LocalDateTime now = LocalDateTime.now();
+            final BigDecimal finalLatestValue = latestValue;
+            final BigDecimal finalChangePoint = changePoint;
+            final LocalDateTime finalNow = now;
 
             MarketIndex indicator = marketIndexRepository.findBySymbol(symbol)
                     .orElseGet(() -> MarketIndex.builder()
                             .symbol(symbol)
                             .name(name)
                             .changePoint(BigDecimal.ZERO)
-                            .currentPrice(newValue)
-                            .updatedAt(now)
+                            .currentPrice(finalLatestValue)
+                            .updatedAt(finalNow)
                             .build());
 
-            BigDecimal previousValue = indicator.getCurrentPrice();
-            indicator.setCurrentPrice(newValue);
-            indicator.setUpdatedAt(now);
-            indicator.setChangePoint(previousValue == null ? BigDecimal.ZERO : newValue.subtract(previousValue));
+            indicator.setCurrentPrice(finalLatestValue);
+            indicator.setUpdatedAt(finalNow);
+            indicator.setChangePoint(finalChangePoint);
 
             marketIndexRepository.save(indicator);
-            log.info("已更新 {} [{}]: {}", name, symbol, newValue);
+            log.info("已更新 {} [{}]: {} (漲跌: {})", name, symbol, finalLatestValue, finalChangePoint);
         } catch (Exception ex) {
             log.error("更新 FRED [{}] 指標失敗", seriesId, ex);
         }

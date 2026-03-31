@@ -1,19 +1,18 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { fetchMarketIndices } from '../../api/marketApi'
 import { Link } from 'react-router-dom'
 import './MarketSection.css'
 
 function normalizeItems(payload) {
-  if (!payload) {
-    return []
-  }
+  if (!payload) return []
 
   if (Array.isArray(payload)) {
     return payload
       .map((item, index) => ({
         id: item?.id,
         name: item?.name ?? item?.indexName ?? item?.symbol ?? `指數 ${index + 1}`,
-        value: item?.currentPrice ?? item?.value ?? item?.close ?? item?.price ?? item?.last ?? '--',
+        value:
+          item?.currentPrice ?? item?.value ?? item?.close ?? item?.price ?? item?.last ?? '--',
         change:
           item?.changePoint ??
           item?.change ??
@@ -25,133 +24,191 @@ function normalizeItems(payload) {
       .filter((item) => item.name)
   }
 
-  if (Array.isArray(payload?.indices)) {
-    return normalizeItems(payload.indices)
-  }
-
-  if (Array.isArray(payload?.marketData)) {
-    return normalizeItems(payload.marketData)
-  }
-
-  if (payload?.name || payload?.indexName || payload?.symbol) {
-    return normalizeItems([payload])
-  }
+  if (Array.isArray(payload?.indices)) return normalizeItems(payload.indices)
+  if (Array.isArray(payload?.marketData)) return normalizeItems(payload.marketData)
+  if (payload?.name || payload?.indexName || payload?.symbol) return normalizeItems([payload])
 
   return []
 }
 
 function getTrendStyle(changeValue) {
   const num = typeof changeValue === 'number' ? changeValue : parseFloat(changeValue)
-  if (!isNaN(num)) {
-    if (num < 0) return { icon: 'bi bi-caret-down-fill', className: 'text-success' }
-    if (num > 0) return { icon: 'bi bi-caret-up-fill', className: 'text-danger' }
-    return { icon: 'bi bi-dash', className: 'text-secondary' }
-  }
-  const text = String(changeValue ?? '').trim()
-  if (text.startsWith('-')) return { icon: 'bi bi-caret-down-fill', className: 'text-success' }
-  if (text.startsWith('+')) return { icon: 'bi bi-caret-up-fill', className: 'text-danger' }
-  return { icon: 'bi bi-dash', className: 'text-secondary' }
+  if (isNaN(num))
+    return {
+      icon: 'bi-dash',
+      textColor: 'text-secondary',
+      bgColor: 'bg-secondary',
+      isPositive: null,
+    }
+  // 台股習慣：上漲紅、下跌綠
+  if (num > 0)
+    return {
+      icon: 'bi-caret-up-fill',
+      textColor: 'text-danger',
+      bgColor: 'bg-danger',
+      isPositive: true,
+    }
+  if (num < 0)
+    return {
+      icon: 'bi-caret-down-fill',
+      textColor: 'text-success',
+      bgColor: 'bg-success',
+      isPositive: false,
+    }
+  return { icon: 'bi-dash', textColor: 'text-secondary', bgColor: 'bg-secondary', isPositive: null }
 }
 
 function MarketSection() {
-  // marketData: 儲存 API 正規化後的市場指數陣列，成功取得資料後由此驅動畫面。
   const [marketData, setMarketData] = useState([])
-
-  // isLoading: 控制首次載入中的 UI，在請求開始到結束前都維持 true。
-  const [isLoading, setIsLoading] = useState(true)
-
-  // error: 記錄 API 失敗時的友善訊息，讓畫面能改顯示錯誤提醒而不是空白。
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [lastUpdated, setLastUpdated] = useState(null)
 
-  useEffect(() => {
-    let isMounted = true
-
-    async function fetchMarketData() {
-      try {
-        const payload = await fetchMarketIndices()
-        const normalized = normalizeItems(payload)
-
-        if (!isMounted) {
-          return
-        }
-
-        setMarketData(normalized)
-        setError(null)
-      } catch (error) {
-        if (!isMounted) {
-          return
-        }
-
-        setError(error?.message || '目前無法取得市場指數資料，請稍後再試。')
-      } finally {
-        if (isMounted) {
-          setIsLoading(false)
-        }
-      }
-    }
-
-    fetchMarketData()
-
-    return () => {
-      isMounted = false
+  const loadData = useCallback(async () => {
+    try {
+      setLoading(true)
+      setError(null)
+      const response = await fetchMarketIndices()
+      const items = normalizeItems(response?.data ?? response)
+      setMarketData(items.slice(0, 6)) // 取前 6 筆顯示在首頁
+      setLastUpdated(new Date())
+    } catch (err) {
+      console.error('Failed to fetch market data:', err)
+      setError('無法取得最新市場動態，請檢查網路連線後重試。')
+    } finally {
+      setLoading(false)
     }
   }, [])
 
-  // 條件渲染邏輯：載入中優先顯示 Spinner，其次處理錯誤訊息，最後才顯示成功取得的資料內容。
-  if (isLoading) {
-    return (
-      <section className="market-section py-5" aria-label="市場指數區塊載入中">
-        <div className="container">
-          <div className="market-card text-center py-5">
-            <div className="spinner-border text-warning mb-3" role="status" aria-hidden="true" />
-            <p className="mb-0 text-muted">市場指數載入中，請稍候...</p>
-          </div>
-        </div>
-      </section>
-    )
-  }
-
-  if (error) {
-    return (
-      <section className="market-section py-5" aria-label="市場指數區塊錯誤狀態">
-        <div className="container">
-          <div className="alert alert-danger mb-0" role="alert">
-            {error}
-          </div>
-        </div>
-      </section>
-    )
-  }
+  useEffect(() => {
+    loadData()
+  }, [loadData])
 
   return (
-    <section className="market-section py-5">
+    <section className="market-section py-5 bg-light">
       <div className="container">
-        <div className="market-card">
-          <h3 className="mb-3">市場指數快覽</h3>
+        {/* 標題與更新區塊 */}
+        <div className="d-flex justify-content-between align-items-end mb-4">
+          <div>
+            <h2 className="fw-bold mb-2">全球市場指數</h2>
+            <div className="text-muted small d-flex align-items-center gap-2">
+              <span>
+                最後更新：
+                {lastUpdated ? lastUpdated.toLocaleTimeString('zh-TW', { hour12: false }) : '--:--'}
+              </span>
+              <button
+                onClick={loadData}
+                disabled={loading}
+                className="btn btn-sm btn-light border rounded-pill d-flex align-items-center justify-content-center"
+                style={{ width: '28px', height: '28px', padding: 0 }}
+                title="手動更新"
+              >
+                <i className={`bi bi-arrow-clockwise ${loading ? 'spin-icon' : ''}`}></i>
+              </button>
+            </div>
+          </div>
+          <Link
+            to="/market"
+            className="text-decoration-none text-primary fw-semibold d-none d-md-block"
+          >
+            查看更多 <i className="bi bi-arrow-right"></i>
+          </Link>
+        </div>
 
-          {marketData.length === 0 ? (
-            <div className="alert alert-light mb-0" role="status">
+        <div className="market-container">
+          {error ? (
+            // 友善的錯誤狀態卡片
+            <div className="p-5 text-center bg-white rounded-4 border border-danger border-opacity-25">
+              <i className="bi bi-exclamation-triangle text-danger display-4 mb-3 d-block"></i>
+              <h5 className="text-danger fw-bold mb-3">{error}</h5>
+              <button onClick={loadData} className="btn btn-outline-danger rounded-pill px-4">
+                <i className="bi bi-arrow-repeat me-2"></i>點擊重試
+              </button>
+            </div>
+          ) : loading && marketData.length === 0 ? (
+            // 骨架屏 Loading
+            <div className="row g-4">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="col-12 col-md-6 col-xl-4">
+                  <div className="market-card p-4 placeholder-glow">
+                    <div className="d-flex justify-content-between mb-3">
+                      <div>
+                        <span className="placeholder col-8 mb-2 rounded"></span>
+                        <span className="placeholder col-6 h5 d-block rounded"></span>
+                      </div>
+                      <span className="placeholder col-3 rounded-pill"></span>
+                    </div>
+                    <span className="placeholder col-7 display-6 mt-2 rounded"></span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : marketData.length === 0 ? (
+            <div className="text-center py-5 text-muted bg-white rounded-4 border">
               目前沒有可顯示的市場指數資料。
             </div>
           ) : (
-            <div className="row g-3">
+            <div className="row g-4">
               {marketData.map((item, index) => {
                 const trend = getTrendStyle(item.change)
                 const cleanChange = String(item.change ?? '--').replace(/^[+-]/, '')
 
                 return (
-                  <div key={item.id ?? `${item.name}-${index}`} className="col-12 col-md-6 col-xl-4">
-                    <article className="border rounded-3 h-100 p-3 bg-white">
-                      <div className="d-flex justify-content-between align-items-start gap-3">
-                        <div>
-                          <p className="text-muted small mb-2">市場指數</p>
-                          <h4 className="h5 mb-2">{item.name}</h4>
+                  <div
+                    key={item.id ?? `${item.name}-${index}`}
+                    className="col-12 col-md-6 col-xl-4"
+                  >
+                    <article className="market-card p-4 position-relative overflow-hidden h-100">
+                      {/* 背景微型趨勢線 (Sparkline) */}
+                      {trend.isPositive !== null && (
+                        <div
+                          className="position-absolute bottom-0 start-0 w-100"
+                          style={{ height: '45px', opacity: 0.15, pointerEvents: 'none' }}
+                        >
+                          <svg
+                            viewBox="0 0 100 45"
+                            preserveAspectRatio="none"
+                            className="w-100 h-100"
+                          >
+                            {trend.isPositive ? (
+                              <polyline
+                                points="0,45 20,30 40,35 60,15 80,20 100,5"
+                                fill="none"
+                                stroke="#dc3545"
+                                strokeWidth="2.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            ) : (
+                              <polyline
+                                points="0,5 20,15 40,10 60,30 80,25 100,45"
+                                fill="none"
+                                stroke="#198754"
+                                strokeWidth="2.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            )}
+                          </svg>
                         </div>
-                        <span className={`badge bg-light border ${trend.className}`}>
+                      )}
+
+                      <div className="position-relative z-1 d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                          <p className="text-muted small fw-semibold mb-1">市場指數</p>
+                          <h4 className="h5 fw-bold mb-0 text-dark">{item.name}</h4>
+                        </div>
+                        <span
+                          className={`market-badge ${trend.textColor} ${trend.bgColor} bg-opacity-10 rounded-pill px-2 py-1 small fw-bold`}
+                        >
                           <i className={trend.icon} aria-hidden="true" /> {cleanChange}
                         </span>
                       </div>
-                      <p className="display-6 mb-0">{item.value}</p>
+                      <div className="mt-auto position-relative z-1">
+                        <p className="market-value display-6 fw-bold mb-0 text-dark">
+                          {item.value}
+                        </p>
+                      </div>
                     </article>
                   </div>
                 )
@@ -159,9 +216,13 @@ function MarketSection() {
             </div>
           )}
 
-          <div className="mt-3">
-            <Link to="/market" className="btn btn-warning w-100">
-              查看更多
+          {/* 手機版額外顯示的底部查看按鈕 */}
+          <div className="mt-5 text-center d-md-none">
+            <Link
+              to="/market"
+              className="btn btn-outline-primary btn-more-market w-100 rounded-pill fw-bold py-2"
+            >
+              查看全部市場
             </Link>
           </div>
         </div>

@@ -1,3 +1,4 @@
+-- 初始化 JFinancial 資料庫結構與測試資料
 SET NAMES utf8mb4;
 SET time_zone = '+08:00';
 
