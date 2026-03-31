@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### 敏感設定（包含 API Key，不得 commit）###
+**/application-local.properties
