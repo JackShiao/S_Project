@@ -12,6 +12,8 @@ import {
 import { useEffect, useMemo, useState } from 'react'
 import { Line } from 'react-chartjs-2'
 import { fetchMarketHistory, fetchMarketIndices } from '../api/marketApi'
+import { addToWatchlistAPI, getWatchlistAPI, removeFromWatchlistAPI } from '../api/watchlistApi'
+import { useAuthStore } from '../store/authStore'
 import './Market.css'
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler)
@@ -161,41 +163,33 @@ const stockTableData = {
   ],
 }
 
-const bondTableData = {
-  twb: [
-    ['20年期', '台灣-20年期公債殖利率', 1.37, 0.01],
-    ['10年期', '台灣-10年期公債殖利率', 1.13, -0.02],
-    ['5年期', '台灣-5年期公債殖利率', 0.99, 0.0],
-  ],
-  usb: [
-    ['20年期', '美國-20年期公債殖利率', 4.82, 0.06],
-    ['10年期', '美國-10年期公債殖利率', 4.2, 0.06],
-    ['2年期', '美國-2年期公債殖利率', 3.53, 0.0],
-  ],
-  jpb: [
-    ['30年期', '日本-30年期公債殖利率', 3.36, 0.0],
-    ['10年期', '日本-10年期公債殖利率', 1.95, 0.02],
-    ['2年期', '日本-2年期公債殖利率', 1.07, 0.01],
-  ],
-}
+// 台灣公債暫無免費 API 來源，維持靜態參考數據
+const twBondRows = [
+  { term: '20年期', name: '台灣-20年期公債殖利率', yield: 1.37, change: 0.01 },
+  { term: '10年期', name: '台灣-10年期公債殖利率', yield: 1.13, change: -0.02 },
+  { term: '5年期',  name: '台灣-5年期公債殖利率',  yield: 0.99, change: 0.0 },
+]
 
-const fxTableData = {
-  usd_twd: [
-    ['2026-03-29', 'USD/TWD', 31.138, 31.238, 31.01, 30.91],
-    ['2026-03-28', 'USD/TWD', 31.138, 31.238, 30.98, 30.88],
-    ['2026-03-27', 'USD/TWD', 31.223, 31.323, 30.95, 30.85],
-  ],
-  jpy_twd: [
-    ['2026-03-29', 'JPY/TWD', 0.1983, 0.2023, 0.232, 0.238],
-    ['2026-03-28', 'JPY/TWD', 0.1983, 0.2023, 0.231, 0.237],
-    ['2026-03-27', 'JPY/TWD', 0.1984, 0.2024, 0.23, 0.236],
-  ],
-  cny_twd: [
-    ['2026-03-29', 'CNY/TWD', 4.3966, 4.4446, 4.33, 4.39],
-    ['2026-03-28', 'CNY/TWD', 4.3966, 4.4446, 4.32, 4.38],
-    ['2026-03-27', 'CNY/TWD', 4.4054, 4.4534, 4.31, 4.37],
-  ],
-}
+// 美國公債：US20Y / US10Y / US2Y 由 liveData 提供
+const usBondRows = [
+  { term: '20年期', name: '美國-20年期公債殖利率', symbol: 'US20Y' },
+  { term: '10年期', name: '美國-10年期公債殖利率', symbol: 'US10Y' },
+  { term: '2年期',  name: '美國-2年期公債殖利率',  symbol: 'US2Y' },
+]
+
+// 日本公債：JP10Y 由 liveData 提供，其餘暫無免費 API
+const jpBondRows = [
+  { term: '30年期', name: '日本-30年期公債殖利率', symbol: null },
+  { term: '10年期', name: '日本-10年期公債殖利率', symbol: 'JP10Y' },
+  { term: '2年期',  name: '日本-2年期公債殖利率',  symbol: null },
+]
+
+// 匯率：USDTWD / JPYTWD / CNYTWD 由 liveData 提供（Frankfurter 僅提供即期匯率，無 OHLC）
+const fxRows = [
+  { label: 'USD/TWD', symbol: 'USDTWD' },
+  { label: 'JPY/TWD', symbol: 'JPYTWD' },
+  { label: 'CNY/TWD', symbol: 'CNYTWD' },
+]
 
 function Market() {
   const [activeKey, setActiveKey] = useState('twii')
@@ -205,6 +199,9 @@ function Market() {
   // chartData.key 記錄「目前圖表對應的 activeKey」，key 不符即視為 loading
   const [chartData, setChartData] = useState({ key: '', labels: [], prices: [] })
   const [loadingPrices, setLoadingPrices] = useState(true)
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
+  const [watchlist, setWatchlist] = useState(new Set())
+  const [watchlistLoading, setWatchlistLoading] = useState(new Set())
 
   const current = marketConfigs[activeKey]
   const hasSymbol = !!current.symbol
@@ -247,6 +244,46 @@ function Market() {
 
     return () => { cancelled = true }
   }, [activeKey])
+
+  // 登入狀態變更時重新載入追蹤清單
+  useEffect(() => {
+    if (!isLoggedIn) {
+      setWatchlist(new Set())
+      return
+    }
+    getWatchlistAPI()
+      .then((res) => {
+        const symbols = new Set((res?.data ?? []).map((item) => item.symbol))
+        setWatchlist(symbols)
+      })
+      .catch(() => {})
+  }, [isLoggedIn])
+
+  async function toggleWatchlist(symbol) {
+    if (!symbol) return
+    setWatchlistLoading((prev) => new Set(prev).add(symbol))
+    try {
+      if (watchlist.has(symbol)) {
+        await removeFromWatchlistAPI(symbol)
+        setWatchlist((prev) => {
+          const next = new Set(prev)
+          next.delete(symbol)
+          return next
+        })
+      } else {
+        await addToWatchlistAPI(symbol)
+        setWatchlist((prev) => new Set(prev).add(symbol))
+      }
+    } catch {
+      // 靜默失敗
+    } finally {
+      setWatchlistLoading((prev) => {
+        const next = new Set(prev)
+        next.delete(symbol)
+        return next
+      })
+    }
+  }
 
   const liveEntry = current.symbol ? liveData[current.symbol] : null
 
@@ -298,27 +335,78 @@ function Market() {
             <h2 className="fs-5 mb-3">功能選單</h2>
 
             <h3 className="fs-6 text-muted">全球股市</h3>
-            <div className="d-grid gap-2 mb-3">
-              <button type="button" className="btn btn-outline-secondary btn-sm" onClick={() => setActiveKey('twii')}>台灣市場</button>
-              <button type="button" className="btn btn-outline-secondary btn-sm" onClick={() => setActiveKey('spx')}>S&P 500</button>
-              <button type="button" className="btn btn-outline-secondary btn-sm" onClick={() => setActiveKey('ixic')}>納斯達克</button>
-              <button type="button" className="btn btn-outline-secondary btn-sm" onClick={() => setActiveKey('dji')}>道瓊工業</button>
-              <button type="button" className="btn btn-outline-secondary btn-sm" onClick={() => setActiveKey('eur')}>歐洲市場</button>
-              <button type="button" className="btn btn-outline-secondary btn-sm" onClick={() => setActiveKey('n225')}>日本市場</button>
+            <div className="d-flex flex-column gap-1 mb-3">
+              {[
+                { key: 'twii', label: '台灣市場' },
+                { key: 'spx', label: 'S&P 500' },
+                { key: 'ixic', label: '納斯達克' },
+                { key: 'dji', label: '道瓊工業' },
+                { key: 'eur', label: '歐洲市場' },
+                { key: 'n225', label: '日本市場' },
+              ].map(({ key, label }) => (
+                <div key={key} className="d-flex align-items-center gap-1">
+                  <button type="button" className="btn btn-outline-secondary btn-sm flex-grow-1" onClick={() => setActiveKey(key)}>{label}</button>
+                  {isLoggedIn && marketConfigs[key].symbol && (
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-link p-0 border-0"
+                      title={watchlist.has(marketConfigs[key].symbol) ? '移除追蹤' : '加入追蹤'}
+                      disabled={watchlistLoading.has(marketConfigs[key].symbol)}
+                      onClick={() => toggleWatchlist(marketConfigs[key].symbol)}
+                    >
+                      <i className={`bi ${watchlist.has(marketConfigs[key].symbol) ? 'bi-star-fill text-warning' : 'bi-star text-muted'} fs-5`} />
+                    </button>
+                  )}
+                </div>
+              ))}
             </div>
 
             <h3 className="fs-6 text-muted">債券市場</h3>
-            <div className="d-grid gap-2 mb-3">
-              <button type="button" className="btn btn-outline-secondary btn-sm" onClick={() => setActiveKey('twb20')}>台灣公債</button>
-              <button type="button" className="btn btn-outline-secondary btn-sm" onClick={() => setActiveKey('usb10')}>美國公債</button>
-              <button type="button" className="btn btn-outline-secondary btn-sm" onClick={() => setActiveKey('jpb10')}>日本公債</button>
+            <div className="d-flex flex-column gap-1 mb-3">
+              {[
+                { key: 'twb20', label: '台灣公債' },
+                { key: 'usb10', label: '美國公債' },
+                { key: 'jpb10', label: '日本公債' },
+              ].map(({ key, label }) => (
+                <div key={key} className="d-flex align-items-center gap-1">
+                  <button type="button" className="btn btn-outline-secondary btn-sm flex-grow-1" onClick={() => setActiveKey(key)}>{label}</button>
+                  {isLoggedIn && marketConfigs[key].symbol && (
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-link p-0 border-0"
+                      title={watchlist.has(marketConfigs[key].symbol) ? '移除追蹤' : '加入追蹤'}
+                      disabled={watchlistLoading.has(marketConfigs[key].symbol)}
+                      onClick={() => toggleWatchlist(marketConfigs[key].symbol)}
+                    >
+                      <i className={`bi ${watchlist.has(marketConfigs[key].symbol) ? 'bi-star-fill text-warning' : 'bi-star text-muted'} fs-5`} />
+                    </button>
+                  )}
+                </div>
+              ))}
             </div>
 
             <h3 className="fs-6 text-muted">匯市</h3>
-            <div className="d-grid gap-2">
-              <button type="button" className="btn btn-outline-secondary btn-sm" onClick={() => setActiveKey('usd_twd')}>美元/台幣</button>
-              <button type="button" className="btn btn-outline-secondary btn-sm" onClick={() => setActiveKey('jpy_twd')}>日圓/台幣</button>
-              <button type="button" className="btn btn-outline-secondary btn-sm" onClick={() => setActiveKey('cny_twd')}>人民幣/台幣</button>
+            <div className="d-flex flex-column gap-1">
+              {[
+                { key: 'usd_twd', label: '美元/台幣' },
+                { key: 'jpy_twd', label: '日圓/台幣' },
+                { key: 'cny_twd', label: '人民幣/台幣' },
+              ].map(({ key, label }) => (
+                <div key={key} className="d-flex align-items-center gap-1">
+                  <button type="button" className="btn btn-outline-secondary btn-sm flex-grow-1" onClick={() => setActiveKey(key)}>{label}</button>
+                  {isLoggedIn && marketConfigs[key].symbol && (
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-link p-0 border-0"
+                      title={watchlist.has(marketConfigs[key].symbol) ? '移除追蹤' : '加入追蹤'}
+                      disabled={watchlistLoading.has(marketConfigs[key].symbol)}
+                      onClick={() => toggleWatchlist(marketConfigs[key].symbol)}
+                    >
+                      <i className={`bi ${watchlist.has(marketConfigs[key].symbol) ? 'bi-star-fill text-warning' : 'bi-star text-muted'} fs-5`} />
+                    </button>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         </aside>
@@ -392,67 +480,88 @@ function Market() {
             </div>
           )}
 
-          {current.type === 'bond' && (
-            <div className="table-responsive mb-4">
-              <table className="table table-striped align-middle" aria-label="債券表格">
-                <thead>
-                  <tr>
-                    <th scope="col">年期</th>
-                    <th scope="col">名稱</th>
-                    <th scope="col">殖利率</th>
-                    <th scope="col">漲跌幅</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {(bondTableData[current.tableKey] || []).map((row) => {
-                    const isUp = row[3] > 0
-                    const isFlat = row[3] === 0
-                    return (
-                      <tr key={row[1]}>
-                        <td>{row[0]}</td>
-                        <td>{row[1]}</td>
-                        <td>{row[2]}%</td>
-                        <td className={isFlat ? '' : isUp ? 'text-danger' : 'text-success'}>
-                          {!isFlat && (
-                            <i className={`bi ${isUp ? 'bi-caret-up-fill' : 'bi-caret-down-fill'}`} />
-                          )}{' '}
-                          {isUp ? '+' : ''}
-                          {row[3]}%
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            </div>
-          )}
+          {current.type === 'bond' && (() => {
+            const rows = current.tableKey === 'usb' ? usBondRows
+              : current.tableKey === 'jpb' ? jpBondRows
+              : twBondRows
+            const isLive = current.tableKey === 'usb' || current.tableKey === 'jpb'
+            return (
+              <div className="table-responsive mb-4">
+                <table className="table table-striped align-middle" aria-label="債券表格">
+                  <thead>
+                    <tr>
+                      <th scope="col">年期</th>
+                      <th scope="col">名稱</th>
+                      <th scope="col">殖利率</th>
+                      <th scope="col">漲跌點</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {rows.map((row) => {
+                      const entry = isLive && row.symbol ? liveData[row.symbol] : null
+                      const yieldVal = entry ? parseFloat(entry.currentPrice) : (row.yield ?? null)
+                      const changeVal = entry ? parseFloat(entry.changePoint) : (row.change ?? null)
+                      const isFlat = changeVal === 0
+                      const isUp = changeVal > 0
+                      return (
+                        <tr key={row.name}>
+                          <td>{row.term}</td>
+                          <td>{row.name}</td>
+                          <td>{yieldVal != null ? `${yieldVal}%` : <span className="text-muted">N/A</span>}</td>
+                          <td className={changeVal == null || isFlat ? '' : isUp ? 'text-danger' : 'text-success'}>
+                            {changeVal == null ? (
+                              <span className="text-muted">N/A</span>
+                            ) : (
+                              <>{!isFlat && <i className={`bi ${isUp ? 'bi-caret-up-fill' : 'bi-caret-down-fill'}`} />}{' '}{isUp ? '+' : ''}{changeVal}%</>
+                            )}
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )
+          })()}
 
           {current.type === 'fx' && (
             <div className="table-responsive mb-4">
               <table className="table table-striped align-middle" aria-label="匯市表格">
                 <thead>
                   <tr>
-                    <th scope="col">日期</th>
                     <th scope="col">幣別</th>
-                    <th scope="col">即期匯率(買入)</th>
-                    <th scope="col">即期匯率(賣出)</th>
-                    <th scope="col">現金匯率(買入)</th>
-                    <th scope="col">現金匯率(賣出)</th>
+                    <th scope="col">即期匯率</th>
+                    <th scope="col">漲跌點</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {(fxTableData[current.tableKey] || []).map((row) => (
-                    <tr key={row[0]}>
-                      <td>{row[0]}</td>
-                      <td>{row[1]}</td>
-                      <td>{row[2]}</td>
-                      <td>{row[3]}</td>
-                      <td>{row[4]}</td>
-                      <td>{row[5]}</td>
-                    </tr>
-                  ))}
+                  {fxRows.map((row) => {
+                    const entry = liveData[row.symbol]
+                    const rate = entry ? Number(entry.currentPrice) : null
+                    const change = entry ? parseFloat(entry.changePoint) : null
+                    const isUp = change > 0
+                    const isFlat = change === 0
+                    return (
+                      <tr key={row.symbol}>
+                        <td>{row.label}</td>
+                        <td>
+                          {rate != null
+                            ? rate.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })
+                            : <span className="text-muted">載入中…</span>}
+                        </td>
+                        <td className={change == null || isFlat ? '' : isUp ? 'text-danger' : 'text-success'}>
+                          {change == null ? (
+                            <span className="text-muted">載入中…</span>
+                          ) : (
+                            <>{!isFlat && <i className={`bi ${isUp ? 'bi-caret-up-fill' : 'bi-caret-down-fill'}`} />}{' '}{isUp ? '+' : ''}{change.toFixed(4)}</>
+                          )}
+                        </td>
+                      </tr>
+                    )
+                  })}
                 </tbody>
               </table>
+              <p className="text-muted small mb-0">資料來源：Frankfurter API（即期中間價）</p>
             </div>
           )}
         </section>

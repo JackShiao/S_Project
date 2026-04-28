@@ -113,7 +113,9 @@ public class MarketService {
     // ---------------------------------------------------------------
     @Scheduled(fixedRateString = "${scheduler.bond.fixed-rate}", initialDelayString = "${scheduler.bond.initial-delay}")
     public void updateBondYields() {
+        fetchAndUpdateFredIndicator("DGS20", "US20Y", "US 20-Year");
         fetchAndUpdateFredIndicator("DGS10", "US10Y", "US 10-Year");
+        fetchAndUpdateFredIndicator("DGS2", "US2Y", "US 2-Year");
         fetchAndUpdateFredIndicator("IRLTLT01JPM156N", "JP10Y", "JP 10-Year");
     }
 
