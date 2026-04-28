@@ -10,3 +10,8 @@ export async function searchMarketIndices(keyword) {
   return response?.data?.data ?? []
 }
 
+export async function fetchMarketHistory(symbol, limit = 30) {
+  const response = await axiosClient.get('/market/history', { params: { symbol, limit } })
+  return response?.data?.data ?? []
+}
+

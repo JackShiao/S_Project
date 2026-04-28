@@ -1,11 +1,16 @@
 package com.jackshiao.financial.service;
 
+import com.jackshiao.financial.dto.MarketPriceHistoryDto;
 import com.jackshiao.financial.entity.MarketIndex;
+import com.jackshiao.financial.entity.MarketPriceHistory;
 import com.jackshiao.financial.repository.MarketIndexRepository;
+import com.jackshiao.financial.repository.MarketPriceHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.core.ParameterizedTypeReference;
@@ -13,16 +18,21 @@ import org.springframework.web.client.RestClient;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class MarketService {
 
     private static final Logger log = LoggerFactory.getLogger(MarketService.class);
-    private static final String FOREX_SYMBOL = "USDTWD";
-    private static final String FOREX_NAME = "USD/TWD";
+    private static final int MIN_HISTORY_DAYS = 1;
+    private static final int MAX_HISTORY_DAYS = 90; // 約 3 個月，防止單次查詢過多歷史資料
+    private static final DateTimeFormatter HISTORY_DATE_FMT = DateTimeFormatter.ofPattern("MM/dd");
 
     @Value("${fred.api.key}")
     private String fredApiKey;
@@ -31,6 +41,7 @@ public class MarketService {
     private String fugleApiKey;
 
     private final MarketIndexRepository marketIndexRepository;
+    private final MarketPriceHistoryRepository marketPriceHistoryRepository;
     private final RestClient restClient = RestClient.create();
 
     public List<MarketIndex> getAllMarketIndices() {
@@ -42,36 +53,43 @@ public class MarketService {
     }
 
     // ---------------------------------------------------------------
-    // 定時任務：每隔一段時間從 Frankfurter API 取得最新的 USD/TWD 匯率，並更新到資料庫。
+    // 定時任務：每隔一段時間從 Frankfurter API 取得 USD、JPY、CNY 對 TWD 匯率並更新到資料庫。
     // ---------------------------------------------------------------
     @Scheduled(fixedRateString = "${scheduler.forex.fixed-rate}", initialDelayString = "${scheduler.forex.initial-delay}")
     public void updateForexRates() {
+        updateFrankfurterRate("USD", "TWD", "USDTWD", "USD/TWD");
+        updateFrankfurterRate("JPY", "TWD", "JPYTWD", "JPY/TWD");
+        updateFrankfurterRate("CNY", "TWD", "CNYTWD", "CNY/TWD");
+    }
+
+    // ---------------------------------------------------------------
+    // 共用輔助方法：呼叫 Frankfurter API 並更新單一匯率到資料庫
+    // ---------------------------------------------------------------
+    private void updateFrankfurterRate(String baseCurrency, String quoteCurrency, String symbol, String name) {
         try {
             List<Map<String, Object>> response = restClient.get()
-                    .uri("https://api.frankfurter.dev/v2/rates?base=USD&quotes=TWD")
+                    .uri("https://api.frankfurter.dev/v2/rates?base=" + baseCurrency + "&quotes=" + quoteCurrency)
                     .retrieve()
                     .body(new ParameterizedTypeReference<List<Map<String, Object>>>() {});
 
             if (response == null || response.isEmpty()) {
-                log.warn("Frankfurter 回應格式不符合預期: {}", response);
+                log.warn("Frankfurter [{}] 回應格式不符合預期: {}", symbol, response);
                 return;
             }
 
-            Map<String, Object> firstRate = response.getFirst();
-
-            Object twdRateObj = firstRate.get("rate");
-            if (twdRateObj == null) {
-                log.warn("Frankfurter 回應缺少 TWD 匯率: {}", response);
+            Object rateObj = response.getFirst().get("rate");
+            if (rateObj == null) {
+                log.warn("Frankfurter [{}] 回應缺少匯率欄位", symbol);
                 return;
             }
 
-            BigDecimal newRate = new BigDecimal(twdRateObj.toString());
+            BigDecimal newRate = new BigDecimal(rateObj.toString());
             LocalDateTime now = LocalDateTime.now();
 
-            MarketIndex forex = marketIndexRepository.findBySymbol(FOREX_SYMBOL)
+            MarketIndex forex = marketIndexRepository.findBySymbol(symbol)
                     .orElseGet(() -> MarketIndex.builder()
-                            .symbol(FOREX_SYMBOL)
-                            .name(FOREX_NAME)
+                            .symbol(symbol)
+                            .name(name)
                             .changePoint(BigDecimal.ZERO)
                             .currentPrice(newRate)
                             .updatedAt(now)
@@ -83,18 +101,20 @@ public class MarketService {
             forex.setChangePoint(previousPrice == null ? BigDecimal.ZERO : newRate.subtract(previousPrice));
 
             marketIndexRepository.save(forex);
-            log.info("已更新 {} 匯率: {}", FOREX_SYMBOL, newRate);
+            saveHistory(symbol, newRate);
+            log.info("已更新 {} 匯率: {}", symbol, newRate);
         } catch (Exception ex) {
-            log.error("更新 USD/TWD 匯率失敗", ex);
+            log.error("更新 {} 匯率失敗", symbol, ex);
         }
     }
 
     // ---------------------------------------------------------------
-    // 定時任務：每隔一段時間從 FRED API 取得最新的美國 10 年期公債殖利率、主要美股指數，並更新到資料庫。
+    // 定時任務：每隔一段時間從 FRED API 取得最新的公債殖利率並更新到資料庫。
     // ---------------------------------------------------------------
     @Scheduled(fixedRateString = "${scheduler.bond.fixed-rate}", initialDelayString = "${scheduler.bond.initial-delay}")
-    public void updateUS10YBondYield() {
+    public void updateBondYields() {
         fetchAndUpdateFredIndicator("DGS10", "US10Y", "US 10-Year");
+        fetchAndUpdateFredIndicator("IRLTLT01JPM156N", "JP10Y", "JP 10-Year");
     }
 
     @Scheduled(fixedRateString = "${scheduler.stock.fixed-rate}", initialDelayString = "${scheduler.stock.initial-delay}")
@@ -102,6 +122,7 @@ public class MarketService {
         fetchAndUpdateFredIndicator("SP500", "SPX", "S&P 500");
         fetchAndUpdateFredIndicator("NASDAQCOM", "IXIC", "NASDAQ Composite");
         fetchAndUpdateFredIndicator("DJIA", "DJI", "Dow Jones");
+        fetchAndUpdateFredIndicator("NIKKEI225", "N225", "Nikkei 225");
     }
 
     // ---------------------------------------------------------------
@@ -178,6 +199,7 @@ public class MarketService {
             indicator.setChangePoint(finalChangePoint);
 
             marketIndexRepository.save(indicator);
+            saveHistory(symbol, finalLatestValue);
             log.info("已更新 {} [{}]: {} (漲跌: {})", name, symbol, finalLatestValue, finalChangePoint);
         } catch (Exception ex) {
             log.error("更新 FRED [{}] 指標失敗", seriesId, ex);
@@ -247,9 +269,42 @@ public class MarketService {
             indicator.setChangePoint(changePoint);
 
             marketIndexRepository.save(indicator);
+            saveHistory(symbol, newPrice);
             log.info("已更新 {} [{}]: {} (漲跌: {})", name, symbol, newPrice, changePoint);
         } catch (Exception ex) {
             log.error("更新 Fugle [{}] 指標失敗", symbolCode, ex);
         }
+    }
+
+    // ---------------------------------------------------------------
+    // 工具方法：每次 Scheduler 更新後儲存一筆歷史快照
+    // 歷史快照為輔助數據（僅供折線圖使用），儲存失敗不應中斷主指數更新，故吞掉例外僅記錄 log。
+    // ---------------------------------------------------------------
+    private void saveHistory(String symbol, BigDecimal price) {
+        try {
+            MarketPriceHistory history = MarketPriceHistory.builder()
+                    .symbol(symbol)
+                    .price(price)
+                    .recordedAt(LocalDateTime.now())
+                    .build();
+            marketPriceHistoryRepository.save(history);
+        } catch (Exception ex) {
+            log.error("儲存 {} 歷史快照失敗", symbol, ex);
+        }
+    }
+
+    // ---------------------------------------------------------------
+    // 查詢方法：取得指定 symbol 的每日最新快照（最近 N 天，由舊到新）
+    // ---------------------------------------------------------------
+    public List<MarketPriceHistoryDto> getMarketHistory(String symbol, int limit) {
+        int safeLimit = Math.min(Math.max(limit, MIN_HISTORY_DAYS), MAX_HISTORY_DAYS);
+        Pageable pageable = PageRequest.of(0, safeLimit);
+        List<MarketPriceHistory> rows = marketPriceHistoryRepository
+                .findLatestPerDayBySymbol(symbol.toUpperCase(), pageable);
+        List<MarketPriceHistoryDto> result = rows.stream()
+                .map(h -> new MarketPriceHistoryDto(h.getPrice(), h.getRecordedAt().format(HISTORY_DATE_FMT)))
+                .collect(Collectors.toCollection(ArrayList::new));
+        Collections.reverse(result);
+        return result;
     }
 }

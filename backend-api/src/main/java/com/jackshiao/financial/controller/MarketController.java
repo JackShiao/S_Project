@@ -1,6 +1,7 @@
 package com.jackshiao.financial.controller;
 
 import com.jackshiao.financial.common.ApiResponse;
+import com.jackshiao.financial.dto.MarketPriceHistoryDto;
 import com.jackshiao.financial.entity.MarketIndex;
 import com.jackshiao.financial.service.MarketService;
 import lombok.RequiredArgsConstructor;
@@ -33,4 +34,13 @@ public class MarketController {
         List<MarketIndex> results = marketService.searchMarketIndices(keyword.trim());
         return ApiResponse.success(results);
     }
+
+    @GetMapping("/history")
+    public ApiResponse<List<MarketPriceHistoryDto>> getMarketHistory(
+            @RequestParam(name = "symbol") String symbol,
+            @RequestParam(name = "limit", defaultValue = "30") int limit) {
+        List<MarketPriceHistoryDto> history = marketService.getMarketHistory(symbol, limit);
+        return ApiResponse.success(history);
+    }
 }
+

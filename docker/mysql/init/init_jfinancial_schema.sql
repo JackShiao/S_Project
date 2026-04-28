@@ -81,6 +81,17 @@ CREATE TABLE member_watchlist (
   DEFAULT CHARSET=utf8mb4
   COLLATE=utf8mb4_0900_ai_ci;
 
+CREATE TABLE market_price_history (
+	id BIGINT NOT NULL AUTO_INCREMENT,
+	symbol VARCHAR(20) NOT NULL COMMENT '指數代號',
+	price DECIMAL(15,4) NOT NULL COMMENT '快照價格',
+	recorded_at DATETIME NOT NULL COMMENT '記錄時間',
+	PRIMARY KEY (id),
+	INDEX idx_market_price_history_symbol_recorded_at (symbol, recorded_at)
+) ENGINE=InnoDB
+  DEFAULT CHARSET=utf8mb4
+  COLLATE=utf8mb4_0900_ai_ci;
+
 INSERT INTO role (id, role_name)
 VALUES
 	(1, 'ROLE_USER'),

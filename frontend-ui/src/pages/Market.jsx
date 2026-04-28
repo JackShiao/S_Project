@@ -9,110 +9,110 @@ import {
   Title,
   Tooltip,
 } from 'chart.js'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Line } from 'react-chartjs-2'
+import { fetchMarketHistory, fetchMarketIndices } from '../api/marketApi'
 import './Market.css'
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler)
 
-const dateLabels = ['03/24', '03/25', '03/26', '03/27', '03/28', '03/29']
-
+// 前端顯示 key → 後端 symbol 的對應表（null 表示目前無後端資料來源）
 const marketConfigs = {
   twii: {
     title: '台灣加權指數',
     chartLabel: '加權指數',
-    chartData: [27980, 28303, 28182, 28400, 28024, 28198],
     color: '#0d6efd',
     type: 'stock',
     tableKey: 'twii',
+    symbol: 'TWII',
   },
   spx: {
     title: 'S&P 500 指數',
     chartLabel: 'S&P 500',
-    chartData: [6870, 6846, 6840, 6886, 6901, 6827],
     color: '#dc3545',
     type: 'stock',
     tableKey: 'spx',
+    symbol: 'SPX',
   },
   ixic: {
     title: '納斯達克指數',
     chartLabel: 'NASDAQ',
-    chartData: [23578, 23545, 23576, 23654, 23593, 23195],
     color: '#fd7e14',
     type: 'stock',
     tableKey: 'ixic',
+    symbol: 'IXIC',
   },
   dji: {
     title: '道瓊工業指數',
     chartLabel: 'Dow Jones',
-    chartData: [47954, 47739, 47560, 48057, 48704, 48458],
     color: '#198754',
     type: 'stock',
     tableKey: 'dji',
+    symbol: 'DJI',
   },
   eur: {
     title: '歐洲市場',
     chartLabel: 'Euro Stoxx 50',
-    chartData: [5723, 5725, 5718, 5708, 5753, 5720],
     color: '#20c997',
     type: 'stock',
     tableKey: 'eur',
+    symbol: null, // 暫無免費 API 來源
   },
   n225: {
     title: '日本市場',
     chartLabel: 'Nikkei 225',
-    chartData: [50491, 50581, 50655, 50602, 50148, 50836],
     color: '#6f42c1',
     type: 'stock',
     tableKey: 'n225',
+    symbol: 'N225',
   },
   twb20: {
     title: '台灣-20年期公債殖利率',
     chartLabel: '20年期殖利率',
-    chartData: [1.35, 1.36, 1.37, 1.38, 1.36, 1.37],
     color: '#0d6efd',
     type: 'bond',
     tableKey: 'twb',
+    symbol: null, // 暫無免費 API 來源
   },
   usb10: {
     title: '美國-10年期公債殖利率',
     chartLabel: '10年期殖利率',
-    chartData: [4.12, 4.13, 4.14, 4.13, 4.12, 4.13],
     color: '#dc3545',
     type: 'bond',
     tableKey: 'usb',
+    symbol: 'US10Y',
   },
   jpb10: {
     title: '日本-10年期公債殖利率',
     chartLabel: '10年期殖利率',
-    chartData: [1.9, 1.91, 1.92, 1.93, 1.91, 1.92],
     color: '#ffc107',
     type: 'bond',
     tableKey: 'jpb',
+    symbol: 'JP10Y',
   },
   usd_twd: {
     title: '美元/台幣即期匯率',
     chartLabel: 'USD/TWD',
-    chartData: [31.142, 31.158, 31.148, 31.223, 31.138, 31.138],
     color: '#e63946',
     type: 'fx',
     tableKey: 'usd_twd',
+    symbol: 'USDTWD',
   },
   jpy_twd: {
     title: '日圓/台幣即期匯率',
     chartLabel: 'JPY/TWD',
-    chartData: [0.1987, 0.1978, 0.1972, 0.1984, 0.1983, 0.1983],
     color: '#ff6b6b',
     type: 'fx',
     tableKey: 'jpy_twd',
+    symbol: 'JPYTWD',
   },
   cny_twd: {
     title: '人民幣/台幣即期匯率',
     chartLabel: 'CNY/TWD',
-    chartData: [4.3877, 4.3897, 4.3943, 4.4054, 4.3966, 4.3966],
     color: '#f72585',
     type: 'fx',
     tableKey: 'cny_twd',
+    symbol: 'CNYTWD',
   },
 }
 
@@ -199,24 +199,86 @@ const fxTableData = {
 
 function Market() {
   const [activeKey, setActiveKey] = useState('twii')
-  const current = marketConfigs[activeKey]
+  // 所有市場的即時價格（keyed by symbol）
+  const [liveData, setLiveData] = useState({})
+  // 當前選取市場的折線圖歷史資料
+  // chartData.key 記錄「目前圖表對應的 activeKey」，key 不符即視為 loading
+  const [chartData, setChartData] = useState({ key: '', labels: [], prices: [] })
+  const [loadingPrices, setLoadingPrices] = useState(true)
 
-  const lineData = useMemo(
-    () => ({
-      labels: dateLabels,
+  const current = marketConfigs[activeKey]
+  const hasSymbol = !!current.symbol
+  const loadingChart = hasSymbol && chartData.key !== activeKey
+
+  // 元件載入時，一次性取回所有指數的即時價格
+  useEffect(() => {
+    fetchMarketIndices()
+      .then((list) => {
+        if (!list) return
+        const map = {}
+        list.forEach((item) => {
+          map[item.symbol] = item
+        })
+        setLiveData(map)
+      })
+      .catch(() => {})
+      .finally(() => setLoadingPrices(false))
+  }, [])
+
+  // 切換市場時，載入對應的歷史價格折線數據
+  useEffect(() => {
+    const symbol = marketConfigs[activeKey]?.symbol
+    if (!symbol) return
+
+    let cancelled = false
+
+    fetchMarketHistory(symbol, 30)
+      .then((data) => {
+        if (cancelled) return
+        setChartData({
+          key: activeKey,
+          labels: data?.length ? data.map((d) => d.priceDate) : [],
+          prices: data?.length ? data.map((d) => parseFloat(d.price)) : [],
+        })
+      })
+      .catch(() => {
+        if (!cancelled) setChartData({ key: activeKey, labels: [], prices: [] })
+      })
+
+    return () => { cancelled = true }
+  }, [activeKey])
+
+  const liveEntry = current.symbol ? liveData[current.symbol] : null
+
+  const lineData = useMemo(() => {
+    const prices = [...chartData.prices]
+    const labels = [...chartData.labels]
+
+    // 用即時價格取代（或補上）圖表最後一個點，確保終點與側欄數字一致
+    if (liveEntry) {
+      const livePrice = parseFloat(liveEntry.currentPrice)
+      if (prices.length > 0) {
+        prices[prices.length - 1] = livePrice
+      } else {
+        prices.push(livePrice)
+        labels.push('今日')
+      }
+    }
+
+    return {
+      labels,
       datasets: [
         {
           label: current.chartLabel,
-          data: current.chartData,
+          data: prices,
           borderColor: current.color,
           backgroundColor: `${current.color}22`,
           tension: 0.3,
           fill: true,
         },
       ],
-    }),
-    [current]
-  )
+    }
+  }, [chartData, current, liveEntry])
 
   const lineOptions = useMemo(
     () => ({
@@ -263,12 +325,40 @@ function Market() {
 
         <section className="col-lg-9">
           <div className="d-flex justify-content-between flex-wrap align-items-center pb-2 mb-3 border-bottom">
-            <h1 className="h2 mb-0">市場指數(模擬資料)</h1>
+            <h1 className="h2 mb-0">市場指數</h1>
+            {!loadingPrices && liveEntry && (
+              <div className="text-end">
+                <span className="fs-5 fw-bold me-2">
+                  {Number(liveEntry.currentPrice).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 4,
+                  })}
+                </span>
+                <span className={parseFloat(liveEntry.changePoint) >= 0 ? 'text-danger' : 'text-success'}>
+                  <i
+                    className={`bi bi-caret-${parseFloat(liveEntry.changePoint) >= 0 ? 'up' : 'down'}-fill`}
+                  />{' '}
+                  {parseFloat(liveEntry.changePoint) >= 0 ? '+' : ''}
+                  {Number(liveEntry.changePoint).toFixed(2)}
+                </span>
+              </div>
+            )}
           </div>
 
           <h2 className="h4 mb-3">{current.title}</h2>
           <div className="market-chart-wrap mb-4">
-            <Line data={lineData} options={lineOptions} />
+            {loadingChart ? (
+              <div className="d-flex justify-content-center align-items-center h-100 text-muted">
+                <div className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" />
+                載入中…
+              </div>
+            ) : chartData.labels.length === 0 ? (
+              <div className="d-flex justify-content-center align-items-center h-100 text-muted">
+                <i className="bi bi-bar-chart me-2" />暫無歷史數據
+              </div>
+            ) : (
+              <Line data={lineData} options={lineOptions} />
+            )}
           </div>
 
           {current.type === 'stock' && (
