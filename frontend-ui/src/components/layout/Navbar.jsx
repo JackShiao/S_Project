@@ -159,18 +159,44 @@ function Navbar() {
 
             <div className="d-flex flex-lg-row flex-column align-items-center gap-2">
               {isLoggedIn ? (
-                <>
-                  <span className="text-white text-nowrap">
-                    歡迎，{userInfo?.displayName || userInfo?.email || '會員'}
-                  </span>
+                <div className="dropdown">
                   <button
                     type="button"
-                    className="btn btn-outline-light w-100 w-lg-auto"
-                    onClick={logout}
+                    className="btn btn-outline-light dropdown-toggle text-nowrap"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
                   >
-                    登出
+                    <i className="bi bi-person-circle me-1" aria-hidden="true" />
+                    {userInfo?.displayName || userInfo?.email || '會員'}
                   </button>
-                </>
+                  <ul className="dropdown-menu dropdown-menu-end">
+                    <li>
+                      <Link className="dropdown-item" to="/watchlist">
+                        <i className="bi bi-star me-2" aria-hidden="true" />
+                        追蹤清單
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="dropdown-item" to="/portfolio">
+                        <i className="bi bi-briefcase me-2" aria-hidden="true" />
+                        投資組合
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="dropdown-item" to="/profile">
+                        <i className="bi bi-gear me-2" aria-hidden="true" />
+                        個人設定
+                      </Link>
+                    </li>
+                    <li><hr className="dropdown-divider" /></li>
+                    <li>
+                      <button type="button" className="dropdown-item text-danger" onClick={logout}>
+                        <i className="bi bi-box-arrow-right me-2" aria-hidden="true" />
+                        登出
+                      </button>
+                    </li>
+                  </ul>
+                </div>
               ) : (
                 <>
                   <button

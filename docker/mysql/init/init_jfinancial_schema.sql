@@ -5,6 +5,7 @@ SET time_zone = '+08:00';
 SET FOREIGN_KEY_CHECKS = 0;
 
 DROP TABLE IF EXISTS member_watchlist;
+DROP TABLE IF EXISTS portfolio_holding;
 DROP TABLE IF EXISTS member_role;
 DROP TABLE IF EXISTS market_index;
 DROP TABLE IF EXISTS member;
@@ -92,9 +93,21 @@ CREATE TABLE market_price_history (
   DEFAULT CHARSET=utf8mb4
   COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO role (id, role_name)
-VALUES
-	(1, 'ROLE_USER'),
+CREATE TABLE portfolio_holding (
+	id INT NOT NULL AUTO_INCREMENT,
+	member_id INT NOT NULL COMMENT '會員 ID',
+	symbol VARCHAR(20) NOT NULL COMMENT '指數代號',
+	quantity DECIMAL(15,4) NOT NULL COMMENT '持股數量',
+	buy_price DECIMAL(15,4) NOT NULL COMMENT '買入均價',
+	buy_date DATE NOT NULL COMMENT '買入日期',
+	note VARCHAR(200) COMMENT '備註',
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '建立時間',
+	PRIMARY KEY (id),
+	INDEX idx_portfolio_holding_member_id (member_id),
+	CONSTRAINT fk_portfolio_holding_member FOREIGN KEY (member_id) REFERENCES member (id) ON DELETE CASCADE
+) ENGINE=InnoDB
+  DEFAULT CHARSET=utf8mb4
+  COLLATE=utf8mb4_0900_ai_ci;
 	(2, 'ROLE_ADMIN');
 
 INSERT INTO member (id, email, password_hash, display_name, created_at)

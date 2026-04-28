@@ -118,79 +118,6 @@ const marketConfigs = {
   },
 }
 
-const stockTableData = {
-  twii: [
-    ['2330', '台積電', 620.0, 1.2],
-    ['2317', '鴻海', 110.5, -0.8],
-    ['2454', '聯發科', 1100.0, 2.1],
-    ['2881', '富邦金', 70.2, -0.3],
-    ['2382', '廣達', 220.0, 0.9],
-  ],
-  spx: [
-    ['AAPL', 'Apple', 195.0, 1.5],
-    ['MSFT', 'Microsoft', 410.0, 0.8],
-    ['NVDA', 'NVIDIA', 650.0, 3.0],
-    ['AMZN', 'Amazon', 170.0, -0.6],
-    ['GOOGL', 'Alphabet', 135.0, 2.2],
-  ],
-  ixic: [
-    ['AAPL', 'Apple', 195.0, 1.5],
-    ['MSFT', 'Microsoft', 410.0, 0.8],
-    ['TSLA', 'Tesla', 250.0, -1.3],
-    ['AVGO', 'Broadcom', 1200.0, 0.9],
-    ['ADBE', 'Adobe', 600.0, 0.5],
-  ],
-  dji: [
-    ['UNH', 'UnitedHealth', 520.0, 0.9],
-    ['GS', 'Goldman Sachs', 390.0, -0.4],
-    ['HD', 'Home Depot', 350.0, 1.2],
-    ['JNJ', 'Johnson & Johnson', 160.0, -0.2],
-    ['V', 'Visa', 250.0, 0.7],
-  ],
-  eur: [
-    ['SAP', 'SAP SE', 130.0, 1.0],
-    ['ASML', 'ASML Holding', 700.0, -0.7],
-    ['OR', "L'Oreal", 400.0, 1.8],
-    ['SIE', 'Siemens', 140.0, 0.6],
-    ['ALV', 'Allianz', 220.0, -0.4],
-  ],
-  n225: [
-    ['7203', '豐田汽車', 2700.0, 1.1],
-    ['6758', '索尼', 13000.0, -0.5],
-    ['9984', '軟銀集團', 6500.0, 2.3],
-    ['8306', '三菱UFJ', 1200.0, 0.7],
-    ['8035', '東京電子', 25000.0, 1.8],
-  ],
-}
-
-// 台灣公債暫無免費 API 來源，維持靜態參考數據
-const twBondRows = [
-  { term: '20年期', name: '台灣-20年期公債殖利率', yield: 1.37, change: 0.01 },
-  { term: '10年期', name: '台灣-10年期公債殖利率', yield: 1.13, change: -0.02 },
-  { term: '5年期',  name: '台灣-5年期公債殖利率',  yield: 0.99, change: 0.0 },
-]
-
-// 美國公債：US20Y / US10Y / US2Y 由 liveData 提供
-const usBondRows = [
-  { term: '20年期', name: '美國-20年期公債殖利率', symbol: 'US20Y' },
-  { term: '10年期', name: '美國-10年期公債殖利率', symbol: 'US10Y' },
-  { term: '2年期',  name: '美國-2年期公債殖利率',  symbol: 'US2Y' },
-]
-
-// 日本公債：JP10Y 由 liveData 提供，其餘暫無免費 API
-const jpBondRows = [
-  { term: '30年期', name: '日本-30年期公債殖利率', symbol: null },
-  { term: '10年期', name: '日本-10年期公債殖利率', symbol: 'JP10Y' },
-  { term: '2年期',  name: '日本-2年期公債殖利率',  symbol: null },
-]
-
-// 匯率：USDTWD / JPYTWD / CNYTWD 由 liveData 提供（Frankfurter 僅提供即期匯率，無 OHLC）
-const fxRows = [
-  { label: 'USD/TWD', symbol: 'USDTWD' },
-  { label: 'JPY/TWD', symbol: 'JPYTWD' },
-  { label: 'CNY/TWD', symbol: 'CNYTWD' },
-]
-
 function Market() {
   const [activeKey, setActiveKey] = useState('twii')
   // 所有市場的即時價格（keyed by symbol）
@@ -449,121 +376,192 @@ function Market() {
             )}
           </div>
 
-          {current.type === 'stock' && (
-            <div className="table-responsive mb-4">
-              <table className="table table-striped align-middle" aria-label="股票表格">
-                <thead>
-                  <tr>
-                    <th scope="col">證券代碼</th>
-                    <th scope="col">證券名稱</th>
-                    <th scope="col">收盤指數</th>
-                    <th scope="col">漲跌幅</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {(stockTableData[current.tableKey] || []).map((row) => {
-                    const isUp = row[3] > 0
-                    return (
-                      <tr key={row[0]}>
-                        <td>{row[0]}</td>
-                        <td>{row[1]}</td>
-                        <td>{Number(row[2]).toLocaleString()}</td>
-                        <td className={isUp ? 'text-danger' : 'text-success'}>
-                          <i className={`bi ${isUp ? 'bi-caret-up-fill' : 'bi-caret-down-fill'}`} /> {isUp ? '+' : ''}
-                          {row[3]}%
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            </div>
-          )}
+          {current.type === 'stock' && (() => {
+            if (!current.symbol) {
+              return (
+                <div className="alert alert-secondary mb-4" role="status">
+                  <i className="bi bi-info-circle me-2" aria-hidden="true" />
+                  此市場目前暫無即時資料來源，敬請期待。
+                </div>
+              )
+            }
+            if (loadingPrices) {
+              return (
+                <div className="d-flex align-items-center gap-2 text-muted mb-4">
+                  <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+                  載入即時資料中…
+                </div>
+              )
+            }
+            if (!liveEntry) {
+              return (
+                <div className="alert alert-warning mb-4" role="status">
+                  <i className="bi bi-exclamation-triangle me-2" aria-hidden="true" />
+                  目前無法取得即時資料，請稍後再試。
+                </div>
+              )
+            }
+            const price = Number(liveEntry.currentPrice)
+            const change = parseFloat(liveEntry.changePoint)
+            const isUp = change > 0
+            const isDown = change < 0
+            const changeClass = isUp ? 'text-danger' : isDown ? 'text-success' : 'text-muted'
+            const changePrefix = isUp ? '+' : ''
+            const prevPrice = price - change
+            const changePct = prevPrice !== 0 ? ((change / prevPrice) * 100).toFixed(2) : '0.00'
+            const updatedAt = liveEntry.updatedAt
+              ? new Date(liveEntry.updatedAt).toLocaleString('zh-TW', { hour12: false })
+              : null
 
-          {current.type === 'bond' && (() => {
-            const rows = current.tableKey === 'usb' ? usBondRows
-              : current.tableKey === 'jpb' ? jpBondRows
-              : twBondRows
-            const isLive = current.tableKey === 'usb' || current.tableKey === 'jpb'
             return (
-              <div className="table-responsive mb-4">
-                <table className="table table-striped align-middle" aria-label="債券表格">
-                  <thead>
-                    <tr>
-                      <th scope="col">年期</th>
-                      <th scope="col">名稱</th>
-                      <th scope="col">殖利率</th>
-                      <th scope="col">漲跌點</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {rows.map((row) => {
-                      const entry = isLive && row.symbol ? liveData[row.symbol] : null
-                      const yieldVal = entry ? parseFloat(entry.currentPrice) : (row.yield ?? null)
-                      const changeVal = entry ? parseFloat(entry.changePoint) : (row.change ?? null)
-                      const isFlat = changeVal === 0
-                      const isUp = changeVal > 0
-                      return (
-                        <tr key={row.name}>
-                          <td>{row.term}</td>
-                          <td>{row.name}</td>
-                          <td>{yieldVal != null ? `${yieldVal}%` : <span className="text-muted">N/A</span>}</td>
-                          <td className={changeVal == null || isFlat ? '' : isUp ? 'text-danger' : 'text-success'}>
-                            {changeVal == null ? (
-                              <span className="text-muted">N/A</span>
-                            ) : (
-                              <>{!isFlat && <i className={`bi ${isUp ? 'bi-caret-up-fill' : 'bi-caret-down-fill'}`} />}{' '}{isUp ? '+' : ''}{changeVal}%</>
-                            )}
-                          </td>
-                        </tr>
-                      )
-                    })}
-                  </tbody>
-                </table>
+              <div className="card mb-4">
+                <div className="card-body">
+                  <h3 className="card-title fs-6 text-muted mb-3">
+                    <span className="badge bg-secondary me-2">{liveEntry.symbol}</span>
+                    {liveEntry.name}
+                  </h3>
+                  <div className="d-flex align-items-end gap-3 flex-wrap">
+                    <span className="fs-2 fw-bold font-monospace">
+                      {price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </span>
+                    <span className={`fs-5 font-monospace ${changeClass}`}>
+                      {!isUp && !isDown ? null : (
+                        <i className={`bi bi-caret-${isUp ? 'up' : 'down'}-fill me-1`} aria-hidden="true" />
+                      )}
+                      {changePrefix}{change.toFixed(2)}
+                    </span>
+                    <span className={`fs-5 font-monospace ${changeClass}`}>
+                      ({changePrefix}{changePct}%)
+                    </span>
+                  </div>
+                  {updatedAt && (
+                    <p className="text-muted small mt-2 mb-0">
+                      <i className="bi bi-clock me-1" aria-hidden="true" />
+                      資料更新時間：{updatedAt}（每 30 分鐘更新）
+                    </p>
+                  )}
+                </div>
               </div>
             )
           })()}
 
-          {current.type === 'fx' && (
-            <div className="table-responsive mb-4">
-              <table className="table table-striped align-middle" aria-label="匯市表格">
-                <thead>
-                  <tr>
-                    <th scope="col">幣別</th>
-                    <th scope="col">即期匯率</th>
-                    <th scope="col">漲跌點</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {fxRows.map((row) => {
-                    const entry = liveData[row.symbol]
-                    const rate = entry ? Number(entry.currentPrice) : null
-                    const change = entry ? parseFloat(entry.changePoint) : null
-                    const isUp = change > 0
-                    const isFlat = change === 0
-                    return (
-                      <tr key={row.symbol}>
-                        <td>{row.label}</td>
-                        <td>
-                          {rate != null
-                            ? rate.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })
-                            : <span className="text-muted">載入中…</span>}
-                        </td>
-                        <td className={change == null || isFlat ? '' : isUp ? 'text-danger' : 'text-success'}>
-                          {change == null ? (
-                            <span className="text-muted">載入中…</span>
-                          ) : (
-                            <>{!isFlat && <i className={`bi ${isUp ? 'bi-caret-up-fill' : 'bi-caret-down-fill'}`} />}{' '}{isUp ? '+' : ''}{change.toFixed(4)}</>
-                          )}
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-              <p className="text-muted small mb-0">資料來源：Frankfurter API（即期中間價）</p>
-            </div>
-          )}
+          {current.type === 'bond' && (() => {
+            if (!current.symbol) {
+              return (
+                <div className="alert alert-secondary mb-4" role="status">
+                  <i className="bi bi-info-circle me-2" aria-hidden="true" />
+                  此市場目前暫無即時資料來源，敬請期待。
+                </div>
+              )
+            }
+            if (loadingPrices) {
+              return (
+                <div className="d-flex align-items-center gap-2 text-muted mb-4">
+                  <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+                  載入即時資料中…
+                </div>
+              )
+            }
+            if (!liveEntry) {
+              return (
+                <div className="alert alert-warning mb-4" role="status">
+                  <i className="bi bi-exclamation-triangle me-2" aria-hidden="true" />
+                  目前無法取得即時資料，請稍後再試。
+                </div>
+              )
+            }
+            const yieldVal = parseFloat(liveEntry.currentPrice)
+            const change = parseFloat(liveEntry.changePoint)
+            const isUp = change > 0
+            const isDown = change < 0
+            const changeClass = isUp ? 'text-danger' : isDown ? 'text-success' : 'text-muted'
+            const changePrefix = isUp ? '+' : ''
+            const updatedAt = liveEntry.updatedAt
+              ? new Date(liveEntry.updatedAt).toLocaleString('zh-TW', { hour12: false })
+              : null
+            return (
+              <div className="card mb-4">
+                <div className="card-body">
+                  <h3 className="card-title fs-6 text-muted mb-3">
+                    <span className="badge bg-secondary me-2">{liveEntry.symbol}</span>
+                    {liveEntry.name}
+                  </h3>
+                  <div className="d-flex align-items-end gap-3 flex-wrap">
+                    <span className="fs-2 fw-bold font-monospace">
+                      {yieldVal.toFixed(2)}%
+                    </span>
+                    <span className={`fs-5 font-monospace ${changeClass}`}>
+                      {!isUp && !isDown ? null : (
+                        <i className={`bi bi-caret-${isUp ? 'up' : 'down'}-fill me-1`} aria-hidden="true" />
+                      )}
+                      {changePrefix}{change.toFixed(2)}%
+                    </span>
+                  </div>
+                  {updatedAt && (
+                    <p className="text-muted small mt-2 mb-0">
+                      <i className="bi bi-clock me-1" aria-hidden="true" />
+                      資料更新時間：{updatedAt}（每 30 分鐘更新）
+                    </p>
+                  )}
+                </div>
+              </div>
+            )
+          })()}
+
+          {current.type === 'fx' && (() => {
+            if (loadingPrices) {
+              return (
+                <div className="d-flex align-items-center gap-2 text-muted mb-4">
+                  <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+                  載入即時資料中…
+                </div>
+              )
+            }
+            if (!liveEntry) {
+              return (
+                <div className="alert alert-warning mb-4" role="status">
+                  <i className="bi bi-exclamation-triangle me-2" aria-hidden="true" />
+                  目前無法取得即時資料，請稍後再試。
+                </div>
+              )
+            }
+            const rate = Number(liveEntry.currentPrice)
+            const change = parseFloat(liveEntry.changePoint)
+            const isUp = change > 0
+            const isDown = change < 0
+            const changeClass = isUp ? 'text-danger' : isDown ? 'text-success' : 'text-muted'
+            const changePrefix = isUp ? '+' : ''
+            const updatedAt = liveEntry.updatedAt
+              ? new Date(liveEntry.updatedAt).toLocaleString('zh-TW', { hour12: false })
+              : null
+            return (
+              <div className="card mb-4">
+                <div className="card-body">
+                  <h3 className="card-title fs-6 text-muted mb-3">
+                    <span className="badge bg-secondary me-2">{liveEntry.symbol}</span>
+                    {liveEntry.name}
+                  </h3>
+                  <div className="d-flex align-items-end gap-3 flex-wrap">
+                    <span className="fs-2 fw-bold font-monospace">
+                      {rate.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })}
+                    </span>
+                    <span className={`fs-5 font-monospace ${changeClass}`}>
+                      {!isUp && !isDown ? null : (
+                        <i className={`bi bi-caret-${isUp ? 'up' : 'down'}-fill me-1`} aria-hidden="true" />
+                      )}
+                      {changePrefix}{change.toFixed(4)}
+                    </span>
+                  </div>
+                  {updatedAt && (
+                    <p className="text-muted small mt-2 mb-0">
+                      <i className="bi bi-clock me-1" aria-hidden="true" />
+                      資料更新時間：{updatedAt}（每 30 分鐘更新，來源：Frankfurter API）
+                    </p>
+                  )}
+                </div>
+              </div>
+            )
+          })()}
         </section>
       </div>
     </main>

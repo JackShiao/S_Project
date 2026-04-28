@@ -42,8 +42,10 @@ public class SecurityConfig {
                 // 公開端點：認證、市場指數（唯讀）
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/market/**").permitAll()
-                // 受保護端點：追蹤清單需登入
+                // 受保護端點：追蹤清單、會員資料、投資組合需登入
                 .requestMatchers("/api/watchlist/**").authenticated()
+                .requestMatchers("/api/member/**").authenticated()
+                .requestMatchers("/api/portfolio/**").authenticated()
                 // 其他端點預設需要認證
                 .anyRequest().authenticated()
             )

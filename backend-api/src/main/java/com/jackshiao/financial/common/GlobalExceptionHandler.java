@@ -27,6 +27,13 @@ public class GlobalExceptionHandler {
                 .body(new ApiResponse<>(400, ex.getMessage(), null));
     }
 
+    // 處理資源不存在（如找不到會員）
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> handleResourceNotFound(ResourceNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ApiResponse<>(404, ex.getMessage(), null));
+    }
+
     // 處理帳密錯誤或帳號不存在（未授權）
     @ExceptionHandler(org.springframework.security.core.AuthenticationException.class)
     public ResponseEntity<ApiResponse<Void>> handleAuthException(

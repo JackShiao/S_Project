@@ -35,6 +35,13 @@ export const useAuthStore = create((set) => ({
     });
   },
 
+  // 修改顯示名稱後同步更新 store，讓 Navbar 即時反映新名稱
+  updateDisplayName: (newDisplayName) => {
+    set((state) => ({
+      userInfo: state.userInfo ? { ...state.userInfo, displayName: newDisplayName } : state.userInfo,
+    }));
+  },
+
   // 頁面重整後從 localStorage 恢復登入狀態
   initAuth: () => {
     const token = localStorage.getItem(TOKEN_KEY);
