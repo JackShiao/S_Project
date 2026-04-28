@@ -2,15 +2,15 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { updateDisplayNameAPI, deleteAccountAPI } from '../api/memberApi'
 import { useAuthStore } from '../store/authStore'
+import { useToastStore } from '../store/toastStore'
 
 function Profile() {
   const { isLoggedIn, userInfo, loginSuccess, updateDisplayName, logout } = useAuthStore()
   const navigate = useNavigate()
+  const addToast = useToastStore((state) => state.addToast)
 
   const [displayName, setDisplayName] = useState('')
   const [submitting, setSubmitting] = useState(false)
-  const [successMsg, setSuccessMsg] = useState('')
-  const [errorMsg, setErrorMsg] = useState('')
 
   const [deleteConfirm, setDeleteConfirm] = useState('')
   const [deleting, setDeleting] = useState(false)
@@ -35,8 +35,6 @@ function Profile() {
     if (!displayName.trim()) return
 
     setSubmitting(true)
-    setSuccessMsg('')
-    setErrorMsg('')
 
     try {
       const res = await updateDisplayNameAPI(displayName.trim())
@@ -48,10 +46,10 @@ function Profile() {
         updateDisplayName(newName)
       }
       setDisplayName(newName)
-      setSuccessMsg('顯示名稱已更新成功！')
+      addToast('顯示名稱已更新成功！', 'success')
     } catch (err) {
       const msg = err?.response?.data?.message ?? '更新失敗，請稍後再試'
-      setErrorMsg(msg)
+      addToast(msg, 'danger')
     } finally {
       setSubmitting(false)
     }
@@ -105,26 +103,11 @@ function Profile() {
                 value={displayName}
                 onChange={(e) => {
                   setDisplayName(e.target.value)
-                  setSuccessMsg('')
-                  setErrorMsg('')
                 }}
                 disabled={submitting}
               />
               <div className="form-text text-muted">最多 50 個字元</div>
             </div>
-
-            {successMsg && (
-              <div className="alert alert-success py-2" role="alert">
-                <i className="bi bi-check-circle me-2" aria-hidden="true" />
-                {successMsg}
-              </div>
-            )}
-            {errorMsg && (
-              <div className="alert alert-danger py-2" role="alert">
-                <i className="bi bi-exclamation-circle me-2" aria-hidden="true" />
-                {errorMsg}
-              </div>
-            )}
 
             <button
               type="submit"

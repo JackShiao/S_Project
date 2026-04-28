@@ -3,3 +3,23 @@
   object-fit: cover;
   object-position: center 5%;
 }
+
+/* 讓 btn-link 的新聞標題按鈕外觀與 a.news-link 一致 */
+.news-page .btn.news-link,
+.border.rounded .btn.news-link {
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  vertical-align: baseline;
+  color: inherit;
+  text-decoration: none;
+  white-space: normal;
+  display: inline;
+}
+
+.news-page .btn.news-link:hover,
+.border.rounded .btn.news-link:hover {
+  text-decoration: underline;
+  color: var(--bs-primary);
+}
+

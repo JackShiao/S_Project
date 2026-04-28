@@ -2,15 +2,16 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { getWatchlistAPI, removeFromWatchlistAPI } from '../api/watchlistApi'
 import { useAuthStore } from '../store/authStore'
+import { useToastStore } from '../store/toastStore'
 
 function Watchlist() {
   const { isLoggedIn } = useAuthStore()
   const navigate = useNavigate()
+  const addToast = useToastStore((state) => state.addToast)
 
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
   const [removing, setRemoving] = useState(new Set())
-  const [error, setError] = useState('')
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -29,7 +30,7 @@ function Watchlist() {
         arr.sort((a, b) => a.symbol.localeCompare(b.symbol))
         setItems(arr)
       })
-      .catch(() => setError('載入追蹤清單失敗，請稍後再試'))
+      .catch(() => addToast('載入追蹤清單失敗，請稍後再試', 'danger'))
       .finally(() => setLoading(false))
   }, [isLoggedIn])
 
@@ -38,8 +39,9 @@ function Watchlist() {
     try {
       await removeFromWatchlistAPI(symbol)
       setItems((prev) => prev.filter((item) => item.symbol !== symbol))
+      addToast(`已移除追蹤 ${symbol}`, 'success')
     } catch {
-      setError(`移除 ${symbol} 失敗，請稍後再試`)
+      addToast(`移除 ${symbol} 失敗，請稍後再試`, 'danger')
     } finally {
       setRemoving((prev) => {
         const next = new Set(prev)
@@ -57,13 +59,6 @@ function Watchlist() {
         <i className="bi bi-star-fill text-warning me-2" aria-hidden="true" />
         追蹤清單
       </h1>
-
-      {error && (
-        <div className="alert alert-danger" role="alert">
-          <i className="bi bi-exclamation-circle me-2" aria-hidden="true" />
-          {error}
-        </div>
-      )}
 
       {loading ? (
         <div className="text-center py-5">

@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import Footer from './components/layout/Footer'
 import AuthModals from './components/auth/AuthModals'
 import Navbar from './components/layout/Navbar'
+import ToastContainer from './components/layout/ToastContainer'
 import Home from './pages/Home'
 import Market from './pages/Market'
 import News from './pages/News'
@@ -34,6 +35,7 @@ function App() {
       </Routes>
       <Footer />
       <AuthModals />
+      <ToastContainer />
     </BrowserRouter>
   )
 }

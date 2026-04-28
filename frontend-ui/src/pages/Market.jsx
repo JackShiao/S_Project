@@ -10,6 +10,7 @@ import {
   Tooltip,
 } from 'chart.js'
 import { useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { Line } from 'react-chartjs-2'
 import { fetchMarketHistory, fetchMarketIndices } from '../api/marketApi'
 import { addToWatchlistAPI, getWatchlistAPI, removeFromWatchlistAPI } from '../api/watchlistApi'
@@ -120,6 +121,17 @@ const marketConfigs = {
 
 function Market() {
   const [activeKey, setActiveKey] = useState('twii')
+  const [searchParams] = useSearchParams()
+
+  // URL ?symbol=TWII 時自動切換側欄到對應指數
+  useEffect(() => {
+    const sym = searchParams.get('symbol')?.toUpperCase()
+    if (!sym) return
+    const matchKey = Object.keys(marketConfigs).find(
+      (k) => marketConfigs[k].symbol === sym
+    )
+    if (matchKey) setActiveKey(matchKey)
+  }, [searchParams])
   // 所有市場的即時價格（keyed by symbol）
   const [liveData, setLiveData] = useState({})
   // 當前選取市場的折線圖歷史資料

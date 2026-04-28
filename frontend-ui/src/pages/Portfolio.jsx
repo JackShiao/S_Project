@@ -1,7 +1,19 @@
-import { useEffect, useState } from 'react'
+import {
+  BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
+  Tooltip,
+} from 'chart.js'
+import { useEffect, useMemo, useState } from 'react'
+import { Bar } from 'react-chartjs-2'
 import { useNavigate } from 'react-router-dom'
 import { addHoldingAPI, deleteHoldingAPI, getHoldingsAPI } from '../api/portfolioApi'
 import { useAuthStore } from '../store/authStore'
+import { useToastStore } from '../store/toastStore'
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 
 const EMPTY_FORM = {
   symbol: '',
@@ -30,10 +42,10 @@ function PnlCell({ value }) {
 function Portfolio() {
   const { isLoggedIn } = useAuthStore()
   const navigate = useNavigate()
+  const addToast = useToastStore((state) => state.addToast)
 
   const [holdings, setHoldings] = useState([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
   const [removing, setRemoving] = useState(new Set())
 
   const [showForm, setShowForm] = useState(false)
@@ -54,7 +66,7 @@ function Portfolio() {
     setLoading(true)
     getHoldingsAPI()
       .then((res) => setHoldings(res?.data ?? []))
-      .catch(() => setError('載入持倉失敗，請稍後再試'))
+      .catch(() => addToast('載入持倉失敗，請稍後再試', 'danger'))
       .finally(() => setLoading(false))
   }
 
@@ -63,10 +75,15 @@ function Portfolio() {
     try {
       await deleteHoldingAPI(id)
       setHoldings((prev) => prev.filter((h) => h.id !== id))
+      addToast('持倉已刪除', 'success')
     } catch {
-      setError('刪除失敗，請稍後再試')
+      addToast('刪除失敗，請稍後再試', 'danger')
     } finally {
-      setRemoving((prev) => { const next = new Set(prev); next.delete(id); return next })
+      setRemoving((prev) => {
+        const next = new Set(prev)
+        next.delete(id)
+        return next
+      })
     }
   }
 
@@ -89,6 +106,7 @@ function Portfolio() {
       setHoldings((prev) => [res.data, ...prev])
       setForm(EMPTY_FORM)
       setShowForm(false)
+      addToast('持倉新增成功！', 'success')
     } catch (err) {
       setFormError(err?.response?.data?.message ?? '新增失敗，請稍後再試')
     } finally {
@@ -102,6 +120,58 @@ function Portfolio() {
     ? holdings.reduce((sum, h) => sum + Number(h.currentValue), 0)
     : null
   const totalPnl = totalValue != null ? totalValue - totalCost : null
+
+  // 成本 vs 現值長條圖資料（只顯示有即時價格的持倉）
+  const chartHoldings = useMemo(
+    () => holdings.filter((h) => h.currentValue != null),
+    [holdings]
+  )
+  const barData = useMemo(() => {
+    const labels = chartHoldings.map((h) => h.symbol)
+    const costs = chartHoldings.map((h) => Number(h.cost))
+    const values = chartHoldings.map((h) => Number(h.currentValue))
+    const valueColors = chartHoldings.map((h) =>
+      Number(h.profitLoss) >= 0 ? 'rgba(220,53,69,0.75)' : 'rgba(25,135,84,0.75)'
+    )
+    return {
+      labels,
+      datasets: [
+        {
+          label: '成本',
+          data: costs,
+          backgroundColor: 'rgba(13,110,253,0.6)',
+          borderColor: 'rgba(13,110,253,1)',
+          borderWidth: 1,
+          borderRadius: 4,
+        },
+        {
+          label: '現值',
+          data: values,
+          backgroundColor: valueColors,
+          borderColor: valueColors.map((c) => c.replace('0.75', '1')),
+          borderWidth: 1,
+          borderRadius: 4,
+        },
+      ],
+    }
+  }, [chartHoldings])
+
+  const barOptions = useMemo(() => ({
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top' },
+      tooltip: {
+        callbacks: {
+          label: (ctx) =>
+            ` ${ctx.dataset.label}：${Number(ctx.raw).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+        },
+      },
+    },
+    scales: {
+      y: { beginAtZero: false, ticks: { maxTicksLimit: 6 } },
+    },
+  }), [])
 
   if (!isLoggedIn) return null
 
@@ -205,10 +275,19 @@ function Portfolio() {
         </div>
       )}
 
-      {/* 錯誤訊息 */}
-      {error && (
-        <div className="alert alert-danger" role="alert">
-          <i className="bi bi-exclamation-circle me-2" aria-hidden="true" />{error}
+      {/* 成本 vs 現值圖表 */}
+      {!loading && chartHoldings.length > 0 && (
+        <div className="card mb-4">
+          <div className="card-header d-flex justify-content-between align-items-center">
+            <span>持倉成本 vs 現值</span>
+            <span className="text-muted small">
+              <i className="bi bi-circle-fill text-danger me-1" style={{ fontSize: '8px' }} aria-hidden="true" />上漲&nbsp;
+              <i className="bi bi-circle-fill text-success me-1" style={{ fontSize: '8px' }} aria-hidden="true" />下跌
+            </span>
+          </div>
+          <div className="card-body" style={{ height: '260px' }}>
+            <Bar data={barData} options={barOptions} />
+          </div>
         </div>
       )}
 

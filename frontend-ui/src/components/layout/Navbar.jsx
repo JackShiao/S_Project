@@ -49,10 +49,10 @@ function Navbar() {
     debounceRef.current = setTimeout(() => runSearch(val), SEARCH_DEBOUNCE_MS)
   }
 
-  function handleSelectResult(/* item */) {
+  function handleSelectResult(item) {
     setQuery('')
     setDropdownOpen(false)
-    navigate('/market')
+    navigate(`/market${item?.symbol ? `?symbol=${encodeURIComponent(item.symbol)}` : ''}`)
   }
 
   // 點擊外部關閉 dropdown
