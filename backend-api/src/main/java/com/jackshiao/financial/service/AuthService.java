@@ -1,11 +1,16 @@
 package com.jackshiao.financial.service;
 
 import java.time.LocalDateTime;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.jackshiao.financial.dto.LoginRequest;
+import com.jackshiao.financial.dto.LoginResponse;
 import com.jackshiao.financial.dto.RegisterRequest;
 import com.jackshiao.financial.entity.Member;
 import com.jackshiao.financial.entity.Role;
@@ -21,17 +26,18 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     @Transactional
     public void register(RegisterRequest request) {
         if (memberRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("信箱已被註冊");
+            throw new IllegalArgumentException("註冊失敗，請稍後再試");
         }
 
         String encodedPassword = passwordEncoder.encode(request.getPassword());
 
         Role role = roleRepository.findByRoleName("ROLE_USER")
-                .orElseThrow(() -> new RuntimeException("找不到預設角色 ROLE_USER，請確認資料庫初始資料。"));
+                .orElseThrow(() -> new RuntimeException("找不到預設角色 ROLE_USER，請確認資料庫初始資料"));
 
         Member member = Member.builder()
                 .email(request.getEmail())
@@ -41,7 +47,25 @@ public class AuthService {
                 .build();
 
         member.getRoles().add(role);
-
         memberRepository.save(member);
     }
+
+    @Transactional(readOnly = true)
+    public LoginResponse login(LoginRequest request) {
+        Member member = memberRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new BadCredentialsException("信箱或密碼錯誤"));
+
+        if (!passwordEncoder.matches(request.getPassword(), member.getPasswordHash())) {
+            throw new BadCredentialsException("信箱或密碼錯誤");
+        }
+
+        Set<String> roles = member.getRoles().stream()
+                .map(Role::getRoleName)
+                .collect(Collectors.toSet());
+
+        String token = jwtService.generateToken(member.getEmail(), member.getDisplayName(), roles);
+
+        return new LoginResponse(token, member.getDisplayName(), member.getEmail());
+    }
 }
+

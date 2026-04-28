@@ -1,9 +1,13 @@
+
 import { useMemo, useState } from 'react'
 import './AuthModals.css'
 import { useAuthStore } from '../../store/authStore'
+import { loginAPI, registerAPI } from '../../api/authApi'
 
 const passwordRule =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/
+
+const REGISTER_REDIRECT_DELAY_MS = 1500
 
 function validateEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
@@ -14,11 +18,11 @@ function initialLogin() {
 }
 
 function initialRegister() {
-  return { email: '', password: '', confirmPassword: '' }
+  return { email: '', username: '', password: '', confirmPassword: '' }
 }
 
 function AuthModals() {
-  const { isModalOpen, modalType, closeModal, openModal } = useAuthStore()
+  const { isModalOpen, modalType, closeModal, openModal, loginSuccess: storeLoginSuccess } = useAuthStore()
 
   const [loginForm, setLoginForm] = useState(initialLogin)
   const [registerForm, setRegisterForm] = useState(initialRegister)
@@ -26,8 +30,11 @@ function AuthModals() {
   const [showRegisterPassword, setShowRegisterPassword] = useState(false)
   const [loginErrors, setLoginErrors] = useState({})
   const [registerErrors, setRegisterErrors] = useState({})
-  const [loginSuccess, setLoginSuccess] = useState('')
+  const [loginApiError, setLoginApiError] = useState('')
+  const [registerApiError, setRegisterApiError] = useState('')
   const [registerSuccess, setRegisterSuccess] = useState('')
+  const [loginLoading, setLoginLoading] = useState(false)
+  const [registerLoading, setRegisterLoading] = useState(false)
 
   const loginPasswordType = useMemo(
     () => (showLoginPassword ? 'text' : 'password'),
@@ -42,18 +49,19 @@ function AuthModals() {
   function resetLoginForm() {
     setLoginForm(initialLogin)
     setLoginErrors({})
-    setLoginSuccess('')
+    setLoginApiError('')
     setShowLoginPassword(false)
   }
 
   function resetRegisterForm() {
     setRegisterForm(initialRegister)
     setRegisterErrors({})
+    setRegisterApiError('')
     setRegisterSuccess('')
     setShowRegisterPassword(false)
   }
 
-  function handleLoginSubmit(event) {
+  async function handleLoginSubmit(event) {
     event.preventDefault()
     const errors = {}
 
@@ -65,21 +73,29 @@ function AuthModals() {
 
     if (!loginForm.password.trim()) {
       errors.password = '請輸入密碼'
-    } else if (loginForm.password.length < 8) {
-      errors.password = '密碼至少8碼'
-    } else if (!passwordRule.test(loginForm.password)) {
-      errors.password = '密碼需含大寫、小寫、數字、特殊符號'
     }
 
     setLoginErrors(errors)
-    if (Object.keys(errors).length === 0) {
-      setLoginSuccess('登入驗證通過，後續可接後端登入 API。')
-    } else {
-      setLoginSuccess('')
+    setLoginApiError('')
+    if (Object.keys(errors).length > 0) return
+
+    setLoginLoading(true)
+    try {
+      const result = await loginAPI({ email: loginForm.email, password: loginForm.password })
+      storeLoginSuccess(
+        { email: result.data.email, displayName: result.data.displayName },
+        result.data.token
+      )
+      closeModal()
+      resetLoginForm()
+    } catch (err) {
+      setLoginApiError(err?.response?.data?.message ?? '登入失敗，請稍後再試')
+    } finally {
+      setLoginLoading(false)
     }
   }
 
-  function handleRegisterSubmit(event) {
+  async function handleRegisterSubmit(event) {
     event.preventDefault()
     const errors = {}
 
@@ -87,6 +103,12 @@ function AuthModals() {
       errors.email = '請輸入電子郵件'
     } else if (!validateEmail(registerForm.email)) {
       errors.email = '電子郵件格式錯誤'
+    }
+
+    if (!registerForm.username.trim()) {
+      errors.username = '請輸入暱稱'
+    } else if (registerForm.username.length > 50) {
+      errors.username = '暱稱不得超過 50 字'
     }
 
     if (!registerForm.password.trim()) {
@@ -104,10 +126,25 @@ function AuthModals() {
     }
 
     setRegisterErrors(errors)
-    if (Object.keys(errors).length === 0) {
-      setRegisterSuccess('註冊驗證通過，後續可接後端註冊 API。')
-    } else {
-      setRegisterSuccess('')
+    setRegisterApiError('')
+    if (Object.keys(errors).length > 0) return
+
+    setRegisterLoading(true)
+    try {
+      await registerAPI({
+        email: registerForm.email,
+        username: registerForm.username,
+        password: registerForm.password,
+      })
+      setRegisterSuccess('註冊成功！請登入您的帳號。')
+      setTimeout(() => {
+        resetRegisterForm()
+        openModal('login')
+      }, REGISTER_REDIRECT_DELAY_MS)
+    } catch (err) {
+      setRegisterApiError(err?.response?.data?.message ?? '註冊失敗，請稍後再試')
+    } finally {
+      setRegisterLoading(false)
     }
   }
 
@@ -198,15 +235,24 @@ function AuthModals() {
                       </div>
                     </div>
 
-                    <button className="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit">
-                      登入
-                    </button>
-
-                    {loginSuccess && (
-                      <small className="d-flex text-success justify-content-center mb-2">
-                        {loginSuccess}
-                      </small>
+                    {loginApiError && (
+                      <div className="alert alert-danger py-2 mb-3" role="alert">
+                        {loginApiError}
+                      </div>
                     )}
+
+                    <button
+                      className="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
+                      type="submit"
+                      disabled={loginLoading}
+                    >
+                      {loginLoading ? (
+                        <>
+                          <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" />
+                          登入中...
+                        </>
+                      ) : '登入'}
+                    </button>
                     <small className="d-flex text-body-secondary justify-content-center">
                       登入即表示同意本站使用條款。
                     </small>
@@ -295,6 +341,23 @@ function AuthModals() {
 
                     <div className="form-floating mb-3">
                       <input
+                        type="text"
+                        className={`form-control rounded-3 ${registerErrors.username ? 'is-invalid' : ''}`}
+                        id="registerUsername"
+                        placeholder="您的暱稱"
+                        value={registerForm.username}
+                        onChange={(event) =>
+                          setRegisterForm((prev) => ({ ...prev, username: event.target.value }))
+                        }
+                      />
+                      <label htmlFor="registerUsername">暱稱</label>
+                      {registerErrors.username && (
+                        <div className="invalid-feedback">{registerErrors.username}</div>
+                      )}
+                    </div>
+
+                    <div className="form-floating mb-3">
+                      <input
                         type={registerPasswordType}
                         className={`form-control rounded-3 ${registerErrors.password ? 'is-invalid' : ''}`}
                         id="registerPassword"
@@ -343,14 +406,29 @@ function AuthModals() {
                       </div>
                     </div>
 
-                    <button className="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit">
-                      註冊
+                    {registerApiError && (
+                      <div className="alert alert-danger py-2 mb-3" role="alert">
+                        {registerApiError}
+                      </div>
+                    )}
+
+                    <button
+                      className="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
+                      type="submit"
+                      disabled={registerLoading}
+                    >
+                      {registerLoading ? (
+                        <>
+                          <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" />
+                          註冊中...
+                        </>
+                      ) : '註冊'}
                     </button>
 
                     {registerSuccess && (
-                      <small className="d-flex text-success justify-content-center mb-2">
+                      <div className="alert alert-success py-2 mb-2" role="alert">
                         {registerSuccess}
-                      </small>
+                      </div>
                     )}
                     <small className="text-body-secondary d-flex justify-content-center">
                       註冊即表示同意本站使用條款。

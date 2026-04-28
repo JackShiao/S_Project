@@ -1,6 +1,10 @@
 import './Navbar.css'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/authStore'
+import { searchMarketIndices } from '../../api/marketApi'
+import { useState, useRef, useEffect, useCallback } from 'react'
+
+const SEARCH_DEBOUNCE_MS = 400
 
 const navItems = [
   { label: '首頁', to: '/', end: true },
@@ -11,6 +15,56 @@ const navItems = [
 
 function Navbar() {
   const { isLoggedIn, userInfo, openModal, logout } = useAuthStore()
+  const navigate = useNavigate()
+
+  const [query, setQuery] = useState('')
+  const [results, setResults] = useState([])
+  const [searching, setSearching] = useState(false)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const debounceRef = useRef(null)
+  const wrapperRef = useRef(null)
+
+  const runSearch = useCallback(async (keyword) => {
+    if (!keyword.trim()) {
+      setResults([])
+      setDropdownOpen(false)
+      return
+    }
+    setSearching(true)
+    try {
+      const data = await searchMarketIndices(keyword)
+      setResults(data ?? [])
+      setDropdownOpen(true)
+    } catch {
+      setResults([])
+    } finally {
+      setSearching(false)
+    }
+  }, [])
+
+  function handleQueryChange(e) {
+    const val = e.target.value
+    setQuery(val)
+    clearTimeout(debounceRef.current)
+    debounceRef.current = setTimeout(() => runSearch(val), SEARCH_DEBOUNCE_MS)
+  }
+
+  function handleSelectResult(/* item */) {
+    setQuery('')
+    setDropdownOpen(false)
+    navigate('/market')
+  }
+
+  // 點擊外部關閉 dropdown
+  useEffect(() => {
+    function onClickOutside(e) {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+        setDropdownOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', onClickOutside)
+    return () => document.removeEventListener('mousedown', onClickOutside)
+  }, [])
 
   return (
     <header className="sticky-top">
@@ -63,16 +117,51 @@ function Navbar() {
               ))}
             </ul>
 
-            <div className="navbar-search-placeholder" aria-label="google全站搜尋佔位">
-              <i className="bi bi-search" aria-hidden="true" />
-              <span>全站搜尋功能建置中</span>
+            <div className="navbar-search-wrapper position-relative me-2" ref={wrapperRef}>
+              <div className="input-group input-group-sm">
+                <span className="input-group-text bg-secondary border-secondary text-white">
+                  {searching
+                    ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+                    : <i className="bi bi-search" aria-hidden="true" />
+                  }
+                </span>
+                <input
+                  type="text"
+                  className="form-control form-control-sm bg-secondary border-secondary text-white navbar-search-input"
+                  placeholder="搜尋指數…"
+                  value={query}
+                  onChange={handleQueryChange}
+                  onFocus={() => results.length > 0 && setDropdownOpen(true)}
+                  aria-label="搜尋市場指數"
+                />
+              </div>
+              {dropdownOpen && (
+                <ul className="navbar-search-dropdown list-unstyled position-absolute bg-white border rounded shadow mt-1 w-100 z-3 mb-0">
+                  {results.length === 0 ? (
+                    <li className="px-3 py-2 text-muted small">找不到符合的指數</li>
+                  ) : (
+                    results.slice(0, 8).map((item) => (
+                      <li key={item.id ?? item.symbol}>
+                        <button
+                          type="button"
+                          className="btn btn-link text-dark text-decoration-none w-100 text-start px-3 py-2 small"
+                          onClick={() => handleSelectResult(item)}
+                        >
+                          <span className="fw-bold">{item.symbol}</span>
+                          <span className="text-muted ms-2">{item.name}</span>
+                        </button>
+                      </li>
+                    ))
+                  )}
+                </ul>
+              )}
             </div>
 
             <div className="d-flex flex-lg-row flex-column align-items-center gap-2">
               {isLoggedIn ? (
                 <>
                   <span className="text-white text-nowrap">
-                    歡迎，{userInfo?.name || '會員'}
+                    歡迎，{userInfo?.displayName || userInfo?.email || '會員'}
                   </span>
                   <button
                     type="button"

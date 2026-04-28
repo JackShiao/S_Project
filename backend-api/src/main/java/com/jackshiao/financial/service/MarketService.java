@@ -37,6 +37,10 @@ public class MarketService {
         return marketIndexRepository.findAll();
     }
 
+    public List<MarketIndex> searchMarketIndices(String keyword) {
+        return marketIndexRepository.searchByKeyword(keyword);
+    }
+
     // ---------------------------------------------------------------
     // 定時任務：每隔一段時間從 Frankfurter API 取得最新的 USD/TWD 匯率，並更新到資料庫。
     // ---------------------------------------------------------------

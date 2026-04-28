@@ -1,5 +1,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { fetchMarketIndices } from '../../api/marketApi'
+import { getWatchlistAPI, addToWatchlistAPI, removeFromWatchlistAPI } from '../../api/watchlistApi'
+import { useAuthStore } from '../../store/authStore'
 import { Link } from 'react-router-dom'
 import './MarketSection.css'
 
@@ -10,6 +12,7 @@ function normalizeItems(payload) {
     return payload
       .map((item, index) => ({
         id: item?.id,
+        symbol: item?.symbol ?? '',
         name: item?.name ?? item?.indexName ?? item?.symbol ?? `指數 ${index + 1}`,
         value:
           item?.currentPrice ?? item?.value ?? item?.close ?? item?.price ?? item?.last ?? '--',
@@ -63,6 +66,9 @@ function MarketSection() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [lastUpdated, setLastUpdated] = useState(null)
+  const [watchlist, setWatchlist] = useState(new Set())
+  const [watchlistLoading, setWatchlistLoading] = useState(new Set())
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
 
   const loadData = useCallback(async () => {
     try {
@@ -83,6 +89,46 @@ function MarketSection() {
   useEffect(() => {
     loadData()
   }, [loadData])
+
+  // 登入狀態變更時重新載入追蹤清單
+  useEffect(() => {
+    if (!isLoggedIn) {
+      setWatchlist(new Set())
+      return
+    }
+    getWatchlistAPI()
+      .then((res) => {
+        const symbols = new Set((res?.data ?? []).map((item) => item.symbol))
+        setWatchlist(symbols)
+      })
+      .catch(() => {}) // 靜默失敗，不影響主要功能
+  }, [isLoggedIn])
+
+  async function toggleWatchlist(symbol) {
+    if (!symbol) return
+    setWatchlistLoading((prev) => new Set(prev).add(symbol))
+    try {
+      if (watchlist.has(symbol)) {
+        await removeFromWatchlistAPI(symbol)
+        setWatchlist((prev) => {
+          const next = new Set(prev)
+          next.delete(symbol)
+          return next
+        })
+      } else {
+        await addToWatchlistAPI(symbol)
+        setWatchlist((prev) => new Set(prev).add(symbol))
+      }
+    } catch {
+      // 靜默失敗
+    } finally {
+      setWatchlistLoading((prev) => {
+        const next = new Set(prev)
+        next.delete(symbol)
+        return next
+      })
+    }
+  }
 
   return (
     <section className="market-section py-5 bg-light">
@@ -198,11 +244,29 @@ function MarketSection() {
                           <p className="text-muted small fw-semibold mb-1">市場指數</p>
                           <h4 className="h5 fw-bold mb-0 text-dark">{item.name}</h4>
                         </div>
-                        <span
-                          className={`market-badge ${trend.textColor} ${trend.bgColor} bg-opacity-10 rounded-pill px-2 py-1 small fw-bold`}
-                        >
-                          <i className={trend.icon} aria-hidden="true" /> {cleanChange}
-                        </span>
+                        <div className="d-flex align-items-center gap-1">
+                          {isLoggedIn && item.symbol && (
+                            <button
+                              className="btn btn-sm btn-link p-0 border-0"
+                              title={watchlist.has(item.symbol) ? '移除追蹤' : '加入追蹤'}
+                              disabled={watchlistLoading.has(item.symbol)}
+                              onClick={() => toggleWatchlist(item.symbol)}
+                            >
+                              <i
+                                className={`bi ${
+                                  watchlist.has(item.symbol)
+                                    ? 'bi-star-fill text-warning'
+                                    : 'bi-star text-muted'
+                                } fs-5`}
+                              />
+                            </button>
+                          )}
+                          <span
+                            className={`market-badge ${trend.textColor} ${trend.bgColor} bg-opacity-10 rounded-pill px-2 py-1 small fw-bold`}
+                          >
+                            <i className={trend.icon} aria-hidden="true" /> {cleanChange}
+                          </span>
+                        </div>
                       </div>
                       <div className="mt-auto position-relative z-1">
                         <p className="market-value display-6 fw-bold mb-0 text-dark">

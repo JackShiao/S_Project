@@ -1,27 +1,67 @@
 import { create } from 'zustand';
 
+const TOKEN_KEY = 'access_token';
+
 export const useAuthStore = create((set) => ({
   isModalOpen: false,
   modalType: 'login',
   isLoggedIn: false,
   userInfo: null,
+
   openModal: (type) =>
     set({
       isModalOpen: true,
       modalType: type,
     }),
+
   closeModal: () =>
     set({
       isModalOpen: false,
     }),
-  loginSuccess: (userData) =>
+
+  loginSuccess: (userData, token) => {
+    localStorage.setItem(TOKEN_KEY, token);
     set({
       isLoggedIn: true,
       userInfo: userData,
-    }),
-  logout: () =>
+    });
+  },
+
+  logout: () => {
+    localStorage.removeItem(TOKEN_KEY);
     set({
       isLoggedIn: false,
       userInfo: null,
-    }),
+    });
+  },
+
+  // 頁面重整後從 localStorage 恢復登入狀態
+  initAuth: () => {
+    const token = localStorage.getItem(TOKEN_KEY);
+    if (!token) return;
+
+    // 簡單解析 JWT payload（不驗簽，只取資料）
+    try {
+      const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')
+      const payload = JSON.parse(
+        decodeURIComponent(
+          atob(base64).split('').map(c => '%' + c.charCodeAt(0).toString(16).padStart(2, '0')).join('')
+        )
+      );
+      const isExpired = payload.exp * 1000 < Date.now();
+      if (isExpired) {
+        localStorage.removeItem(TOKEN_KEY);
+        return;
+      }
+      set({
+        isLoggedIn: true,
+        userInfo: {
+          email: payload.sub,
+          displayName: payload.displayName ?? payload.sub,
+        },
+      });
+    } catch {
+      localStorage.removeItem(TOKEN_KEY);
+    }
+  },
 }));
