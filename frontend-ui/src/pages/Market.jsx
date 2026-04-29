@@ -75,7 +75,7 @@ const marketConfigs = {
     color: '#0d6efd',
     type: 'bond',
     tableKey: 'twb',
-    symbol: null, // 台灣公債殖利率尚無免費公開 API
+    symbol: null, // 台灣公債殖利率尚無免費公開 API，無 DB 記錄，不支援追蹤
   },
   usb10: {
     title: '美國-10年期公債殖利率',
@@ -120,10 +120,19 @@ const marketConfigs = {
 }
 
 function Market() {
-  const [activeKey, setActiveKey] = useState('twii')
-  const [searchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
 
-  // URL ?symbol=TWII 時自動切換側欄到對應指數
+  // 從 URL ?symbol= 初始化 activeKey，避免 mount 時寫入 effect 蓋掉來源頁帶入的 symbol
+  const [activeKey, setActiveKey] = useState(() => {
+    const sym = searchParams.get('symbol')?.toUpperCase()
+    if (sym) {
+      const matchKey = Object.keys(marketConfigs).find((k) => marketConfigs[k].symbol === sym)
+      if (matchKey) return matchKey
+    }
+    return 'twii'
+  })
+
+  // URL 變動時（例如瀏覽器上一頁/下一頁）同步更新側欄
   useEffect(() => {
     const sym = searchParams.get('symbol')?.toUpperCase()
     if (!sym) return
@@ -132,6 +141,15 @@ function Market() {
     )
     if (matchKey) setActiveKey(matchKey)
   }, [searchParams])
+
+  // 側欄切換時同步更新 URL（方便書籤、分享、瀏覽器上一頁）
+  useEffect(() => {
+    const symbol = marketConfigs[activeKey]?.symbol
+    if (!symbol) return
+    // 避免與讀取 URL 的 effect 互相觸發：URL 已是目標值時略過
+    if (searchParams.get('symbol')?.toUpperCase() === symbol) return
+    setSearchParams({ symbol }, { replace: false })
+  }, [activeKey]) // eslint-disable-line react-hooks/exhaustive-deps
   // 所有市場的即時價格（keyed by symbol）
   const [liveData, setLiveData] = useState({})
   // 當前選取市場的折線圖歷史資料

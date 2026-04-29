@@ -1,6 +1,7 @@
 package com.jackshiao.financial.controller;
 
 import com.jackshiao.financial.common.ApiResponse;
+import com.jackshiao.financial.dto.ChangePasswordRequest;
 import com.jackshiao.financial.dto.UpdateDisplayNameRequest;
 import com.jackshiao.financial.service.MemberService;
 import jakarta.validation.Valid;
@@ -39,5 +40,16 @@ public class MemberController {
     public ApiResponse<Void> deleteAccount(@AuthenticationPrincipal String email) {
         memberService.deleteAccount(email);
         return ApiResponse.success(null, "帳號已成功刪除");
+    }
+
+    // [需要驗證] 修改密碼
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/password")
+    public ApiResponse<Void> changePassword(
+            @AuthenticationPrincipal String email,
+            @Valid @RequestBody ChangePasswordRequest request) {
+
+        memberService.changePassword(email, request);
+        return ApiResponse.success(null, "密碼已成功更新");
     }
 }

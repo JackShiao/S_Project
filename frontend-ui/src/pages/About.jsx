@@ -67,7 +67,7 @@ function About() {
               </button>
               {showAnswer && (
                 <span>
-                  14 <img src="/img/Gemini.png" alt="Google Gemini logo" style={{ width: '30px' }} />、1{' '}
+                  14 <img src="/img/Gemini.png" alt="Google Gemini logo" style={{ width: '30px' }} />、2{' '}
                   <img src="/img/chatGPT.png" alt="ChatGPT logo" style={{ width: '30px' }} />、1 <span style={{ fontSize: '20px' }}>🍌</span>
                 </span>
               )}

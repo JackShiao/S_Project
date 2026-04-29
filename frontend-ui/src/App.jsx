@@ -10,8 +10,16 @@ import About from './pages/About'
 import Profile from './pages/Profile'
 import Watchlist from './pages/Watchlist'
 import Portfolio from './pages/Portfolio'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
 import { useAuthStore } from './store/authStore'
+
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+  return null
+}
 
 function App() {
   const initAuth = useAuthStore((state) => state.initAuth)
@@ -23,6 +31,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />

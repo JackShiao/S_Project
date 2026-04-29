@@ -148,12 +148,21 @@ function AuthModals() {
     }
   }
 
+  function handleClose() {
+    closeModal()
+    if (modalType === 'login') {
+      resetLoginForm()
+    } else {
+      resetRegisterForm()
+    }
+  }
+
   if (!isModalOpen) return null
 
   return (
     <>
       {/* 背景遮罩，點擊關閉彈窗 */}
-      <div className="modal-backdrop fade show" onClick={closeModal} />
+      <div className="modal-backdrop fade show" onClick={handleClose} />
 
       {/* 彈窗主體，點擊內容區不觸發關閉 */}
       <div
@@ -163,7 +172,7 @@ function AuthModals() {
         aria-labelledby={modalType === 'login' ? 'loginModalLabel' : 'registerModalLabel'}
         aria-modal="true"
         role="dialog"
-        onClick={closeModal}
+        onClick={handleClose}
       >
         <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
           <div className="modal-content rounded-4 shadow">
@@ -178,10 +187,7 @@ function AuthModals() {
                       type="button"
                       className="btn-close position-absolute end-0"
                       aria-label="Close"
-                      onClick={() => {
-                        closeModal()
-                        resetLoginForm()
-                      }}
+                      onClick={handleClose}
                     />
                   </div>
                 </div>
@@ -312,10 +318,7 @@ function AuthModals() {
                       type="button"
                       className="btn-close position-absolute end-0"
                       aria-label="Close"
-                      onClick={() => {
-                        closeModal()
-                        resetRegisterForm()
-                      }}
+                      onClick={handleClose}
                     />
                   </div>
                 </div>

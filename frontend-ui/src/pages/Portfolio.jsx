@@ -10,6 +10,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Bar } from 'react-chartjs-2'
 import { useNavigate } from 'react-router-dom'
 import { addHoldingAPI, deleteHoldingAPI, getHoldingsAPI, updateHoldingAPI } from '../api/portfolioApi'
+import { fetchMarketIndices } from '../api/marketApi'
 import { useAuthStore } from '../store/authStore'
 import { useToastStore } from '../store/toastStore'
 
@@ -47,10 +48,12 @@ function Portfolio() {
   const [holdings, setHoldings] = useState([])
   const [loading, setLoading] = useState(true)
   const [removing, setRemoving] = useState(new Set())
+  const [symbolOptions, setSymbolOptions] = useState([])
 
   const [showForm, setShowForm] = useState(false)
   const [form, setForm] = useState(EMPTY_FORM)
   const [formError, setFormError] = useState('')
+  const [invalidFields, setInvalidFields] = useState(new Set())
   const [submitting, setSubmitting] = useState(false)
 
   // 編輯用狀態
@@ -67,6 +70,12 @@ function Portfolio() {
     if (!isLoggedIn) return
     fetchHoldings()
   }, [isLoggedIn])
+
+  useEffect(() => {
+    fetchMarketIndices()
+      .then((list) => { if (Array.isArray(list)) setSymbolOptions(list) })
+      .catch(() => {})
+  }, [])
 
   function fetchHoldings() {
     setLoading(true)
@@ -96,10 +105,17 @@ function Portfolio() {
   async function handleSubmit(e) {
     e.preventDefault()
     setFormError('')
-    if (!form.symbol.trim() || !form.quantity || !form.buyPrice || !form.buyDate) {
-      setFormError('請填寫所有必填欄位')
+    const missing = []
+    if (!form.symbol.trim()) missing.push('指數代號')
+    if (!form.quantity) missing.push('數量')
+    if (!form.buyPrice) missing.push('買入價格')
+    if (!form.buyDate) missing.push('買入日期')
+    if (missing.length > 0) {
+      setInvalidFields(new Set(missing))
+      setFormError(`以下欄位尚未填寫：${missing.join('、')}`)
       return
     }
+    setInvalidFields(new Set())
     setSubmitting(true)
     try {
       const res = await addHoldingAPI({
@@ -231,7 +247,7 @@ function Portfolio() {
         <button
           type="button"
           className="btn btn-primary btn-sm"
-          onClick={() => { setShowForm((v) => !v); setFormError('') }}
+          onClick={() => { setShowForm((v) => !v); setFormError(''); setInvalidFields(new Set()); setForm(EMPTY_FORM) }}
         >
           <i className={`bi ${showForm ? 'bi-x-lg' : 'bi-plus-lg'} me-1`} aria-hidden="true" />
           {showForm ? '取消' : '新增持倉'}
@@ -247,26 +263,32 @@ function Portfolio() {
               <div className="row g-3">
                 <div className="col-sm-6 col-lg-3">
                   <label className="form-label">指數代號 <span className="text-danger">*</span></label>
-                  <input type="text" className="form-control" placeholder="例：TWII" maxLength={20}
-                    value={form.symbol} onChange={(e) => setForm({ ...form, symbol: e.target.value })}
+                  <input type="text" className={`form-control${invalidFields.has('指數代號') ? ' is-invalid' : ''}`} placeholder="例：TWII" maxLength={20}
+                    list="portfolio-symbol-list" autoComplete="off"
+                    value={form.symbol} onChange={(e) => { setForm({ ...form, symbol: e.target.value }); setInvalidFields((p) => { const n = new Set(p); n.delete('指數代號'); return n }) }}
                     disabled={submitting} />
+                  <datalist id="portfolio-symbol-list">
+                    {symbolOptions.map((s) => (
+                      <option key={s.symbol} value={s.symbol}>{s.name}</option>
+                    ))}
+                  </datalist>
                 </div>
                 <div className="col-sm-6 col-lg-3">
                   <label className="form-label">數量 <span className="text-danger">*</span></label>
-                  <input type="number" className="form-control" placeholder="例：100" min="0.0001" step="0.0001"
-                    value={form.quantity} onChange={(e) => setForm({ ...form, quantity: e.target.value })}
+                  <input type="number" className={`form-control${invalidFields.has('數量') ? ' is-invalid' : ''}`} placeholder="例：100" min="0.0001" step="0.0001"
+                    value={form.quantity} onChange={(e) => { setForm({ ...form, quantity: e.target.value }); setInvalidFields((p) => { const n = new Set(p); n.delete('數量'); return n }) }}
                     disabled={submitting} />
                 </div>
                 <div className="col-sm-6 col-lg-3">
                   <label className="form-label">買入價格 <span className="text-danger">*</span></label>
-                  <input type="number" className="form-control" placeholder="例：20000" min="0.0001" step="0.0001"
-                    value={form.buyPrice} onChange={(e) => setForm({ ...form, buyPrice: e.target.value })}
+                  <input type="number" className={`form-control${invalidFields.has('買入價格') ? ' is-invalid' : ''}`} placeholder="例：20000" min="0.0001" step="0.0001"
+                    value={form.buyPrice} onChange={(e) => { setForm({ ...form, buyPrice: e.target.value }); setInvalidFields((p) => { const n = new Set(p); n.delete('買入價格'); return n }) }}
                     disabled={submitting} />
                 </div>
                 <div className="col-sm-6 col-lg-3">
                   <label className="form-label">買入日期 <span className="text-danger">*</span></label>
-                  <input type="date" className="form-control" max={new Date().toISOString().slice(0, 10)}
-                    value={form.buyDate} onChange={(e) => setForm({ ...form, buyDate: e.target.value })}
+                  <input type="date" className={`form-control${invalidFields.has('買入日期') ? ' is-invalid' : ''}`} max={new Date().toISOString().slice(0, 10)}
+                    value={form.buyDate} onChange={(e) => { setForm({ ...form, buyDate: e.target.value }); setInvalidFields((p) => { const n = new Set(p); n.delete('買入日期'); return n }) }}
                     disabled={submitting} />
                 </div>
                 <div className="col-12">

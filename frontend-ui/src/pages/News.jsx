@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import { getGoogleNewsByTopic } from '../api/newsApi'
 import '../components/home/NewsSection.css'
 import './News.css'
@@ -152,6 +152,13 @@ function NewsModal({ article, onClose }) {
 
 const categoryCards = [
   {
+    key: 'finance',
+    title: '台股財經',
+    fallbackImage: '/img/news/finance.png',
+    topicUrl:
+      'https://news.google.com/search?q=%E5%8F%B0%E8%82%A1+%E6%8A%95%E8%B3%87+%E8%B2%A1%E7%B6%93&hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant',
+  },
+  {
     key: 'international',
     title: '國際新聞',
     fallbackImage: '/img/news1.png',
@@ -301,6 +308,7 @@ function CategoryNewsCard({ title, topicUrl, items, isLoading, fallbackImage, on
 function News() {
   const [newsMap, setNewsMap] = useState({
     headline: [],
+    finance: [],
     international: [],
     taiwan: [],
     business: [],
@@ -310,42 +318,34 @@ function News() {
   })
   const [isLoading, setIsLoading] = useState(true)
   const [selectedNews, setSelectedNews] = useState(null)
+  const [lastUpdated, setLastUpdated] = useState(null)
 
-  useEffect(() => {
-    let isMounted = true
-
-    async function loadNews() {
-      try {
-        const topicKeys = ['headline', ...categoryCards.map((item) => item.key)]
-        const results = await Promise.all(
-          topicKeys.map(async (key) => {
-            const payload = await getGoogleNewsByTopic(key)
-            return [key, Array.isArray(payload?.items) ? payload.items : []]
-          })
-        )
-
-        if (!isMounted) {
-          return
-        }
-
-        setNewsMap(Object.fromEntries(results))
-      } catch {
-        if (!isMounted) {
-          return
-        }
-      } finally {
-        if (isMounted) {
-          setIsLoading(false)
-        }
-      }
-    }
-
-    loadNews()
-
-    return () => {
-      isMounted = false
+  const loadNews = useCallback(async (forceRefresh = false) => {
+    setIsLoading(true)
+    try {
+      const topicKeys = ['headline', ...categoryCards.map((item) => item.key)]
+      const results = await Promise.all(
+        topicKeys.map(async (key) => {
+          // forceRefresh 時清除快取讓 newsApi 重新抓取
+          if (forceRefresh) {
+            try { localStorage.removeItem(`news_cache_${key}`) } catch { /* ignore */ }
+          }
+          const payload = await getGoogleNewsByTopic(key)
+          return [key, Array.isArray(payload?.items) ? payload.items : []]
+        })
+      )
+      setNewsMap(Object.fromEntries(results))
+      setLastUpdated(new Date())
+    } catch {
+      // 靜默失敗，保留舊資料
+    } finally {
+      setIsLoading(false)
     }
   }, [])
+
+  useEffect(() => {
+    loadNews()
+  }, [loadNews])
 
   const headlineMain = useMemo(() => newsMap.headline?.[0], [newsMap])
   const headlineSub = useMemo(() => (newsMap.headline || []).slice(1, 6), [newsMap])
@@ -353,6 +353,25 @@ function News() {
 
   return (
     <main className="container py-3 news-page">
+      <div className="d-flex justify-content-between align-items-center mb-2">
+        <h1 className="h3 mb-0">新聞總覽</h1>
+        <div className="d-flex align-items-center gap-2 text-muted small">
+          {lastUpdated && (
+            <span>最後更新：{lastUpdated.toLocaleTimeString('zh-TW', { hour12: false })}</span>
+          )}
+          <button
+            type="button"
+            className="btn btn-sm btn-light border rounded-pill d-flex align-items-center justify-content-center"
+            style={{ width: '28px', height: '28px', padding: 0 }}
+            title="強制刷新（清除快取）"
+            disabled={isLoading}
+            onClick={() => loadNews(true)}
+          >
+            <i className={`bi bi-arrow-clockwise ${isLoading ? 'spin-icon' : ''}`} aria-hidden="true" />
+          </button>
+        </div>
+      </div>
+
       <section className="border rounded shadow-sm p-3 bg-white my-3">
         <a
           href="https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRFZxYUdjU0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"

@@ -11,3 +11,9 @@ export async function deleteAccountAPI() {
   const response = await axiosClient.delete('/member/profile')
   return response.data
 }
+
+// PUT /api/member/password — 修改密碼
+export async function changePasswordAPI(currentPassword, newPassword) {
+  const response = await axiosClient.put('/member/password', { currentPassword, newPassword })
+  return response.data
+}

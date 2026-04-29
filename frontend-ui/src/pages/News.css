@@ -4,6 +4,15 @@
   object-position: center 5%;
 }
 
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spin-icon {
+  display: inline-block;
+  animation: spin 0.8s linear infinite;
+}
+
 /* 讓 btn-link 的新聞標題按鈕外觀與 a.news-link 一致 */
 .news-page .btn.news-link,
 .border.rounded .btn.news-link {

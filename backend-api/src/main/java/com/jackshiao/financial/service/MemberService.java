@@ -1,10 +1,12 @@
 package com.jackshiao.financial.service;
 
 import com.jackshiao.financial.common.ResourceNotFoundException;
+import com.jackshiao.financial.dto.ChangePasswordRequest;
 import com.jackshiao.financial.dto.UpdateDisplayNameRequest;
 import com.jackshiao.financial.entity.Member;
 import com.jackshiao.financial.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +20,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public Map<String, String> updateDisplayName(String email, UpdateDisplayNameRequest request) {
@@ -41,5 +44,18 @@ public class MemberService {
                 .orElseThrow(() -> new ResourceNotFoundException("找不到對應的會員帳號"));
 
         memberRepository.delete(member);
+    }
+
+    @Transactional
+    public void changePassword(String email, ChangePasswordRequest request) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("找不到對應的會員帳號"));
+
+        if (!passwordEncoder.matches(request.getCurrentPassword(), member.getPasswordHash())) {
+            throw new IllegalArgumentException("目前密碼輸入錯誤");
+        }
+
+        member.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
+        memberRepository.save(member);
     }
 }

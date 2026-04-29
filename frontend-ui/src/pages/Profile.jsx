@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { updateDisplayNameAPI, deleteAccountAPI } from '../api/memberApi'
+import { updateDisplayNameAPI, deleteAccountAPI, changePasswordAPI } from '../api/memberApi'
 import { useAuthStore } from '../store/authStore'
 import { useToastStore } from '../store/toastStore'
 
@@ -15,6 +15,11 @@ function Profile() {
   const [deleteConfirm, setDeleteConfirm] = useState('')
   const [deleting, setDeleting] = useState(false)
   const [deleteError, setDeleteError] = useState('')
+
+  const [pwForm, setPwForm] = useState({ current: '', next: '', confirm: '' })
+  const [pwSubmitting, setPwSubmitting] = useState(false)
+  const [pwError, setPwError] = useState('')
+  const [pwInvalidFields, setPwInvalidFields] = useState(new Set())
 
   // 未登入時 redirect 首頁
   useEffect(() => {
@@ -69,6 +74,41 @@ function Profile() {
     }
   }
 
+  async function handleChangePassword(e) {
+    e.preventDefault()
+    setPwError('')
+    const invalid = new Set()
+    if (!pwForm.current) invalid.add('current')
+    if (!pwForm.next) invalid.add('next')
+    if (!pwForm.confirm) invalid.add('confirm')
+    if (invalid.size > 0) {
+      setPwInvalidFields(invalid)
+      setPwError('請填寫所有欄位')
+      return
+    }
+    if (pwForm.next.length < 8) {
+      setPwInvalidFields(new Set(['next']))
+      setPwError('新密碼長度至少 8 個字元')
+      return
+    }
+    if (pwForm.next !== pwForm.confirm) {
+      setPwInvalidFields(new Set(['confirm']))
+      setPwError('新密碼與確認密碼不一致')
+      return
+    }
+    setPwInvalidFields(new Set())
+    setPwSubmitting(true)
+    try {
+      await changePasswordAPI(pwForm.current, pwForm.next)
+      setPwForm({ current: '', next: '', confirm: '' })
+      addToast('密碼已成功更新！', 'success')
+    } catch (err) {
+      setPwError(err?.response?.data?.message ?? '更新失敗，請稍後再試')
+    } finally {
+      setPwSubmitting(false)
+    }
+  }
+
   if (!isLoggedIn) return null
 
   return (
@@ -117,6 +157,63 @@ function Profile() {
               {submitting
                 ? <><span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" />儲存中…</>
                 : '儲存變更'}
+            </button>
+          </form>
+        </div>
+      </div>
+
+      {/* 修改密碼 */}
+      <div className="card mt-4">
+        <div className="card-header">修改密碼</div>
+        <div className="card-body">
+          <form onSubmit={handleChangePassword} noValidate>
+            <div className="mb-3">
+              <label htmlFor="currentPassword" className="form-label">目前密碼</label>
+              <input
+                id="currentPassword"
+                type="password"
+                className={`form-control${pwInvalidFields.has('current') ? ' is-invalid' : ''}`}
+                autoComplete="current-password"
+                value={pwForm.current}
+                onChange={(e) => { setPwForm({ ...pwForm, current: e.target.value }); setPwInvalidFields((p) => { const n = new Set(p); n.delete('current'); return n }) }}
+                disabled={pwSubmitting}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="newPassword" className="form-label">新密碼</label>
+              <input
+                id="newPassword"
+                type="password"
+                className={`form-control${pwInvalidFields.has('next') ? ' is-invalid' : ''}`}
+                autoComplete="new-password"
+                minLength={8}
+                value={pwForm.next}
+                onChange={(e) => { setPwForm({ ...pwForm, next: e.target.value }); setPwInvalidFields((p) => { const n = new Set(p); n.delete('next'); return n }) }}
+                disabled={pwSubmitting}
+              />
+              <div className="form-text text-muted">至少 8 個字元</div>
+            </div>
+            <div className="mb-3">
+              <label htmlFor="confirmPassword" className="form-label">確認新密碼</label>
+              <input
+                id="confirmPassword"
+                type="password"
+                className={`form-control${pwInvalidFields.has('confirm') ? ' is-invalid' : ''}`}
+                autoComplete="new-password"
+                value={pwForm.confirm}
+                onChange={(e) => { setPwForm({ ...pwForm, confirm: e.target.value }); setPwInvalidFields((p) => { const n = new Set(p); n.delete('confirm'); return n }) }}
+                disabled={pwSubmitting}
+              />
+            </div>
+            {pwError && (
+              <div className="alert alert-danger py-2" role="alert">
+                <i className="bi bi-exclamation-circle me-2" aria-hidden="true" />{pwError}
+              </div>
+            )}
+            <button type="submit" className="btn btn-primary" disabled={pwSubmitting}>
+              {pwSubmitting
+                ? <><span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" />更新中…</>
+                : '更新密碼'}
             </button>
           </form>
         </div>

@@ -4,6 +4,8 @@ const CACHE_INTERVAL_MS = 10 * 60 * 1000
 const TOPIC_RSS_URLS = {
   headline:
     'https://news.google.com/rss/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRFZxYUdjU0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW:zh-Hant',
+  finance:
+    'https://news.google.com/rss/search?q=%E5%8F%B0%E8%82%A1+%E6%8A%95%E8%B3%87+%E8%B2%A1%E7%B6%93&hl=zh-TW&gl=TW&ceid=TW:zh-Hant',
   international:
     'https://news.google.com/rss/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx1YlY4U0JYcG9MVlJYR2dKVVZ5Z0FQAQ?hl=zh-TW&gl=TW&ceid=TW:zh-Hant',
   taiwan:
