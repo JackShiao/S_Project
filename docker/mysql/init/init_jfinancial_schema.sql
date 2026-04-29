@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS portfolio_holding;
 DROP TABLE IF EXISTS member_role;
 DROP TABLE IF EXISTS market_index;
 DROP TABLE IF EXISTS member;
+DROP TABLE IF EXISTS market_price_history;
 DROP TABLE IF EXISTS role;
 
 SET FOREIGN_KEY_CHECKS = 1;
@@ -108,6 +109,14 @@ CREATE TABLE portfolio_holding (
 ) ENGINE=InnoDB
   DEFAULT CHARSET=utf8mb4
   COLLATE=utf8mb4_0900_ai_ci;
+
+-- ---------------------------------------------------------------
+-- 種子資料
+-- ---------------------------------------------------------------
+
+INSERT INTO role (id, role_name)
+VALUES
+	(1, 'ROLE_USER'),
 	(2, 'ROLE_ADMIN');
 
 INSERT INTO member (id, email, password_hash, display_name, created_at)
@@ -118,16 +127,30 @@ INSERT INTO member_role (member_id, role_id)
 VALUES
 	(1, 1);
 
+-- market_index：symbol 與後端排程任務保持一致
+-- 股市：TWII(Fugle) / SPX、IXIC、DJI、N225、EUR(FRED)
+-- 債券：US10Y、JP10Y(FRED)
+-- 匯率：USDTWD、JPYTWD、CNYTWD(Frankfurter)
+-- 注意：current_price / change_point 為佔位初始值，MarketDataSeeder 啟動後會以真實資料覆蓋
 INSERT INTO market_index (id, symbol, name, current_price, change_point, updated_at)
 VALUES
-	(1, '^TWII', '台灣加權指數', 20345.67, 85.32, '2026-03-30 15:21:38'),
-	(2, '^IXIC', '納斯達克綜合指數', 17890.45, -42.18, '2026-03-30 15:21:38'),
-	(3, '^GSPC', 'S&P 500', 5298.21, 12.76, '2026-03-30 15:21:38');
+	(1,  'TWII',   '台灣加權指數',           39521.00,   150.00, '2026-04-29 00:00:00'),
+	(2,  'SPX',    'S&P 500',                7138.00,     25.00, '2026-04-29 00:00:00'),
+	(3,  'IXIC',   'NASDAQ Composite',      24663.00,   -45.00, '2026-04-29 00:00:00'),
+	(4,  'DJI',    'Dow Jones',             49141.00,    120.00, '2026-04-29 00:00:00'),
+	(5,  'N225',   'Nikkei 225',            59917.00,    200.00, '2026-04-29 00:00:00'),
+	(6,  'EUR',    'Euro Stoxx 50',          5836.00,     30.00, '2026-04-29 00:00:00'),
+	(7,  'US10Y',  'US 10-Year',                4.35,    -0.05, '2026-04-29 00:00:00'),
+	(8,  'JP10Y',  'JP 10-Year',                2.47,     0.02, '2026-04-29 00:00:00'),
+	(9,  'USDTWD', 'USD/TWD',                  31.53,     0.10, '2026-04-29 00:00:00'),
+	(10, 'JPYTWD', 'JPY/TWD',                   0.20,     0.00, '2026-04-29 00:00:00'),
+	(11, 'CNYTWD', 'CNY/TWD',                   4.61,     0.02, '2026-04-29 00:00:00');
 
+-- 測試帳號追蹤台灣加權指數與 S&P 500
 INSERT INTO member_watchlist (member_id, market_index_id, added_at)
 VALUES
-	(1, 1, '2026-03-30 15:21:38'),
-	(1, 2, '2026-03-30 15:21:38');
+	(1, 1, '2026-04-29 00:00:00'),
+	(1, 2, '2026-04-29 00:00:00');
 
 -- 驗證查詢：檢查各表筆數
 -- SELECT 'role' AS table_name, COUNT(*) AS total_count FROM role

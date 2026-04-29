@@ -2,6 +2,7 @@ package com.jackshiao.financial.service;
 
 import com.jackshiao.financial.dto.AddHoldingRequest;
 import com.jackshiao.financial.dto.HoldingResponse;
+import com.jackshiao.financial.dto.UpdateHoldingRequest;
 import com.jackshiao.financial.entity.MarketIndex;
 import com.jackshiao.financial.entity.Member;
 import com.jackshiao.financial.entity.PortfolioHolding;
@@ -54,6 +55,18 @@ public class PortfolioService {
                 .findByIdAndMemberEmail(holdingId, email)
                 .orElseThrow(() -> new IllegalArgumentException("找不到對應的持倉紀錄"));
         portfolioHoldingRepository.delete(holding);
+    }
+
+    @Transactional
+    public HoldingResponse updateHolding(String email, Integer holdingId, UpdateHoldingRequest request) {
+        PortfolioHolding holding = portfolioHoldingRepository
+                .findByIdAndMemberEmail(holdingId, email)
+                .orElseThrow(() -> new IllegalArgumentException("找不到對應的持倉紀錄"));
+        holding.setQuantity(request.getQuantity());
+        holding.setBuyPrice(request.getBuyPrice());
+        holding.setBuyDate(request.getBuyDate());
+        holding.setNote(request.getNote());
+        return toResponse(portfolioHoldingRepository.save(holding));
     }
 
     // ---- 私有輔助方法 ----

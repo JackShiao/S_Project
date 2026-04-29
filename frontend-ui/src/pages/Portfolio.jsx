@@ -9,7 +9,7 @@ import {
 import { useEffect, useMemo, useState } from 'react'
 import { Bar } from 'react-chartjs-2'
 import { useNavigate } from 'react-router-dom'
-import { addHoldingAPI, deleteHoldingAPI, getHoldingsAPI } from '../api/portfolioApi'
+import { addHoldingAPI, deleteHoldingAPI, getHoldingsAPI, updateHoldingAPI } from '../api/portfolioApi'
 import { useAuthStore } from '../store/authStore'
 import { useToastStore } from '../store/toastStore'
 
@@ -52,6 +52,12 @@ function Portfolio() {
   const [form, setForm] = useState(EMPTY_FORM)
   const [formError, setFormError] = useState('')
   const [submitting, setSubmitting] = useState(false)
+
+  // 編輯用狀態
+  const [editingId, setEditingId] = useState(null)
+  const [editForm, setEditForm] = useState({})
+  const [editError, setEditError] = useState('')
+  const [editSaving, setEditSaving] = useState(false)
 
   useEffect(() => {
     if (!isLoggedIn) navigate('/', { replace: true })
@@ -111,6 +117,46 @@ function Portfolio() {
       setFormError(err?.response?.data?.message ?? '新增失敗，請稍後再試')
     } finally {
       setSubmitting(false)
+    }
+  }
+
+  function handleEditStart(h) {
+    setEditingId(h.id)
+    setEditError('')
+    setEditForm({
+      quantity: h.quantity != null ? String(h.quantity) : '',
+      buyPrice: h.buyPrice != null ? String(h.buyPrice) : '',
+      buyDate: h.buyDate ?? '',
+      note: h.note ?? '',
+    })
+  }
+
+  function handleEditCancel() {
+    setEditingId(null)
+    setEditError('')
+  }
+
+  async function handleEditSave(id) {
+    setEditError('')
+    if (!editForm.quantity || !editForm.buyPrice || !editForm.buyDate) {
+      setEditError('數量、買入均價與買入日期為必填')
+      return
+    }
+    setEditSaving(true)
+    try {
+      const res = await updateHoldingAPI(id, {
+        quantity: parseFloat(editForm.quantity),
+        buyPrice: parseFloat(editForm.buyPrice),
+        buyDate: editForm.buyDate,
+        note: editForm.note?.trim() || null,
+      })
+      setHoldings((prev) => prev.map((h) => (h.id === id ? res.data : h)))
+      setEditingId(null)
+      addToast('持倉更新成功！', 'success')
+    } catch (err) {
+      setEditError(err?.response?.data?.message ?? '更新失敗，請稍後再試')
+    } finally {
+      setEditSaving(false)
     }
   }
 
@@ -326,32 +372,98 @@ function Portfolio() {
             </thead>
             <tbody>
               {holdings.map((h) => (
-                <tr key={h.id}>
-                  <td><span className="badge bg-secondary">{h.symbol}</span></td>
-                  <td className="text-muted small">{h.name ?? '—'}</td>
-                  <td className="text-end font-monospace">{fmt(h.quantity, 4)}</td>
-                  <td className="text-end font-monospace">{fmt(h.buyPrice, 4)}</td>
-                  <td className="text-end font-monospace">{fmt(h.cost)}</td>
-                  <td className="text-end font-monospace">{fmt(h.currentPrice)}</td>
-                  <td className="text-end font-monospace">{fmt(h.currentValue)}</td>
-                  <td className="text-end font-monospace"><PnlCell value={h.profitLoss} /></td>
-                  <td className="text-end font-monospace">
-                    {h.profitLossPct != null
-                      ? <PnlCell value={h.profitLossPct} />
-                      : <span className="text-muted">N/A</span>}
-                    {h.profitLossPct != null ? '%' : ''}
-                  </td>
-                  <td className="text-muted small">{h.note ?? '—'}</td>
-                  <td className="text-end">
-                    <button type="button" className="btn btn-sm btn-outline-danger"
-                      disabled={removing.has(h.id)} onClick={() => handleDelete(h.id)}
-                      aria-label={`刪除 ${h.symbol}`}>
-                      {removing.has(h.id)
-                        ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
-                        : <i className="bi bi-trash" aria-hidden="true" />}
-                    </button>
-                  </td>
-                </tr>
+                <>
+                  <tr key={h.id} className={editingId === h.id ? 'table-active' : ''}>
+                    <td><span className="badge bg-secondary">{h.symbol}</span></td>
+                    <td className="text-muted small">{h.name ?? '—'}</td>
+                    <td className="text-end font-monospace">{fmt(h.quantity, 4)}</td>
+                    <td className="text-end font-monospace">{fmt(h.buyPrice, 4)}</td>
+                    <td className="text-end font-monospace">{fmt(h.cost)}</td>
+                    <td className="text-end font-monospace">{fmt(h.currentPrice)}</td>
+                    <td className="text-end font-monospace">{fmt(h.currentValue)}</td>
+                    <td className="text-end font-monospace"><PnlCell value={h.profitLoss} /></td>
+                    <td className="text-end font-monospace">
+                      {h.profitLossPct != null
+                        ? <PnlCell value={h.profitLossPct} />
+                        : <span className="text-muted">N/A</span>}
+                      {h.profitLossPct != null ? '%' : ''}
+                    </td>
+                    <td className="text-muted small">{h.note ?? '—'}</td>
+                    <td className="text-end">
+                      <div className="d-flex gap-1 justify-content-end">
+                        <button type="button" className="btn btn-sm btn-outline-secondary"
+                          onClick={() => editingId === h.id ? handleEditCancel() : handleEditStart(h)}
+                          aria-label={`編輯 ${h.symbol}`}>
+                          <i className={`bi ${editingId === h.id ? 'bi-x-lg' : 'bi-pencil'}`} aria-hidden="true" />
+                        </button>
+                        <button type="button" className="btn btn-sm btn-outline-danger"
+                          disabled={removing.has(h.id)} onClick={() => handleDelete(h.id)}
+                          aria-label={`刪除 ${h.symbol}`}>
+                          {removing.has(h.id)
+                            ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+                            : <i className="bi bi-trash" aria-hidden="true" />}
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  {editingId === h.id && (
+                    <tr key={`edit-${h.id}`} className="table-warning">
+                      <td colSpan={11} className="px-3 py-2">
+                        <div className="row g-2 align-items-end">
+                          <div className="col-6 col-md-2">
+                            <label className="form-label form-label-sm mb-1">數量 <span className="text-danger">*</span></label>
+                            <input type="number" className="form-control form-control-sm" step="0.0001" min="0.0001"
+                              value={editForm.quantity}
+                              onChange={(e) => setEditForm({ ...editForm, quantity: e.target.value })}
+                              disabled={editSaving} />
+                          </div>
+                          <div className="col-6 col-md-2">
+                            <label className="form-label form-label-sm mb-1">買入均價 <span className="text-danger">*</span></label>
+                            <input type="number" className="form-control form-control-sm" step="0.0001" min="0.0001"
+                              value={editForm.buyPrice}
+                              onChange={(e) => setEditForm({ ...editForm, buyPrice: e.target.value })}
+                              disabled={editSaving} />
+                          </div>
+                          <div className="col-6 col-md-2">
+                            <label className="form-label form-label-sm mb-1">買入日期 <span className="text-danger">*</span></label>
+                            <input type="date" className="form-control form-control-sm"
+                              max={new Date().toISOString().slice(0, 10)}
+                              value={editForm.buyDate}
+                              onChange={(e) => setEditForm({ ...editForm, buyDate: e.target.value })}
+                              disabled={editSaving} />
+                          </div>
+                          <div className="col-6 col-md-3">
+                            <label className="form-label form-label-sm mb-1">備註</label>
+                            <input type="text" className="form-control form-control-sm" maxLength={200}
+                              value={editForm.note}
+                              onChange={(e) => setEditForm({ ...editForm, note: e.target.value })}
+                              disabled={editSaving} />
+                          </div>
+                          <div className="col-12 col-md-3 d-flex gap-2 align-items-end">
+                            <button type="button" className="btn btn-sm btn-primary" onClick={() => handleEditSave(h.id)}
+                              disabled={editSaving}>
+                              {editSaving
+                                ? <span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true" />
+                                : <i className="bi bi-check-lg me-1" aria-hidden="true" />}
+                              儲存
+                            </button>
+                            <button type="button" className="btn btn-sm btn-outline-secondary"
+                              onClick={handleEditCancel} disabled={editSaving}>
+                              取消
+                            </button>
+                          </div>
+                          {editError && (
+                            <div className="col-12">
+                              <div className="alert alert-danger py-1 mb-0 small" role="alert">
+                                <i className="bi bi-exclamation-circle me-1" aria-hidden="true" />{editError}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </>
               ))}
             </tbody>
           </table>

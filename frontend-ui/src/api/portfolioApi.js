@@ -18,3 +18,10 @@ export async function deleteHoldingAPI(id) {
   const response = await axiosClient.delete(`/portfolio/${id}`)
   return response.data
 }
+
+// PUT /api/portfolio/:id — 編輯持倉（數量 / 買入均價 / 買入日期 / 備註）
+export async function updateHoldingAPI(id, payload) {
+  // payload: { quantity, buyPrice, buyDate, note? }
+  const response = await axiosClient.put(`/portfolio/${id}`, payload)
+  return response.data
+}

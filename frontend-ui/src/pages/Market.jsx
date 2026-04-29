@@ -59,7 +59,7 @@ const marketConfigs = {
     color: '#20c997',
     type: 'stock',
     tableKey: 'eur',
-    symbol: null, // 暫無免費 API 來源
+    symbol: 'EUR',
   },
   n225: {
     title: '日本市場',
@@ -75,7 +75,7 @@ const marketConfigs = {
     color: '#0d6efd',
     type: 'bond',
     tableKey: 'twb',
-    symbol: null, // 暫無免費 API 來源
+    symbol: null, // 台灣公債殖利率尚無免費公開 API
   },
   usb10: {
     title: '美國-10年期公債殖利率',
@@ -393,7 +393,7 @@ function Market() {
               return (
                 <div className="alert alert-secondary mb-4" role="status">
                   <i className="bi bi-info-circle me-2" aria-hidden="true" />
-                  此市場目前暫無即時資料來源，敬請期待。
+                  此市場目前尚無免費公開資料來源，此項目暫時停用。
                 </div>
               )
             }
@@ -462,7 +462,7 @@ function Market() {
               return (
                 <div className="alert alert-secondary mb-4" role="status">
                   <i className="bi bi-info-circle me-2" aria-hidden="true" />
-                  此市場目前暫無即時資料來源，敬請期待。
+                  台灣公債殖利率尚無免費公開 API，此項目目前停用。
                 </div>
               )
             }

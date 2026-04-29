@@ -3,6 +3,7 @@ package com.jackshiao.financial.controller;
 import com.jackshiao.financial.common.ApiResponse;
 import com.jackshiao.financial.dto.AddHoldingRequest;
 import com.jackshiao.financial.dto.HoldingResponse;
+import com.jackshiao.financial.dto.UpdateHoldingRequest;
 import com.jackshiao.financial.service.PortfolioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -49,5 +50,16 @@ public class PortfolioController {
 
         portfolioService.deleteHolding(email, id);
         return ApiResponse.success(null, "持倉已刪除");
+    }
+
+    // [需要驗證] 編輯持倉（數量 / 買入均價 / 買入日期 / 備註）
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/{id}")
+    public ApiResponse<HoldingResponse> updateHolding(
+            @AuthenticationPrincipal String email,
+            @PathVariable Integer id,
+            @Valid @RequestBody UpdateHoldingRequest request) {
+
+        return ApiResponse.success(portfolioService.updateHolding(email, id, request), "持倉更新成功");
     }
 }

@@ -101,9 +101,21 @@ function Watchlist() {
 
                 return (
                   <tr key={item.symbol}>
-                    <td className="fw-semibold">{item.name}</td>
+                    <td
+                      className="fw-semibold"
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => navigate(`/market?symbol=${item.symbol}`)}
+                      title="點擊查看詳細圖表"
+                    >
+                      {item.name}
+                      <i className="bi bi-box-arrow-up-right ms-1 text-muted" style={{ fontSize: '0.75rem' }} aria-hidden="true" />
+                    </td>
                     <td>
-                      <span className="badge bg-secondary">{item.symbol}</span>
+                      <span
+                        className="badge bg-secondary"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => navigate(`/market?symbol=${item.symbol}`)}
+                      >{item.symbol}</span>
                     </td>
                     <td className="text-end font-monospace">
                       {price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}

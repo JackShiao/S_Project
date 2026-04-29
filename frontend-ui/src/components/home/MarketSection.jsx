@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { fetchMarketIndices } from '../../api/marketApi'
 import { getWatchlistAPI, addToWatchlistAPI, removeFromWatchlistAPI } from '../../api/watchlistApi'
 import { useAuthStore } from '../../store/authStore'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import './MarketSection.css'
 
 function normalizeItems(payload) {
@@ -66,6 +66,7 @@ function MarketSection() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [lastUpdated, setLastUpdated] = useState(null)
+  const navigate = useNavigate()
   const [watchlist, setWatchlist] = useState(new Set())
   const [watchlistLoading, setWatchlistLoading] = useState(new Set())
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
@@ -197,14 +198,30 @@ function MarketSection() {
             <div className="row g-4">
               {marketData.map((item, index) => {
                 const trend = getTrendStyle(item.change)
-                const cleanChange = String(item.change ?? '--').replace(/^[+-]/, '')
+                const changeNum = parseFloat(item.change)
+                const isValidChange = !isNaN(changeNum)
+                const changePrefix = isValidChange && changeNum > 0 ? '+' : ''
+                const changeDisplay = isValidChange
+                  ? `${changePrefix}${changeNum.toFixed(2)}`
+                  : '--'
+
+                const valueNum = parseFloat(item.value)
+                const valueDisplay = !isNaN(valueNum)
+                  ? valueNum.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                  : (item.value ?? '--')
 
                 return (
                   <div
                     key={item.id ?? `${item.name}-${index}`}
                     className="col-12 col-md-6 col-xl-4"
                   >
-                    <article className="market-card p-4 position-relative overflow-hidden h-100">
+                    <article
+                      className="market-card p-4 position-relative overflow-hidden h-100"
+                      style={item.symbol ? { cursor: 'pointer' } : undefined}
+                      onClick={item.symbol ? () => navigate(`/market?symbol=${item.symbol}`) : undefined}
+                      role={item.symbol ? 'button' : undefined}
+                      aria-label={item.symbol ? `查看 ${item.name} 詳細資料` : undefined}
+                    >
                       {/* 背景微型趨勢線 (Sparkline) */}
                       {trend.isPositive !== null && (
                         <div
@@ -264,13 +281,13 @@ function MarketSection() {
                           <span
                             className={`market-badge ${trend.textColor} ${trend.bgColor} bg-opacity-10 rounded-pill px-2 py-1 small fw-bold`}
                           >
-                            <i className={trend.icon} aria-hidden="true" /> {cleanChange}
+                            <i className={trend.icon} aria-hidden="true" /> {changeDisplay}
                           </span>
                         </div>
                       </div>
                       <div className="mt-auto position-relative z-1">
                         <p className="market-value display-6 fw-bold mb-0 text-dark">
-                          {item.value}
+                          {valueDisplay}
                         </p>
                       </div>
                     </article>
